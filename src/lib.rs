@@ -2,9 +2,10 @@ pub mod json_schema;
 
 #[cfg(test)]
 mod tests {
-    use crate::json_schema::{
-        Achievement, AchievementCredential, AchievementSubject, Context, Criteria,
-    };
+    use crate::json_schema::achievement::{Achievement, Criteria};
+    use crate::json_schema::achievement_credential::AchievementCredential;
+    use crate::json_schema::achievement_subject::AchievementSubject;
+    use crate::json_schema::general::Context;
 
     #[test]
     fn test_achievement_credential() {
