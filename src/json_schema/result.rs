@@ -1,11 +1,5 @@
-#![allow(clippy::redundant_closure_call)]
-#![allow(clippy::needless_lifetimes)]
-#![allow(clippy::match_single_binding)]
-#![allow(clippy::clone_on_copy)]
-
 use serde::{Deserialize, Serialize};
 use super::alignment;
-
 
 #[doc = "Describes a possible achievement result."]
 #[derive(Clone, Debug, Deserialize, Serialize)]

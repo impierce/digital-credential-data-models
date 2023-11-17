@@ -6,7 +6,6 @@ pub mod identity;
 pub mod profile;
 pub mod result;
 
-pub mod json_schema;
 pub mod general;
 pub mod proof_evidence;
 pub mod alignment;

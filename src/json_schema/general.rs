@@ -1,8 +1,3 @@
-#![allow(clippy::redundant_closure_call)]
-#![allow(clippy::needless_lifetimes)]
-#![allow(clippy::match_single_binding)]
-#![allow(clippy::clone_on_copy)]
-
 use serde::{Deserialize, Serialize};
 
 #[doc = "JSON-LD Context. Either a URI with the context definition or a Map with a local context definition MUST be supplied."]

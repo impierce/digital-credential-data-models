@@ -1,8 +1,3 @@
-#![allow(clippy::redundant_closure_call)]
-#![allow(clippy::needless_lifetimes)]
-#![allow(clippy::match_single_binding)]
-#![allow(clippy::clone_on_copy)]
-
 use serde::{Deserialize, Serialize};
 use super::{endorsement, profile, result, identity, general, alignment, related};
 
@@ -152,7 +147,7 @@ pub enum AchievementAchievementTypeSubtype0 {
 
 impl From<&AchievementAchievementTypeSubtype0> for AchievementAchievementTypeSubtype0 {
     fn from(value: &AchievementAchievementTypeSubtype0) -> Self {
-        value.clone()
+        *value
     }
 }
 
