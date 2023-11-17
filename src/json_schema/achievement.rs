@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use super::{endorsement, profile, result, identity, general, alignment, related};
+use super::{endorsement, profile, result::ResultDescription, identity, general, alignment, related};
 
 #[doc = "A collection of information about the accomplishment recognized by the Assertion. Many assertions may be created corresponding to one Achievement."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -14,7 +14,7 @@ pub struct Achievement {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub achievement_type: Option<AchievementAchievementType>,
+    pub achievement_type: Option<AchievementType>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub alignment: Vec<alignment::Alignment>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -29,7 +29,7 @@ pub struct Achievement {
     #[doc = "A short description of the achievement."]
     pub description: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub endorsement: Vec<endorsement::EndorsementCredential>, // mogelijk verplaatsen
+    pub endorsement: Vec<endorsement::EndorsementCredential>, 
     #[serde(
         rename = "endorsementJwt",
         default,
@@ -66,7 +66,7 @@ pub struct Achievement {
         default,
         skip_serializing_if = "Vec::is_empty"
     )]
-    pub result_description: Vec<result::ResultDescription>,
+    pub result_description: Vec<ResultDescription>,
     #[doc = "Name given to the focus, concentration, or specific area of study defined in the achievement. Examples include 'Entrepreneurship', 'Technical Communication', and 'Finance'."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub specialization: Option<String>,
@@ -91,27 +91,27 @@ impl Achievement {
 
 #[doc = "The type of achievement. This is an extensible vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AchievementAchievementType {
+pub struct AchievementType { // Enum of struct? XOR of OR?
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_0: Option<AchievementAchievementTypeSubtype0>,
+    pub type_enum: Option<AchievementTypeEnum>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_1: Option<AchievementAchievementTypeSubtype1>,
+    pub type_string: Option<AchievementTypeString>,
 }
 
-impl From<&AchievementAchievementType> for AchievementAchievementType {
-    fn from(value: &AchievementAchievementType) -> Self {
+impl From<&AchievementType> for AchievementType {
+    fn from(value: &AchievementType) -> Self {
         value.clone()
     }
 }
 
-impl AchievementAchievementType {
+impl AchievementType {
     pub fn builder() -> builder::AchievementAchievementType {
         builder::AchievementAchievementType::default()
     }
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum AchievementAchievementTypeSubtype0 {
+pub enum AchievementTypeEnum {
     Achievement,
     ApprenticeshipCertificate,
     Assessment,
@@ -145,13 +145,13 @@ pub enum AchievementAchievementTypeSubtype0 {
     SecondarySchoolDiploma,
 }
 
-impl From<&AchievementAchievementTypeSubtype0> for AchievementAchievementTypeSubtype0 {
-    fn from(value: &AchievementAchievementTypeSubtype0) -> Self {
+impl From<&AchievementTypeEnum> for AchievementTypeEnum {
+    fn from(value: &AchievementTypeEnum) -> Self {
         *value
     }
 }
 
-impl ToString for AchievementAchievementTypeSubtype0 {
+impl ToString for AchievementTypeEnum {
     fn to_string(&self) -> String {
         match *self {
             Self::Achievement => "Achievement".to_string(),
@@ -189,7 +189,7 @@ impl ToString for AchievementAchievementTypeSubtype0 {
     }
 }
 
-impl std::str::FromStr for AchievementAchievementTypeSubtype0 {
+impl std::str::FromStr for AchievementTypeEnum {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         match value {
@@ -229,21 +229,21 @@ impl std::str::FromStr for AchievementAchievementTypeSubtype0 {
     }
 }
 
-impl std::convert::TryFrom<&str> for AchievementAchievementTypeSubtype0 {
+impl std::convert::TryFrom<&str> for AchievementTypeEnum {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 
-impl std::convert::TryFrom<&String> for AchievementAchievementTypeSubtype0 {
+impl std::convert::TryFrom<&String> for AchievementTypeEnum {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 
-impl std::convert::TryFrom<String> for AchievementAchievementTypeSubtype0 {
+impl std::convert::TryFrom<String> for AchievementTypeEnum {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
@@ -251,27 +251,27 @@ impl std::convert::TryFrom<String> for AchievementAchievementTypeSubtype0 {
 }
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct AchievementAchievementTypeSubtype1(String);
-impl std::ops::Deref for AchievementAchievementTypeSubtype1 {
+pub struct AchievementTypeString(String);
+impl std::ops::Deref for AchievementTypeString {
     type Target = String;
     fn deref(&self) -> &String {
         &self.0
     }
 }
 
-impl From<AchievementAchievementTypeSubtype1> for String {
-    fn from(value: AchievementAchievementTypeSubtype1) -> Self {
+impl From<AchievementTypeString> for String {
+    fn from(value: AchievementTypeString) -> Self {
         value.0
     }
 }
 
-impl From<&AchievementAchievementTypeSubtype1> for AchievementAchievementTypeSubtype1 {
-    fn from(value: &AchievementAchievementTypeSubtype1) -> Self {
+impl From<&AchievementTypeString> for AchievementTypeString {
+    fn from(value: &AchievementTypeString) -> Self {
         value.clone()
     }
 }
 
-impl std::str::FromStr for AchievementAchievementTypeSubtype1 {
+impl std::str::FromStr for AchievementTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
@@ -285,28 +285,28 @@ impl std::str::FromStr for AchievementAchievementTypeSubtype1 {
     }
 }
 
-impl std::convert::TryFrom<&str> for AchievementAchievementTypeSubtype1 {
+impl std::convert::TryFrom<&str> for AchievementTypeString {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 
-impl std::convert::TryFrom<&String> for AchievementAchievementTypeSubtype1 {
+impl std::convert::TryFrom<&String> for AchievementTypeString {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 
-impl std::convert::TryFrom<String> for AchievementAchievementTypeSubtype1 {
+impl std::convert::TryFrom<String> for AchievementTypeString {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 
-impl<'de> serde::Deserialize<'de> for AchievementAchievementTypeSubtype1 {
+impl<'de> serde::Deserialize<'de> for AchievementTypeString {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -343,7 +343,7 @@ impl Criteria {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum Type {
-    Variant0(String),
+    Variant0(String), //////////////////////////////////
     Variant1(Vec<String>),
 }
 
@@ -506,7 +506,7 @@ pub mod builder {
 
     #[derive(Clone, Debug)]
     pub struct Achievement {
-        achievement_type: Result<Option<super::AchievementAchievementType>, String>,
+        achievement_type: Result<Option<super::AchievementType>, String>,
         alignment: Result<Vec<alignment::Alignment>, String>,
         creator: Result<Option<profile::Profile>, String>,
         credits_available: Result<Option<f64>, String>,
@@ -558,7 +558,7 @@ pub mod builder {
     impl Achievement {
         pub fn achievement_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::AchievementAchievementType>>,
+            T: std::convert::TryInto<Option<super::AchievementType>>,
             T::Error: std::fmt::Display,
         {
             self.achievement_type = value.try_into().map_err(|e| {
@@ -837,8 +837,8 @@ pub mod builder {
 
     #[derive(Clone, Debug)]
     pub struct AchievementAchievementType {
-        subtype_0: Result<Option<super::AchievementAchievementTypeSubtype0>, String>,
-        subtype_1: Result<Option<super::AchievementAchievementTypeSubtype1>, String>,
+        subtype_0: Result<Option<super::AchievementTypeEnum>, String>,
+        subtype_1: Result<Option<super::AchievementTypeString>, String>,
     }
     impl Default for AchievementAchievementType {
         fn default() -> Self {
@@ -851,7 +851,7 @@ pub mod builder {
     impl AchievementAchievementType {
         pub fn subtype_0<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::AchievementAchievementTypeSubtype0>>,
+            T: std::convert::TryInto<Option<super::AchievementTypeEnum>>,
             T::Error: std::fmt::Display,
         {
             self.subtype_0 = value
@@ -861,7 +861,7 @@ pub mod builder {
         }
         pub fn subtype_1<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::AchievementAchievementTypeSubtype1>>,
+            T: std::convert::TryInto<Option<super::AchievementTypeString>>,
             T::Error: std::fmt::Display,
         {
             self.subtype_1 = value
@@ -870,20 +870,20 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<AchievementAchievementType> for super::AchievementAchievementType {
+    impl std::convert::TryFrom<AchievementAchievementType> for super::AchievementType {
         type Error = String;
         fn try_from(value: AchievementAchievementType) -> Result<Self, String> {
             Ok(Self {
-                subtype_0: value.subtype_0?,
-                subtype_1: value.subtype_1?,
+                type_enum: value.subtype_0?,
+                type_string: value.subtype_1?,
             })
         }
     }
-    impl From<super::AchievementAchievementType> for AchievementAchievementType {
-        fn from(value: super::AchievementAchievementType) -> Self {
+    impl From<super::AchievementType> for AchievementAchievementType {
+        fn from(value: super::AchievementType) -> Self {
             Self {
-                subtype_0: Ok(value.subtype_0),
-                subtype_1: Ok(value.subtype_1),
+                subtype_0: Ok(value.type_enum),
+                subtype_1: Ok(value.type_string),
             }
         }
     }

@@ -18,7 +18,7 @@ pub struct AchievementCredential {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub credential_schema: Option<AchievementCredentialCredentialSchema>,
+    pub credential_schema: Option<AchievementCredentialSchema>,
     #[serde(
         rename = "credentialStatus",
         default,
@@ -89,24 +89,24 @@ impl AchievementCredential {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
-pub enum AchievementCredentialCredentialSchema {
+pub enum AchievementCredentialSchema {
     Variant0(CredentialSchema),
     Variant1(Vec<CredentialSchema>),
 }
 
-impl From<&AchievementCredentialCredentialSchema> for AchievementCredentialCredentialSchema {
-    fn from(value: &AchievementCredentialCredentialSchema) -> Self {
+impl From<&AchievementCredentialSchema> for AchievementCredentialSchema {
+    fn from(value: &AchievementCredentialSchema) -> Self {
         value.clone()
     }
 }
 
-impl From<CredentialSchema> for AchievementCredentialCredentialSchema {
+impl From<CredentialSchema> for AchievementCredentialSchema {
     fn from(value: CredentialSchema) -> Self {
         Self::Variant0(value)
     }
 }
 
-impl From<Vec<CredentialSchema>> for AchievementCredentialCredentialSchema {
+impl From<Vec<CredentialSchema>> for AchievementCredentialSchema {
     fn from(value: Vec<CredentialSchema>) -> Self {
         Self::Variant1(value)
     }
@@ -297,7 +297,7 @@ pub mod builder {
     pub struct AchievementCredential {
         awarded_date: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
         context: Result<Vec<general::Context>, String>,
-        credential_schema: Result<Option<super::AchievementCredentialCredentialSchema>, String>,
+        credential_schema: Result<Option<super::AchievementCredentialSchema>, String>,
         credential_status: Result<Option<super::CredentialStatus>, String>,
         credential_subject: Result<achievement_subject::AchievementSubject, String>,
         description: Result<Option<String>, String>,
@@ -363,7 +363,7 @@ pub mod builder {
         }
         pub fn credential_schema<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::AchievementCredentialCredentialSchema>>,
+            T: std::convert::TryInto<Option<super::AchievementCredentialSchema>>,
             T::Error: std::fmt::Display,
         {
             self.credential_schema = value.try_into().map_err(|e| {
