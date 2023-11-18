@@ -54,9 +54,9 @@ impl Alignment {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AlignmentTargetType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_0: Option<AlignmentTargetTypeSubtype0>, //////////////
+    pub type_enum: Option<AlignmentTargetTypeEnum>, //////////////
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_1: Option<AlignmentTargetTypeSubtype1>,
+    pub type_string: Option<AlignmentTargetTypeString>,
 }
 impl From<&AlignmentTargetType> for AlignmentTargetType {
     fn from(value: &AlignmentTargetType) -> Self {
@@ -69,7 +69,7 @@ impl AlignmentTargetType {
     }
 }
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum AlignmentTargetTypeSubtype0 {
+pub enum AlignmentTargetTypeEnum {
     #[serde(rename = "ceasn:Competency")]
     CeasnCompetency,
     #[serde(rename = "ceterms:Credential")]
@@ -85,12 +85,12 @@ pub enum AlignmentTargetTypeSubtype0 {
     #[serde(rename = "CTDL")]
     Ctdl,
 }
-impl From<&AlignmentTargetTypeSubtype0> for AlignmentTargetTypeSubtype0 {
-    fn from(value: &AlignmentTargetTypeSubtype0) -> Self {
+impl From<&AlignmentTargetTypeEnum> for AlignmentTargetTypeEnum {
+    fn from(value: &AlignmentTargetTypeEnum) -> Self {
         value.clone()
     }
 }
-impl ToString for AlignmentTargetTypeSubtype0 {
+impl ToString for AlignmentTargetTypeEnum {
     fn to_string(&self) -> String {
         match *self {
             Self::CeasnCompetency => "ceasn:Competency".to_string(),
@@ -103,7 +103,7 @@ impl ToString for AlignmentTargetTypeSubtype0 {
         }
     }
 }
-impl std::str::FromStr for AlignmentTargetTypeSubtype0 {
+impl std::str::FromStr for AlignmentTargetTypeEnum {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         match value {
@@ -118,43 +118,43 @@ impl std::str::FromStr for AlignmentTargetTypeSubtype0 {
         }
     }
 }
-impl std::convert::TryFrom<&str> for AlignmentTargetTypeSubtype0 {
+impl std::convert::TryFrom<&str> for AlignmentTargetTypeEnum {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for AlignmentTargetTypeSubtype0 {
+impl std::convert::TryFrom<&String> for AlignmentTargetTypeEnum {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for AlignmentTargetTypeSubtype0 {
+impl std::convert::TryFrom<String> for AlignmentTargetTypeEnum {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct AlignmentTargetTypeSubtype1(String);
-impl std::ops::Deref for AlignmentTargetTypeSubtype1 {
+pub struct AlignmentTargetTypeString(String);
+impl std::ops::Deref for AlignmentTargetTypeString {
     type Target = String;
     fn deref(&self) -> &String {
         &self.0
     }
 }
-impl From<AlignmentTargetTypeSubtype1> for String {
-    fn from(value: AlignmentTargetTypeSubtype1) -> Self {
+impl From<AlignmentTargetTypeString> for String {
+    fn from(value: AlignmentTargetTypeString) -> Self {
         value.0
     }
 }
-impl From<&AlignmentTargetTypeSubtype1> for AlignmentTargetTypeSubtype1 {
-    fn from(value: &AlignmentTargetTypeSubtype1) -> Self {
+impl From<&AlignmentTargetTypeString> for AlignmentTargetTypeString {
+    fn from(value: &AlignmentTargetTypeString) -> Self {
         value.clone()
     }
 }
-impl std::str::FromStr for AlignmentTargetTypeSubtype1 {
+impl std::str::FromStr for AlignmentTargetTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
@@ -167,25 +167,25 @@ impl std::str::FromStr for AlignmentTargetTypeSubtype1 {
         Ok(Self(value.to_string()))
     }
 }
-impl std::convert::TryFrom<&str> for AlignmentTargetTypeSubtype1 {
+impl std::convert::TryFrom<&str> for AlignmentTargetTypeString {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for AlignmentTargetTypeSubtype1 {
+impl std::convert::TryFrom<&String> for AlignmentTargetTypeString {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for AlignmentTargetTypeSubtype1 {
+impl std::convert::TryFrom<String> for AlignmentTargetTypeString {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl<'de> serde::Deserialize<'de> for AlignmentTargetTypeSubtype1 {
+impl<'de> serde::Deserialize<'de> for AlignmentTargetTypeString {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -343,34 +343,34 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AlignmentTargetType {
-        subtype_0: Result<Option<super::AlignmentTargetTypeSubtype0>, String>,
-        subtype_1: Result<Option<super::AlignmentTargetTypeSubtype1>, String>,
+        type_enum: Result<Option<super::AlignmentTargetTypeEnum>, String>, //////////////
+        type_string: Result<Option<super::AlignmentTargetTypeString>, String>,
     }
     impl Default for AlignmentTargetType {
         fn default() -> Self {
             Self {
-                subtype_0: Ok(Default::default()),
-                subtype_1: Ok(Default::default()),
+                type_enum: Ok(Default::default()),
+                type_string: Ok(Default::default()),
             }
         }
     }
     impl AlignmentTargetType {
         pub fn subtype_0<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::AlignmentTargetTypeSubtype0>>,
+            T: std::convert::TryInto<Option<super::AlignmentTargetTypeEnum>>,
             T::Error: std::fmt::Display,
         {
-            self.subtype_0 = value
+            self.type_enum = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for subtype_0: {}", e));
             self
         }
         pub fn subtype_1<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::AlignmentTargetTypeSubtype1>>,
+            T: std::convert::TryInto<Option<super::AlignmentTargetTypeString>>,
             T::Error: std::fmt::Display,
         {
-            self.subtype_1 = value
+            self.type_string = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for subtype_1: {}", e));
             self
@@ -380,16 +380,16 @@ pub mod builder {
         type Error = String;
         fn try_from(value: AlignmentTargetType) -> Result<Self, String> {
             Ok(Self {
-                subtype_0: value.subtype_0?,
-                subtype_1: value.subtype_1?,
+                type_enum: value.type_enum?,
+                type_string: value.type_string?,
             })
         }
     }
     impl From<super::AlignmentTargetType> for AlignmentTargetType {
         fn from(value: super::AlignmentTargetType) -> Self {
             Self {
-                subtype_0: Ok(value.subtype_0),
-                subtype_1: Ok(value.subtype_1),
+                type_enum: Ok(value.type_enum),
+                type_string: Ok(value.type_string),
             }
         }
     }

@@ -83,9 +83,9 @@ impl From<Vec<String>> for DescriptionType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DescriptionResultType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_0: Option<ResultDescriptionResultTypeSubtype0>,
+    pub type_enum: Option<DescriptionResultTypeEnum>, //////////////////
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_1: Option<ResultDescriptionResultTypeSubtype1>,
+    pub type_string: Option<DescriptionResultTypeString>,
 }
 impl From<&DescriptionResultType> for DescriptionResultType {
     fn from(value: &DescriptionResultType) -> Self {
@@ -93,12 +93,12 @@ impl From<&DescriptionResultType> for DescriptionResultType {
     }
 }
 impl DescriptionResultType {
-    pub fn builder() -> builder::ResultDescriptionResultType {
-        builder::ResultDescriptionResultType::default()
+    pub fn builder() -> builder::DescriptionResultType {
+        builder::DescriptionResultType::default()
     }
 }
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum ResultDescriptionResultTypeSubtype0 {
+pub enum DescriptionResultTypeEnum {
     GradePointAverage,
     LetterGrade,
     Percent,
@@ -112,12 +112,12 @@ pub enum ResultDescriptionResultTypeSubtype0 {
     ScaledScore,
     Status,
 }
-impl From<&ResultDescriptionResultTypeSubtype0> for ResultDescriptionResultTypeSubtype0 {
-    fn from(value: &ResultDescriptionResultTypeSubtype0) -> Self {
+impl From<&DescriptionResultTypeEnum> for DescriptionResultTypeEnum {
+    fn from(value: &DescriptionResultTypeEnum) -> Self {
         value.clone()
     }
 }
-impl ToString for ResultDescriptionResultTypeSubtype0 {
+impl ToString for DescriptionResultTypeEnum {
     fn to_string(&self) -> String {
         match *self {
             Self::GradePointAverage => "GradePointAverage".to_string(),
@@ -135,7 +135,7 @@ impl ToString for ResultDescriptionResultTypeSubtype0 {
         }
     }
 }
-impl std::str::FromStr for ResultDescriptionResultTypeSubtype0 {
+impl std::str::FromStr for DescriptionResultTypeEnum {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         match value {
@@ -155,43 +155,43 @@ impl std::str::FromStr for ResultDescriptionResultTypeSubtype0 {
         }
     }
 }
-impl std::convert::TryFrom<&str> for ResultDescriptionResultTypeSubtype0 {
+impl std::convert::TryFrom<&str> for DescriptionResultTypeEnum {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for ResultDescriptionResultTypeSubtype0 {
+impl std::convert::TryFrom<&String> for DescriptionResultTypeEnum {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for ResultDescriptionResultTypeSubtype0 {
+impl std::convert::TryFrom<String> for DescriptionResultTypeEnum {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct ResultDescriptionResultTypeSubtype1(String);
-impl std::ops::Deref for ResultDescriptionResultTypeSubtype1 {
+pub struct DescriptionResultTypeString(String);
+impl std::ops::Deref for DescriptionResultTypeString {
     type Target = String;
     fn deref(&self) -> &String {
         &self.0
     }
 }
-impl From<ResultDescriptionResultTypeSubtype1> for String {
-    fn from(value: ResultDescriptionResultTypeSubtype1) -> Self {
+impl From<DescriptionResultTypeString> for String {
+    fn from(value: DescriptionResultTypeString) -> Self {
         value.0
     }
 }
-impl From<&ResultDescriptionResultTypeSubtype1> for ResultDescriptionResultTypeSubtype1 {
-    fn from(value: &ResultDescriptionResultTypeSubtype1) -> Self {
+impl From<&DescriptionResultTypeString> for DescriptionResultTypeString {
+    fn from(value: &DescriptionResultTypeString) -> Self {
         value.clone()
     }
 }
-impl std::str::FromStr for ResultDescriptionResultTypeSubtype1 {
+impl std::str::FromStr for DescriptionResultTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
@@ -204,25 +204,25 @@ impl std::str::FromStr for ResultDescriptionResultTypeSubtype1 {
         Ok(Self(value.to_string()))
     }
 }
-impl std::convert::TryFrom<&str> for ResultDescriptionResultTypeSubtype1 {
+impl std::convert::TryFrom<&str> for DescriptionResultTypeString {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for ResultDescriptionResultTypeSubtype1 {
+impl std::convert::TryFrom<&String> for DescriptionResultTypeString {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for ResultDescriptionResultTypeSubtype1 {
+impl std::convert::TryFrom<String> for DescriptionResultTypeString {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl<'de> serde::Deserialize<'de> for ResultDescriptionResultTypeSubtype1 {
+impl<'de> serde::Deserialize<'de> for DescriptionResultTypeString {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -580,54 +580,54 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct ResultDescriptionResultType {
-        subtype_0: Result<Option<super::ResultDescriptionResultTypeSubtype0>, String>,
-        subtype_1: Result<Option<super::ResultDescriptionResultTypeSubtype1>, String>,
+    pub struct DescriptionResultType {
+        type_enum: Result<Option<super::DescriptionResultTypeEnum>, String>, /////////////
+        type_string: Result<Option<super::DescriptionResultTypeString>, String>,
     }
-    impl Default for ResultDescriptionResultType {
+    impl Default for DescriptionResultType {
         fn default() -> Self {
             Self {
-                subtype_0: Ok(Default::default()),
-                subtype_1: Ok(Default::default()),
+                type_enum: Ok(Default::default()),
+                type_string: Ok(Default::default()),
             }
         }
     }
-    impl ResultDescriptionResultType {
+    impl DescriptionResultType {
         pub fn subtype_0<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ResultDescriptionResultTypeSubtype0>>,
+            T: std::convert::TryInto<Option<super::DescriptionResultTypeEnum>>,
             T::Error: std::fmt::Display,
         {
-            self.subtype_0 = value
+            self.type_enum = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for subtype_0: {}", e));
             self
         }
         pub fn subtype_1<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ResultDescriptionResultTypeSubtype1>>,
+            T: std::convert::TryInto<Option<super::DescriptionResultTypeString>>,
             T::Error: std::fmt::Display,
         {
-            self.subtype_1 = value
+            self.type_string = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for subtype_1: {}", e));
             self
         }
     }
-    impl std::convert::TryFrom<ResultDescriptionResultType> for super::DescriptionResultType {
+    impl std::convert::TryFrom<DescriptionResultType> for super::DescriptionResultType {
         type Error = String;
-        fn try_from(value: ResultDescriptionResultType) -> Result<Self, String> {
+        fn try_from(value: DescriptionResultType) -> Result<Self, String> {
             Ok(Self {
-                subtype_0: value.subtype_0?,
-                subtype_1: value.subtype_1?,
+                type_enum: value.type_enum?,
+                type_string: value.type_string?,
             })
         }
     }
-    impl From<super::DescriptionResultType> for ResultDescriptionResultType {
+    impl From<super::DescriptionResultType> for DescriptionResultType {
         fn from(value: super::DescriptionResultType) -> Self {
             Self {
-                subtype_0: Ok(value.subtype_0),
-                subtype_1: Ok(value.subtype_1),
+                type_enum: Ok(value.type_enum),
+                type_string: Ok(value.type_string),
             }
         }
     }
