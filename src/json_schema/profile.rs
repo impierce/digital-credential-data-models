@@ -175,8 +175,8 @@ impl<'de> serde::Deserialize<'de> for ProfileEndorsementJwtItem {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ProfileType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&ProfileType> for ProfileType {
     fn from(value: &ProfileType) -> Self {
@@ -185,7 +185,7 @@ impl From<&ProfileType> for ProfileType {
 }
 impl From<Vec<String>> for ProfileType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 
@@ -261,8 +261,8 @@ impl Address {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum AddressType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&AddressType> for AddressType {
     fn from(value: &AddressType) -> Self {
@@ -271,7 +271,7 @@ impl From<&AddressType> for AddressType {
 }
 impl From<Vec<String>> for AddressType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 

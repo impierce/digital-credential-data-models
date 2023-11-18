@@ -32,7 +32,7 @@ pub struct ResultDescription {
     pub required_value: Option<String>,
     #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
     #[serde(rename = "resultType")]
-    pub result_type: ResultDescriptionResultType,
+    pub result_type: DescriptionResultType,
     #[serde(
         rename = "rubricCriterionLevel",
         default,
@@ -40,7 +40,7 @@ pub struct ResultDescription {
     )]
     pub rubric_criterion_level: Vec<RubricCriterionLevel>,
     #[serde(rename = "type")]
-    pub type_: ResultDescriptionType,
+    pub type_: DescriptionType,
     #[doc = "The maximum possible `value` that may be asserted in a linked result."]
     #[serde(rename = "valueMax", default, skip_serializing_if = "Option::is_none")]
     pub value_max: Option<String>,
@@ -61,38 +61,38 @@ impl ResultDescription {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
-pub enum ResultDescriptionType {
-    Variant0(String),
-    Variant1(Vec<String>),
+pub enum DescriptionType {
+    SingleString(String),
+    VecString(Vec<String>),
 }
 
-impl From<&ResultDescriptionType> for ResultDescriptionType {
-    fn from(value: &ResultDescriptionType) -> Self {
+impl From<&DescriptionType> for DescriptionType {
+    fn from(value: &DescriptionType) -> Self {
         value.clone()
     }
 }
 
-impl From<Vec<String>> for ResultDescriptionType {
+impl From<Vec<String>> for DescriptionType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 
 
 #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ResultDescriptionResultType {
+pub struct DescriptionResultType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub subtype_0: Option<ResultDescriptionResultTypeSubtype0>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub subtype_1: Option<ResultDescriptionResultTypeSubtype1>,
 }
-impl From<&ResultDescriptionResultType> for ResultDescriptionResultType {
-    fn from(value: &ResultDescriptionResultType) -> Self {
+impl From<&DescriptionResultType> for DescriptionResultType {
+    fn from(value: &DescriptionResultType) -> Self {
         value.clone()
     }
 }
-impl ResultDescriptionResultType {
+impl DescriptionResultType {
     pub fn builder() -> builder::ResultDescriptionResultType {
         builder::ResultDescriptionResultType::default()
     }
@@ -333,8 +333,8 @@ impl std::convert::TryFrom<String> for ResultTempStatus {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ResultTempType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&ResultTempType> for ResultTempType {
     fn from(value: &ResultTempType) -> Self {
@@ -343,7 +343,7 @@ impl From<&ResultTempType> for ResultTempType {
 }
 impl From<Vec<String>> for ResultTempType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 #[doc = "Describes a rubric criterion level."]
@@ -380,8 +380,8 @@ impl RubricCriterionLevel {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum RubricCriterionLevelType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&RubricCriterionLevelType> for RubricCriterionLevelType {
     fn from(value: &RubricCriterionLevelType) -> Self {
@@ -390,7 +390,7 @@ impl From<&RubricCriterionLevelType> for RubricCriterionLevelType {
 }
 impl From<Vec<String>> for RubricCriterionLevelType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 
@@ -406,9 +406,9 @@ pub mod builder {
         name: Result<String, String>,
         required_level: Result<Option<String>, String>,
         required_value: Result<Option<String>, String>,
-        result_type: Result<super::ResultDescriptionResultType, String>,
+        result_type: Result<super::DescriptionResultType, String>,
         rubric_criterion_level: Result<Vec<super::RubricCriterionLevel>, String>,
-        type_: Result<super::ResultDescriptionType, String>,
+        type_: Result<super::DescriptionType, String>,
         value_max: Result<Option<String>, String>,
         value_min: Result<Option<String>, String>,
     }
@@ -492,7 +492,7 @@ pub mod builder {
         }
         pub fn result_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::ResultDescriptionResultType>,
+            T: std::convert::TryInto<super::DescriptionResultType>,
             T::Error: std::fmt::Display,
         {
             self.result_type = value
@@ -515,7 +515,7 @@ pub mod builder {
         }
         pub fn type_<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::ResultDescriptionType>,
+            T: std::convert::TryInto<super::DescriptionType>,
             T::Error: std::fmt::Display,
         {
             self.type_ = value
@@ -614,7 +614,7 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<ResultDescriptionResultType> for super::ResultDescriptionResultType {
+    impl std::convert::TryFrom<ResultDescriptionResultType> for super::DescriptionResultType {
         type Error = String;
         fn try_from(value: ResultDescriptionResultType) -> Result<Self, String> {
             Ok(Self {
@@ -623,8 +623,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::ResultDescriptionResultType> for ResultDescriptionResultType {
-        fn from(value: super::ResultDescriptionResultType) -> Self {
+    impl From<super::DescriptionResultType> for ResultDescriptionResultType {
+        fn from(value: super::DescriptionResultType) -> Self {
             Self {
                 subtype_0: Ok(value.subtype_0),
                 subtype_1: Ok(value.subtype_1),

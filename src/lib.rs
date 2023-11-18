@@ -10,7 +10,7 @@ mod tests {
     #[test]
     fn test_achievement_credential() {
         let _achievement_credential: AchievementCredential = AchievementCredential::builder()
-            .context(vec![Context::Variant1(
+            .context(vec![Context::SingleString(
                 "https://www.w3.org/2018/credentials/examples/v1".to_string(),
             )])
             .credential_subject(

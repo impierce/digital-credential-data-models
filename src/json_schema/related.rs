@@ -100,8 +100,8 @@ impl<'de> serde::Deserialize<'de> for RelatedLanguage {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum RelatedType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 
 impl From<&RelatedType> for RelatedType {
@@ -112,7 +112,7 @@ impl From<&RelatedType> for RelatedType {
 
 impl From<Vec<String>> for RelatedType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 

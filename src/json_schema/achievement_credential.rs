@@ -90,8 +90,8 @@ impl AchievementCredential {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum AchievementCredentialSchema {
-    Variant0(CredentialSchema),
-    Variant1(Vec<CredentialSchema>),
+    SingleSchema(CredentialSchema),
+    VecSchema(Vec<CredentialSchema>),
 }
 
 impl From<&AchievementCredentialSchema> for AchievementCredentialSchema {
@@ -102,13 +102,13 @@ impl From<&AchievementCredentialSchema> for AchievementCredentialSchema {
 
 impl From<CredentialSchema> for AchievementCredentialSchema {
     fn from(value: CredentialSchema) -> Self {
-        Self::Variant0(value)
+        Self::SingleSchema(value)
     }
 }
 
 impl From<Vec<CredentialSchema>> for AchievementCredentialSchema {
     fn from(value: Vec<CredentialSchema>) -> Self {
-        Self::Variant1(value)
+        Self::VecSchema(value)
     }
 }
 
@@ -185,8 +185,8 @@ impl<'de> serde::Deserialize<'de> for AchievementCredentialEndorsementJwtItem {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum AchievementCredentialProof {
-    Variant0(proof_evidence::Proof),
-    Variant1(Vec<proof_evidence::Proof>),
+    SingleProof(proof_evidence::Proof),
+    VecProof(Vec<proof_evidence::Proof>),
 }
 
 impl From<&AchievementCredentialProof> for AchievementCredentialProof {
@@ -197,21 +197,21 @@ impl From<&AchievementCredentialProof> for AchievementCredentialProof {
 
 impl From<proof_evidence::Proof> for AchievementCredentialProof {
     fn from(value: proof_evidence::Proof) -> Self {
-        Self::Variant0(value)
+        Self::SingleProof(value)
     }
 }
 
 impl From<Vec<proof_evidence::Proof>> for AchievementCredentialProof {
     fn from(value: Vec<proof_evidence::Proof>) -> Self {
-        Self::Variant1(value)
+        Self::VecProof(value)
     }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum AchievementCredentialTermsOfUse {
-    Variant0(general::TermsOfUse),
-    Variant1(Vec<general::TermsOfUse>),
+    SingleTermsOfUse(general::TermsOfUse),
+    VecTermsOfUse(Vec<general::TermsOfUse>),
 }
 
 impl From<&AchievementCredentialTermsOfUse> for AchievementCredentialTermsOfUse {
@@ -222,21 +222,21 @@ impl From<&AchievementCredentialTermsOfUse> for AchievementCredentialTermsOfUse 
 
 impl From<general::TermsOfUse> for AchievementCredentialTermsOfUse {
     fn from(value: general::TermsOfUse) -> Self {
-        Self::Variant0(value)
+        Self::SingleTermsOfUse(value)
     }
 }
 
 impl From<Vec<general::TermsOfUse>> for AchievementCredentialTermsOfUse {
     fn from(value: Vec<general::TermsOfUse>) -> Self {
-        Self::Variant1(value)
+        Self::VecTermsOfUse(value)
     }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum AchievementCredentialType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 
 impl From<&AchievementCredentialType> for AchievementCredentialType {
@@ -247,7 +247,7 @@ impl From<&AchievementCredentialType> for AchievementCredentialType {
 
 impl From<Vec<String>> for AchievementCredentialType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 

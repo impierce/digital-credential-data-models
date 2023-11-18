@@ -76,8 +76,8 @@ impl EndorsementCredential {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EndorsementCredentialCredentialSchema {
-    Variant0(achievement_credential::CredentialSchema),
-    Variant1(Vec<achievement_credential::CredentialSchema>),
+    SingleSchema(achievement_credential::CredentialSchema),
+    VecSchema(Vec<achievement_credential::CredentialSchema>),
 }
 impl From<&EndorsementCredentialCredentialSchema> for EndorsementCredentialCredentialSchema {
     fn from(value: &EndorsementCredentialCredentialSchema) -> Self {
@@ -86,19 +86,19 @@ impl From<&EndorsementCredentialCredentialSchema> for EndorsementCredentialCrede
 }
 impl From<achievement_credential::CredentialSchema> for EndorsementCredentialCredentialSchema {
     fn from(value: achievement_credential::CredentialSchema) -> Self {
-        Self::Variant0(value)
+        Self::SingleSchema(value)
     }
 }
 impl From<Vec<achievement_credential::CredentialSchema>> for EndorsementCredentialCredentialSchema {
     fn from(value: Vec<achievement_credential::CredentialSchema>) -> Self {
-        Self::Variant1(value)
+        Self::VecSchema(value)
     }
 }
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EndorsementCredentialProof {
-    Variant0(proof_evidence::Proof),
-    Variant1(Vec<proof_evidence::Proof>),
+    SingleProof(proof_evidence::Proof),
+    VecProof(Vec<proof_evidence::Proof>),
 }
 impl From<&EndorsementCredentialProof> for EndorsementCredentialProof {
     fn from(value: &EndorsementCredentialProof) -> Self {
@@ -107,19 +107,19 @@ impl From<&EndorsementCredentialProof> for EndorsementCredentialProof {
 }
 impl From<proof_evidence::Proof> for EndorsementCredentialProof {
     fn from(value: proof_evidence::Proof) -> Self {
-        Self::Variant0(value)
+        Self::SingleProof(value)
     }
 }
 impl From<Vec<proof_evidence::Proof>> for EndorsementCredentialProof {
     fn from(value: Vec<proof_evidence::Proof>) -> Self {
-        Self::Variant1(value)
+        Self::VecProof(value)
     }
 }
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EndorsementCredentialTermsOfUse {
-    Variant0(general::TermsOfUse),
-    Variant1(Vec<general::TermsOfUse>),
+    SingleTermsOfUse(general::TermsOfUse),
+    VecTermsOfUse(Vec<general::TermsOfUse>),
 }
 impl From<&EndorsementCredentialTermsOfUse> for EndorsementCredentialTermsOfUse {
     fn from(value: &EndorsementCredentialTermsOfUse) -> Self {
@@ -128,19 +128,19 @@ impl From<&EndorsementCredentialTermsOfUse> for EndorsementCredentialTermsOfUse 
 }
 impl From<general::TermsOfUse> for EndorsementCredentialTermsOfUse {
     fn from(value: general::TermsOfUse) -> Self {
-        Self::Variant0(value)
+        Self::SingleTermsOfUse(value)
     }
 }
 impl From<Vec<general::TermsOfUse>> for EndorsementCredentialTermsOfUse {
     fn from(value: Vec<general::TermsOfUse>) -> Self {
-        Self::Variant1(value)
+        Self::VecTermsOfUse(value)
     }
 }
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EndorsementCredentialType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&EndorsementCredentialType> for EndorsementCredentialType {
     fn from(value: &EndorsementCredentialType) -> Self {
@@ -149,7 +149,7 @@ impl From<&EndorsementCredentialType> for EndorsementCredentialType {
 }
 impl From<Vec<String>> for EndorsementCredentialType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 #[doc = "A collection of information about the subject of the endorsement."]
@@ -180,8 +180,8 @@ impl EndorsementSubject {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EndorsementSubjectType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&EndorsementSubjectType> for EndorsementSubjectType {
     fn from(value: &EndorsementSubjectType) -> Self {
@@ -190,7 +190,7 @@ impl From<&EndorsementSubjectType> for EndorsementSubjectType {
 }
 impl From<Vec<String>> for EndorsementSubjectType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 

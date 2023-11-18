@@ -343,8 +343,8 @@ impl Criteria {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum Type {
-    Variant0(String), //////////////////////////////////
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 
 impl From<&Type> for Type {
@@ -355,7 +355,7 @@ impl From<&Type> for Type {
 
 impl From<Vec<String>> for Type {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 

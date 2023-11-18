@@ -68,8 +68,8 @@ impl AchievementSubject {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum AchievementSubjectType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&AchievementSubjectType> for AchievementSubjectType {
     fn from(value: &AchievementSubjectType) -> Self {
@@ -78,7 +78,7 @@ impl From<&AchievementSubjectType> for AchievementSubjectType {
 }
 impl From<Vec<String>> for AchievementSubjectType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 

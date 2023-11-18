@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum Context {
-    Variant0(serde_json::Map<String, serde_json::Value>),
-    Variant1(String),
+    MapStringJsonValue(serde_json::Map<String, serde_json::Value>),
+    SingleString(String),
 }
 impl From<&Context> for Context {
     fn from(value: &Context) -> Self {
@@ -14,10 +14,9 @@ impl From<&Context> for Context {
 }
 impl From<serde_json::Map<String, serde_json::Value>> for Context {
     fn from(value: serde_json::Map<String, serde_json::Value>) -> Self {
-        Self::Variant0(value)
+        Self::MapStringJsonValue(value)
     }
 }
-
 
 #[doc = "Metadata about images that represent assertions, achieve or profiles. These properties can typically be represented as just the id string of the image, but using a fleshed-out document allows for including captions and other applicable metadata."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -43,7 +42,6 @@ impl Image {
     }
 }
 
-
 #[doc = "The information in RefreshService is used to refresh the verifiable credential."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RefreshService {
@@ -63,7 +61,6 @@ impl RefreshService {
         builder::RefreshService::default()
     }
 }
-
 
 #[doc = "Terms of use can be utilized by an issuer or a holder to communicate the terms under which a verifiable credential or verifiable presentation was issued"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -86,9 +83,8 @@ impl TermsOfUse {
     }
 }
 
-
 pub mod builder {
-    
+
     #[derive(Clone, Debug)]
     pub struct Image {
         caption: Result<Option<String>, String>,
@@ -155,7 +151,7 @@ pub mod builder {
             }
         }
     }
-        
+
     #[derive(Clone, Debug)]
     pub struct RefreshService {
         id: Result<String, String>,

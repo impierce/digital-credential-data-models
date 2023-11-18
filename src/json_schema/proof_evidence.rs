@@ -37,8 +37,8 @@ impl Evidence {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EvidenceType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&EvidenceType> for EvidenceType {
     fn from(value: &EvidenceType) -> Self {
@@ -47,7 +47,7 @@ impl From<&EvidenceType> for EvidenceType {
 }
 impl From<Vec<String>> for EvidenceType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 #[doc = "A JSON-LD Linked Data proof."]
@@ -103,7 +103,6 @@ impl Proof {
         builder::Proof::default()
     }
 }
-
 
 pub mod builder {
     

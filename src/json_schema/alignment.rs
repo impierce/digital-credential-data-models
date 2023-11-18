@@ -54,7 +54,7 @@ impl Alignment {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AlignmentTargetType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_0: Option<AlignmentTargetTypeSubtype0>,
+    pub subtype_0: Option<AlignmentTargetTypeSubtype0>, //////////////
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub subtype_1: Option<AlignmentTargetTypeSubtype1>,
 }
@@ -198,8 +198,8 @@ impl<'de> serde::Deserialize<'de> for AlignmentTargetTypeSubtype1 {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum AlignmentType {
-    Variant0(String),
-    Variant1(Vec<String>),
+    SingleString(String),
+    VecString(Vec<String>),
 }
 impl From<&AlignmentType> for AlignmentType {
     fn from(value: &AlignmentType) -> Self {
@@ -208,7 +208,7 @@ impl From<&AlignmentType> for AlignmentType {
 }
 impl From<Vec<String>> for AlignmentType {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::VecString(value)
     }
 }
 
