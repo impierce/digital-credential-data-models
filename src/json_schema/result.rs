@@ -32,7 +32,7 @@ pub struct ResultDescription {
     pub required_value: Option<String>,
     #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
     #[serde(rename = "resultType")]
-    pub result_type: DescriptionResultType,
+    pub result_type: ResultDescriptionType,
     #[serde(
         rename = "rubricCriterionLevel",
         default,
@@ -81,24 +81,24 @@ impl From<Vec<String>> for DescriptionType {
 
 #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct DescriptionResultType {
+pub struct ResultDescriptionType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<DescriptionResultTypeEnum>, //////////////////
+    pub type_enum: Option<ResultDescriptionTypeEnum>, ////////////////
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_string: Option<DescriptionResultTypeString>,
+    pub type_string: Option<ResultDescriptionTypeString>,
 }
-impl From<&DescriptionResultType> for DescriptionResultType {
-    fn from(value: &DescriptionResultType) -> Self {
+impl From<&ResultDescriptionType> for ResultDescriptionType {
+    fn from(value: &ResultDescriptionType) -> Self {
         value.clone()
     }
 }
-impl DescriptionResultType {
+impl ResultDescriptionType {
     pub fn builder() -> builder::DescriptionResultType {
         builder::DescriptionResultType::default()
     }
 }
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum DescriptionResultTypeEnum {
+pub enum ResultDescriptionTypeEnum {
     GradePointAverage,
     LetterGrade,
     Percent,
@@ -112,12 +112,12 @@ pub enum DescriptionResultTypeEnum {
     ScaledScore,
     Status,
 }
-impl From<&DescriptionResultTypeEnum> for DescriptionResultTypeEnum {
-    fn from(value: &DescriptionResultTypeEnum) -> Self {
+impl From<&ResultDescriptionTypeEnum> for ResultDescriptionTypeEnum {
+    fn from(value: &ResultDescriptionTypeEnum) -> Self {
         value.clone()
     }
 }
-impl ToString for DescriptionResultTypeEnum {
+impl ToString for ResultDescriptionTypeEnum {
     fn to_string(&self) -> String {
         match *self {
             Self::GradePointAverage => "GradePointAverage".to_string(),
@@ -135,7 +135,7 @@ impl ToString for DescriptionResultTypeEnum {
         }
     }
 }
-impl std::str::FromStr for DescriptionResultTypeEnum {
+impl std::str::FromStr for ResultDescriptionTypeEnum {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         match value {
@@ -155,43 +155,43 @@ impl std::str::FromStr for DescriptionResultTypeEnum {
         }
     }
 }
-impl std::convert::TryFrom<&str> for DescriptionResultTypeEnum {
+impl std::convert::TryFrom<&str> for ResultDescriptionTypeEnum {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for DescriptionResultTypeEnum {
+impl std::convert::TryFrom<&String> for ResultDescriptionTypeEnum {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for DescriptionResultTypeEnum {
+impl std::convert::TryFrom<String> for ResultDescriptionTypeEnum {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct DescriptionResultTypeString(String);
-impl std::ops::Deref for DescriptionResultTypeString {
+pub struct ResultDescriptionTypeString(String);
+impl std::ops::Deref for ResultDescriptionTypeString {
     type Target = String;
     fn deref(&self) -> &String {
         &self.0
     }
 }
-impl From<DescriptionResultTypeString> for String {
-    fn from(value: DescriptionResultTypeString) -> Self {
+impl From<ResultDescriptionTypeString> for String {
+    fn from(value: ResultDescriptionTypeString) -> Self {
         value.0
     }
 }
-impl From<&DescriptionResultTypeString> for DescriptionResultTypeString {
-    fn from(value: &DescriptionResultTypeString) -> Self {
+impl From<&ResultDescriptionTypeString> for ResultDescriptionTypeString {
+    fn from(value: &ResultDescriptionTypeString) -> Self {
         value.clone()
     }
 }
-impl std::str::FromStr for DescriptionResultTypeString {
+impl std::str::FromStr for ResultDescriptionTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
@@ -204,25 +204,25 @@ impl std::str::FromStr for DescriptionResultTypeString {
         Ok(Self(value.to_string()))
     }
 }
-impl std::convert::TryFrom<&str> for DescriptionResultTypeString {
+impl std::convert::TryFrom<&str> for ResultDescriptionTypeString {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for DescriptionResultTypeString {
+impl std::convert::TryFrom<&String> for ResultDescriptionTypeString {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for DescriptionResultTypeString {
+impl std::convert::TryFrom<String> for ResultDescriptionTypeString {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl<'de> serde::Deserialize<'de> for DescriptionResultTypeString {
+impl<'de> serde::Deserialize<'de> for ResultDescriptionTypeString {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -406,7 +406,7 @@ pub mod builder {
         name: Result<String, String>,
         required_level: Result<Option<String>, String>,
         required_value: Result<Option<String>, String>,
-        result_type: Result<super::DescriptionResultType, String>,
+        result_type: Result<super::ResultDescriptionType, String>,
         rubric_criterion_level: Result<Vec<super::RubricCriterionLevel>, String>,
         type_: Result<super::DescriptionType, String>,
         value_max: Result<Option<String>, String>,
@@ -492,7 +492,7 @@ pub mod builder {
         }
         pub fn result_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::DescriptionResultType>,
+            T: std::convert::TryInto<super::ResultDescriptionType>,
             T::Error: std::fmt::Display,
         {
             self.result_type = value
@@ -581,8 +581,8 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct DescriptionResultType {
-        type_enum: Result<Option<super::DescriptionResultTypeEnum>, String>, /////////////
-        type_string: Result<Option<super::DescriptionResultTypeString>, String>,
+        type_enum: Result<Option<super::ResultDescriptionTypeEnum>, String>, /////////////
+        type_string: Result<Option<super::ResultDescriptionTypeString>, String>,
     }
     impl Default for DescriptionResultType {
         fn default() -> Self {
@@ -595,7 +595,7 @@ pub mod builder {
     impl DescriptionResultType {
         pub fn subtype_0<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::DescriptionResultTypeEnum>>,
+            T: std::convert::TryInto<Option<super::ResultDescriptionTypeEnum>>,
             T::Error: std::fmt::Display,
         {
             self.type_enum = value
@@ -605,7 +605,7 @@ pub mod builder {
         }
         pub fn subtype_1<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::DescriptionResultTypeString>>,
+            T: std::convert::TryInto<Option<super::ResultDescriptionTypeString>>,
             T::Error: std::fmt::Display,
         {
             self.type_string = value
@@ -614,7 +614,7 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<DescriptionResultType> for super::DescriptionResultType {
+    impl std::convert::TryFrom<DescriptionResultType> for super::ResultDescriptionType {
         type Error = String;
         fn try_from(value: DescriptionResultType) -> Result<Self, String> {
             Ok(Self {
@@ -623,8 +623,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::DescriptionResultType> for DescriptionResultType {
-        fn from(value: super::DescriptionResultType) -> Self {
+    impl From<super::ResultDescriptionType> for DescriptionResultType {
+        fn from(value: super::ResultDescriptionType) -> Self {
             Self {
                 type_enum: Ok(value.type_enum),
                 type_string: Ok(value.type_string),

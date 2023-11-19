@@ -8,7 +8,7 @@ pub struct IdentifierEntry {
     pub identifier: String,
     #[doc = "The identifier type."]
     #[serde(rename = "identifierType")]
-    pub identifier_type: EntryIdentifierType,
+    pub identifier_type: IdentifierEntryType,
     #[doc = "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'IdentifierEntry'."]
     #[serde(rename = "type")]
     pub type_: String,
@@ -25,24 +25,24 @@ impl IdentifierEntry {
 }
 #[doc = "The identifier type."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct EntryIdentifierType {
+pub struct IdentifierEntryType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<EntryIdentifierTypeEnum>, ////////////
+    pub type_enum: Option<IdentifierEntryTypeEnum>, ////////////
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_string: Option<EntryIdentifierTypeString>,
+    pub type_string: Option<IdentifierEntryTypeString>,
 }
-impl From<&EntryIdentifierType> for EntryIdentifierType {
-    fn from(value: &EntryIdentifierType) -> Self {
+impl From<&IdentifierEntryType> for IdentifierEntryType {
+    fn from(value: &IdentifierEntryType) -> Self {
         value.clone()
     }
 }
-impl EntryIdentifierType {
+impl IdentifierEntryType {
     pub fn builder() -> builder::IdentifierEntryIdentifierType {
         builder::IdentifierEntryIdentifierType::default()
     }
 }
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum EntryIdentifierTypeEnum {
+pub enum IdentifierEntryTypeEnum {
     #[serde(rename = "name")]
     Name,
     #[serde(rename = "sourcedId")]
@@ -82,12 +82,12 @@ pub enum EntryIdentifierTypeEnum {
     #[serde(rename = "identifier")]
     Identifier,
 }
-impl From<&EntryIdentifierTypeEnum> for EntryIdentifierTypeEnum {
-    fn from(value: &EntryIdentifierTypeEnum) -> Self {
+impl From<&IdentifierEntryTypeEnum> for IdentifierEntryTypeEnum {
+    fn from(value: &IdentifierEntryTypeEnum) -> Self {
         value.clone()
     }
 }
-impl ToString for EntryIdentifierTypeEnum {
+impl ToString for IdentifierEntryTypeEnum {
     fn to_string(&self) -> String {
         match *self {
             Self::Name => "name".to_string(),
@@ -112,7 +112,7 @@ impl ToString for EntryIdentifierTypeEnum {
         }
     }
 }
-impl std::str::FromStr for EntryIdentifierTypeEnum {
+impl std::str::FromStr for IdentifierEntryTypeEnum {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         match value {
@@ -139,43 +139,43 @@ impl std::str::FromStr for EntryIdentifierTypeEnum {
         }
     }
 }
-impl std::convert::TryFrom<&str> for EntryIdentifierTypeEnum {
+impl std::convert::TryFrom<&str> for IdentifierEntryTypeEnum {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for EntryIdentifierTypeEnum {
+impl std::convert::TryFrom<&String> for IdentifierEntryTypeEnum {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for EntryIdentifierTypeEnum {
+impl std::convert::TryFrom<String> for IdentifierEntryTypeEnum {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct EntryIdentifierTypeString(String);
-impl std::ops::Deref for EntryIdentifierTypeString {
+pub struct IdentifierEntryTypeString(String);
+impl std::ops::Deref for IdentifierEntryTypeString {
     type Target = String;
     fn deref(&self) -> &String {
         &self.0
     }
 }
-impl From<EntryIdentifierTypeString> for String {
-    fn from(value: EntryIdentifierTypeString) -> Self {
+impl From<IdentifierEntryTypeString> for String {
+    fn from(value: IdentifierEntryTypeString) -> Self {
         value.0
     }
 }
-impl From<&EntryIdentifierTypeString> for EntryIdentifierTypeString {
-    fn from(value: &EntryIdentifierTypeString) -> Self {
+impl From<&IdentifierEntryTypeString> for IdentifierEntryTypeString {
+    fn from(value: &IdentifierEntryTypeString) -> Self {
         value.clone()
     }
 }
-impl std::str::FromStr for EntryIdentifierTypeString {
+impl std::str::FromStr for IdentifierEntryTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
@@ -188,25 +188,25 @@ impl std::str::FromStr for EntryIdentifierTypeString {
         Ok(Self(value.to_string()))
     }
 }
-impl std::convert::TryFrom<&str> for EntryIdentifierTypeString {
+impl std::convert::TryFrom<&str> for IdentifierEntryTypeString {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for EntryIdentifierTypeString {
+impl std::convert::TryFrom<&String> for IdentifierEntryTypeString {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for EntryIdentifierTypeString {
+impl std::convert::TryFrom<String> for IdentifierEntryTypeString {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl<'de> serde::Deserialize<'de> for EntryIdentifierTypeString {
+impl<'de> serde::Deserialize<'de> for IdentifierEntryTypeString {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -227,7 +227,7 @@ pub struct IdentityObject {
     pub identity_hash: String,
     #[doc = "The identity type."]
     #[serde(rename = "identityType")]
-    pub identity_type: ObjectIdentityType,
+    pub identity_type: IdentityObjectType,
     #[doc = "If the `identityHash` is hashed, this should contain the string used to salt the hash. If this value is not provided, it should be assumed that the hash was not salted."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub salt: Option<String>,
@@ -247,24 +247,24 @@ impl IdentityObject {
 }
 #[doc = "The identity type."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ObjectIdentityType {
+pub struct IdentityObjectType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<ObjectIdentityTypeEnum>, //////////////
+    pub type_enum: Option<IdentityObjectTypeEnum>, //////////////
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_string: Option<ObjectIdentityTypeString>,
+    pub type_string: Option<IdentityObjectTypeString>,
 }
-impl From<&ObjectIdentityType> for ObjectIdentityType {
-    fn from(value: &ObjectIdentityType) -> Self {
+impl From<&IdentityObjectType> for IdentityObjectType {
+    fn from(value: &IdentityObjectType) -> Self {
         value.clone()
     }
 }
-impl ObjectIdentityType {
+impl IdentityObjectType {
     pub fn builder() -> builder::IdentityObjectIdentityType {
         builder::IdentityObjectIdentityType::default()
     }
 }
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum ObjectIdentityTypeEnum {
+pub enum IdentityObjectTypeEnum {
     #[serde(rename = "name")]
     Name,
     #[serde(rename = "sourcedId")]
@@ -304,12 +304,12 @@ pub enum ObjectIdentityTypeEnum {
     #[serde(rename = "identifier")]
     Identifier,
 }
-impl From<&ObjectIdentityTypeEnum> for ObjectIdentityTypeEnum {
-    fn from(value: &ObjectIdentityTypeEnum) -> Self {
+impl From<&IdentityObjectTypeEnum> for IdentityObjectTypeEnum {
+    fn from(value: &IdentityObjectTypeEnum) -> Self {
         value.clone()
     }
 }
-impl ToString for ObjectIdentityTypeEnum {
+impl ToString for IdentityObjectTypeEnum {
     fn to_string(&self) -> String {
         match *self {
             Self::Name => "name".to_string(),
@@ -334,7 +334,7 @@ impl ToString for ObjectIdentityTypeEnum {
         }
     }
 }
-impl std::str::FromStr for ObjectIdentityTypeEnum {
+impl std::str::FromStr for IdentityObjectTypeEnum {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         match value {
@@ -361,43 +361,43 @@ impl std::str::FromStr for ObjectIdentityTypeEnum {
         }
     }
 }
-impl std::convert::TryFrom<&str> for ObjectIdentityTypeEnum {
+impl std::convert::TryFrom<&str> for IdentityObjectTypeEnum {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for ObjectIdentityTypeEnum {
+impl std::convert::TryFrom<&String> for IdentityObjectTypeEnum {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for ObjectIdentityTypeEnum {
+impl std::convert::TryFrom<String> for IdentityObjectTypeEnum {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct ObjectIdentityTypeString(String);
-impl std::ops::Deref for ObjectIdentityTypeString {
+pub struct IdentityObjectTypeString(String);
+impl std::ops::Deref for IdentityObjectTypeString {
     type Target = String;
     fn deref(&self) -> &String {
         &self.0
     }
 }
-impl From<ObjectIdentityTypeString> for String {
-    fn from(value: ObjectIdentityTypeString) -> Self {
+impl From<IdentityObjectTypeString> for String {
+    fn from(value: IdentityObjectTypeString) -> Self {
         value.0
     }
 }
-impl From<&ObjectIdentityTypeString> for ObjectIdentityTypeString {
-    fn from(value: &ObjectIdentityTypeString) -> Self {
+impl From<&IdentityObjectTypeString> for IdentityObjectTypeString {
+    fn from(value: &IdentityObjectTypeString) -> Self {
         value.clone()
     }
 }
-impl std::str::FromStr for ObjectIdentityTypeString {
+impl std::str::FromStr for IdentityObjectTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
@@ -410,25 +410,25 @@ impl std::str::FromStr for ObjectIdentityTypeString {
         Ok(Self(value.to_string()))
     }
 }
-impl std::convert::TryFrom<&str> for ObjectIdentityTypeString {
+impl std::convert::TryFrom<&str> for IdentityObjectTypeString {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for ObjectIdentityTypeString {
+impl std::convert::TryFrom<&String> for IdentityObjectTypeString {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for ObjectIdentityTypeString {
+impl std::convert::TryFrom<String> for IdentityObjectTypeString {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl<'de> serde::Deserialize<'de> for ObjectIdentityTypeString {
+impl<'de> serde::Deserialize<'de> for IdentityObjectTypeString {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -444,7 +444,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct IdentifierEntry {
         identifier: Result<String, String>,
-        identifier_type: Result<super::EntryIdentifierType, String>,
+        identifier_type: Result<super::IdentifierEntryType, String>,
         type_: Result<String, String>,
     }
     impl Default for IdentifierEntry {
@@ -469,7 +469,7 @@ pub mod builder {
         }
         pub fn identifier_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::EntryIdentifierType>,
+            T: std::convert::TryInto<super::IdentifierEntryType>,
             T::Error: std::fmt::Display,
         {
             self.identifier_type = value
@@ -509,8 +509,8 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct IdentifierEntryIdentifierType {
-        subtype_0: Result<Option<super::EntryIdentifierTypeEnum>, String>,
-        subtype_1: Result<Option<super::EntryIdentifierTypeString>, String>,
+        subtype_0: Result<Option<super::IdentifierEntryTypeEnum>, String>,
+        subtype_1: Result<Option<super::IdentifierEntryTypeString>, String>,
     }
     impl Default for IdentifierEntryIdentifierType {
         fn default() -> Self {
@@ -523,7 +523,7 @@ pub mod builder {
     impl IdentifierEntryIdentifierType {
         pub fn subtype_0<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::EntryIdentifierTypeEnum>>,
+            T: std::convert::TryInto<Option<super::IdentifierEntryTypeEnum>>,
             T::Error: std::fmt::Display,
         {
             self.subtype_0 = value
@@ -533,7 +533,7 @@ pub mod builder {
         }
         pub fn subtype_1<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::EntryIdentifierTypeString>>,
+            T: std::convert::TryInto<Option<super::IdentifierEntryTypeString>>,
             T::Error: std::fmt::Display,
         {
             self.subtype_1 = value
@@ -542,7 +542,7 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<IdentifierEntryIdentifierType> for super::EntryIdentifierType {
+    impl std::convert::TryFrom<IdentifierEntryIdentifierType> for super::IdentifierEntryType {
         type Error = String;
         fn try_from(value: IdentifierEntryIdentifierType) -> Result<Self, String> {
             Ok(Self {
@@ -551,8 +551,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::EntryIdentifierType> for IdentifierEntryIdentifierType {
-        fn from(value: super::EntryIdentifierType) -> Self {
+    impl From<super::IdentifierEntryType> for IdentifierEntryIdentifierType {
+        fn from(value: super::IdentifierEntryType) -> Self {
             Self {
                 subtype_0: Ok(value.type_enum),
                 subtype_1: Ok(value.type_string),
@@ -563,7 +563,7 @@ pub mod builder {
     pub struct IdentityObject {
         hashed: Result<bool, String>,
         identity_hash: Result<String, String>,
-        identity_type: Result<super::ObjectIdentityType, String>,
+        identity_type: Result<super::IdentityObjectType, String>,
         salt: Result<Option<String>, String>,
         type_: Result<String, String>,
     }
@@ -601,7 +601,7 @@ pub mod builder {
         }
         pub fn identity_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::ObjectIdentityType>,
+            T: std::convert::TryInto<super::IdentityObjectType>,
             T::Error: std::fmt::Display,
         {
             self.identity_type = value
@@ -655,8 +655,8 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct IdentityObjectIdentityType {
-        subtype_0: Result<Option<super::ObjectIdentityTypeEnum>, String>,
-        subtype_1: Result<Option<super::ObjectIdentityTypeString>, String>,
+        subtype_0: Result<Option<super::IdentityObjectTypeEnum>, String>,
+        subtype_1: Result<Option<super::IdentityObjectTypeString>, String>,
     }
     impl Default for IdentityObjectIdentityType {
         fn default() -> Self {
@@ -669,7 +669,7 @@ pub mod builder {
     impl IdentityObjectIdentityType {
         pub fn subtype_0<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ObjectIdentityTypeEnum>>,
+            T: std::convert::TryInto<Option<super::IdentityObjectTypeEnum>>,
             T::Error: std::fmt::Display,
         {
             self.subtype_0 = value
@@ -679,7 +679,7 @@ pub mod builder {
         }
         pub fn subtype_1<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ObjectIdentityTypeString>>,
+            T: std::convert::TryInto<Option<super::IdentityObjectTypeString>>,
             T::Error: std::fmt::Display,
         {
             self.subtype_1 = value
@@ -688,7 +688,7 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<IdentityObjectIdentityType> for super::ObjectIdentityType {
+    impl std::convert::TryFrom<IdentityObjectIdentityType> for super::IdentityObjectType {
         type Error = String;
         fn try_from(value: IdentityObjectIdentityType) -> Result<Self, String> {
             Ok(Self {
@@ -697,8 +697,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::ObjectIdentityType> for IdentityObjectIdentityType {
-        fn from(value: super::ObjectIdentityType) -> Self {
+    impl From<super::IdentityObjectType> for IdentityObjectIdentityType {
+        fn from(value: super::IdentityObjectType) -> Self {
             Self {
                 subtype_0: Ok(value.type_enum),
                 subtype_1: Ok(value.type_string),
