@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[doc = "Describes an alignment between an achievement and a node in an educational framework."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Alignment {
     #[doc = "If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl."]
     #[serde(
@@ -53,7 +53,7 @@ impl Alignment {
 
 // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of the alignment target node."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AlignmentTargetType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_enum: Option<AlignmentTargetTypeEnum>,
@@ -197,7 +197,7 @@ impl<'de> serde::Deserialize<'de> for AlignmentTargetTypeString {
             .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AlignmentType {
     SingleString(String),
@@ -215,7 +215,7 @@ impl From<Vec<String>> for AlignmentType {
 }
 
 pub mod builder {
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Alignment {
         target_code: Result<Option<String>, String>,
         target_description: Result<Option<String>, String>,
@@ -345,7 +345,7 @@ pub mod builder {
     }
 
     // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct AlignmentTargetType {
         type_enum: Result<Option<super::AlignmentTargetTypeEnum>, String>,
         type_string: Result<Option<super::AlignmentTargetTypeString>, String>,

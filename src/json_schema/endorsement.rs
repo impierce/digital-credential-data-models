@@ -2,7 +2,7 @@ use super::{achievement_credential, general, profile, proof_evidence};
 use serde::{Deserialize, Serialize};
 
 #[doc = "A verifiable credential that asserts a claim about an entity. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct EndorsementCredential {
     #[doc = "Timestamp of when the credential was awarded. `issuanceDate` is used to determine the most recent version of a Credential in conjunction with `issuer` and `id`. Consequently, the only way to update a Credental is to update the `issuanceDate`, losing the date when the Credential was originally awarded. `awardedDate` is meant to keep this original date."]
     #[serde(
@@ -72,7 +72,7 @@ impl EndorsementCredential {
         builder::EndorsementCredential::default()
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialCredentialSchema {
     SingleSchema(achievement_credential::CredentialSchema),
@@ -93,7 +93,7 @@ impl From<Vec<achievement_credential::CredentialSchema>> for EndorsementCredenti
         Self::VecSchema(value)
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialProof {
     SingleProof(proof_evidence::Proof),
@@ -114,7 +114,7 @@ impl From<Vec<proof_evidence::Proof>> for EndorsementCredentialProof {
         Self::VecProof(value)
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialTermsOfUse {
     SingleTermsOfUse(general::TermsOfUse),
@@ -135,7 +135,7 @@ impl From<Vec<general::TermsOfUse>> for EndorsementCredentialTermsOfUse {
         Self::VecTermsOfUse(value)
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialType {
     SingleString(String),
@@ -152,7 +152,7 @@ impl From<Vec<String>> for EndorsementCredentialType {
     }
 }
 #[doc = "A collection of information about the subject of the endorsement."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct EndorsementSubject {
     #[doc = "Allows endorsers to make a simple claim in writing about the entity."]
     #[serde(
@@ -176,7 +176,7 @@ impl EndorsementSubject {
         builder::EndorsementSubject::default()
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementSubjectType {
     SingleString(String),
@@ -196,7 +196,7 @@ impl From<Vec<String>> for EndorsementSubjectType {
 pub mod builder {
     use crate::json_schema::{achievement_credential, general, profile};
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct EndorsementCredential {
         awarded_date: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
         context: Result<Vec<general::Context>, String>,
@@ -439,7 +439,7 @@ pub mod builder {
             }
         }
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct EndorsementSubject {
         endorsement_comment: Result<Option<String>, String>,
         id: Result<String, String>,

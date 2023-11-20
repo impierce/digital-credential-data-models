@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[doc = "No description supplied."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IdentifierEntry {
     #[doc = "An identifier."]
@@ -26,7 +26,7 @@ impl IdentifierEntry {
 
 // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The identifier type."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct IdentifierEntryType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_enum: Option<IdentifierEntryTypeEnum>,
@@ -219,7 +219,7 @@ impl<'de> serde::Deserialize<'de> for IdentifierEntryTypeString {
     }
 }
 #[doc = "A collection of information about the recipient of an achievement."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IdentityObject {
     #[doc = "Whether or not the `identityHash` value is hashed."]
@@ -250,7 +250,7 @@ impl IdentityObject {
 
 // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The identity type."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct IdentityObjectType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_enum: Option<IdentityObjectTypeEnum>,
@@ -444,7 +444,7 @@ impl<'de> serde::Deserialize<'de> for IdentityObjectTypeString {
 }
 
 pub mod builder {
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct IdentifierEntry {
         identifier: Result<String, String>,
         identifier_type: Result<super::IdentifierEntryType, String>,
@@ -510,7 +510,7 @@ pub mod builder {
             }
         }
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct IdentifierEntryIdentifierType {
         subtype_0: Result<Option<super::IdentifierEntryTypeEnum>, String>,
         subtype_1: Result<Option<super::IdentifierEntryTypeString>, String>,
@@ -562,7 +562,7 @@ pub mod builder {
             }
         }
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct IdentityObject {
         hashed: Result<bool, String>,
         identity_hash: Result<String, String>,
@@ -656,7 +656,7 @@ pub mod builder {
             }
         }
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct IdentityObjectIdentityType {
         subtype_0: Result<Option<super::IdentityObjectTypeEnum>, String>,
         subtype_1: Result<Option<super::IdentityObjectTypeString>, String>,

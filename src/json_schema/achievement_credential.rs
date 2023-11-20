@@ -2,7 +2,7 @@ use super::{achievement_subject, endorsement, general, profile, proof_evidence};
 use serde::{Deserialize, Serialize};
 
 #[doc = "AchievementCredentials are representations of an awarded achievement, used to share information about a achievement belonging to one earner. Maps to a Verifiable Credential as defined in the [[VC-DATA-MODEL]]. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AchievementCredential {
     #[doc = "Timestamp of when the credential was awarded. `issuanceDate` is used to determine the most recent version of a Credential in conjunction with `issuer` and `id`. Consequently, the only way to update a Credental is to update the `issuanceDate`, losing the date when the Credential was originally awarded. `awardedDate` is meant to keep this original date."]
     #[serde(
@@ -87,7 +87,7 @@ impl AchievementCredential {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialSchema {
     SingleSchema(CredentialSchema),
@@ -182,7 +182,7 @@ impl<'de> serde::Deserialize<'de> for AchievementCredentialEndorsementJwtItem {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialProof {
     SingleProof(proof_evidence::Proof),
@@ -207,7 +207,7 @@ impl From<Vec<proof_evidence::Proof>> for AchievementCredentialProof {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialTermsOfUse {
     SingleTermsOfUse(general::TermsOfUse),
@@ -232,7 +232,7 @@ impl From<Vec<general::TermsOfUse>> for AchievementCredentialTermsOfUse {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialType {
     SingleString(String),
@@ -252,7 +252,7 @@ impl From<Vec<String>> for AchievementCredentialType {
 }
 
 #[doc = "Identify the type and location of a data schema."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct CredentialSchema {
     #[doc = "The value MUST be a URI identifying the schema file. One instance of `CredentialSchema` MUST have an `id` that is the URL of the JSON Schema for this credential defined by this specification."]
     pub id: String,
@@ -271,7 +271,7 @@ impl CredentialSchema {
     }
 }
 #[doc = "The information in CredentialStatus is used to discover information about the current status of a verifiable credential, such as whether it is suspended or revoked."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct CredentialStatus {
     #[doc = "The value MUST be the URL of the issuer's credential status method."]
     pub id: String,
@@ -293,7 +293,7 @@ impl CredentialStatus {
 pub mod builder {
     use crate::json_schema::{achievement_subject, endorsement, general, profile, proof_evidence};
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct AchievementCredential {
         awarded_date: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
         context: Result<Vec<general::Context>, String>,
@@ -592,7 +592,7 @@ pub mod builder {
             }
         }
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct CredentialSchema {
         id: Result<String, String>,
         type_: Result<String, String>,
@@ -644,7 +644,7 @@ pub mod builder {
             }
         }
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct CredentialStatus {
         id: Result<String, String>,
         type_: Result<String, String>,

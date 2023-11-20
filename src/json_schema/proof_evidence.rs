@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[doc = "Descriptive metadata about evidence related to the achievement assertion. Each instance of the evidence class present in an assertion corresponds to one entity, though a single entry can describe a set of items collectively. There may be multiple evidence entries referenced from an assertion. The narrative property is also in scope of the assertion class to provide an overall description of the achievement related to the assertion in rich text. It is used here to provide a narrative of achievement of the specific entity described. If both the description and narrative properties are present, displayers can assume the narrative value goes into more detail and is not simply a recapitulation of description."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Evidence {
     #[doc = "A description of the intended audience for a piece of evidence."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -34,7 +34,7 @@ impl Evidence {
         builder::Evidence::default()
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EvidenceType {
     SingleString(String),
@@ -51,7 +51,7 @@ impl From<Vec<String>> for EvidenceType {
     }
 }
 #[doc = "A JSON-LD Linked Data proof."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Proof {
     #[doc = "A value chosen by the verifier to mitigate authentication proof replay attacks."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -106,7 +106,7 @@ impl Proof {
 
 pub mod builder {
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Evidence {
         audience: Result<Option<String>, String>,
         description: Result<Option<String>, String>,
@@ -229,7 +229,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Proof {
         challenge: Result<Option<String>, String>,
         created: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,

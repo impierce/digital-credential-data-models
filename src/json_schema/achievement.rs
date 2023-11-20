@@ -4,7 +4,7 @@ use super::{
 use serde::{Deserialize, Serialize};
 
 #[doc = "A collection of information about the accomplishment recognized by the Assertion. Many assertions may be created corresponding to one Achievement."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Achievement {
     #[doc = "Unique URI for the Achievement."]
     pub id: String,
@@ -93,7 +93,7 @@ impl Achievement {
 
 // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of achievement. This is an extensible vocabulary."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AchievementType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_enum: Option<AchievementTypeEnum>,
@@ -321,7 +321,7 @@ impl<'de> serde::Deserialize<'de> for AchievementTypeString {
 }
 
 #[doc = "Descriptive metadata about the achievements necessary to be recognized with an assertion of a particular achievement. This data is added to the Achievement class so that it may be rendered when the achievement assertion is displayed, instead of simply a link to human-readable criteria external to the achievement. Embedding criteria allows either enhancement of an external criteria page or increased portability and ease of use by allowing issuers to skip hosting the formerly-required external criteria page altogether. Criteria is used to allow would-be recipients to learn what is required of them to be recognized with an assertion of a particular achievement. It is also used after the assertion is awarded to a recipient to let those inspecting earned achievements know the general requirements that the recipients met in order to earn it."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Criteria {
     #[doc = "The URI of a webpage that describes in a human-readable format the criteria for the achievement."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -343,7 +343,7 @@ impl Criteria {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Type {
     SingleString(String),
@@ -505,7 +505,7 @@ impl<'de> serde::Deserialize<'de> for AchievementLanguage {
 pub mod builder {
     use crate::json_schema::{alignment, endorsement, general, identity, profile, related, result};
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Achievement {
         achievement_type: Result<Option<super::AchievementType>, String>,
         alignment: Result<Vec<alignment::Alignment>, String>,
@@ -836,7 +836,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct AchievementAchievementType {
         subtype_0: Result<Option<super::AchievementTypeEnum>, String>,
         subtype_1: Result<Option<super::AchievementTypeString>, String>,
@@ -889,7 +889,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Criteria {
         id: Result<Option<String>, String>,
         narrative: Result<Option<String>, String>,

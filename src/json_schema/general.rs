@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[doc = "JSON-LD Context. Either a URI with the context definition or a Map with a local context definition MUST be supplied."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Context {
     MapStringJsonValue(serde_json::Map<String, serde_json::Value>),
@@ -19,7 +19,7 @@ impl From<serde_json::Map<String, serde_json::Value>> for Context {
 }
 
 #[doc = "Metadata about images that represent assertions, achieve or profiles. These properties can typically be represented as just the id string of the image, but using a fleshed-out document allows for including captions and other applicable metadata."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Image {
     #[doc = "The caption for the image."]
@@ -43,7 +43,7 @@ impl Image {
 }
 
 #[doc = "The information in RefreshService is used to refresh the verifiable credential."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct RefreshService {
     #[doc = "The value MUST be the URL of the issuer's refresh service."]
     pub id: String,
@@ -63,7 +63,7 @@ impl RefreshService {
 }
 
 #[doc = "Terms of use can be utilized by an issuer or a holder to communicate the terms under which a verifiable credential or verifiable presentation was issued"]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct TermsOfUse {
     #[doc = "The value MUST be a URI identifying the term of use."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -85,7 +85,7 @@ impl TermsOfUse {
 
 pub mod builder {
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Image {
         caption: Result<Option<String>, String>,
         id: Result<String, String>,
@@ -152,7 +152,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct RefreshService {
         id: Result<String, String>,
         type_: Result<String, String>,
@@ -205,7 +205,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct TermsOfUse {
         id: Result<Option<String>, String>,
         type_: Result<String, String>,

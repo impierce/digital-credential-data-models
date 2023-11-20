@@ -2,7 +2,7 @@ use super::{achievement, general, identity, profile, result};
 use serde::{Deserialize, Serialize};
 
 #[doc = "A collection of information about the recipient of an achievement. Maps to Credential Subject in [[VC-DATA-MODEL]]."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AchievementSubject {
     pub achievement: achievement::Achievement,
     #[doc = "The datetime the activity ended."]
@@ -65,7 +65,7 @@ impl AchievementSubject {
         builder::AchievementSubject::default()
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementSubjectType {
     SingleString(String),
@@ -85,7 +85,7 @@ impl From<Vec<String>> for AchievementSubjectType {
 pub mod builder {
     use crate::json_schema::{achievement, general, identity, profile, result};
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct AchievementSubject {
         achievement: Result<achievement::Achievement, String>,
         activity_end_date: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,

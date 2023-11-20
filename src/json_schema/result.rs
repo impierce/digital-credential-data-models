@@ -2,7 +2,7 @@ use super::alignment;
 use serde::{Deserialize, Serialize};
 
 #[doc = "Describes a possible achievement result."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct ResultDescription {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub alignment: Vec<alignment::Alignment>,
@@ -59,7 +59,7 @@ impl ResultDescription {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum DescriptionType {
     SingleString(String),
@@ -80,7 +80,7 @@ impl From<Vec<String>> for DescriptionType {
 
 // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct ResultDescriptionType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_enum: Option<ResultDescriptionTypeEnum>,
@@ -234,7 +234,7 @@ impl<'de> serde::Deserialize<'de> for ResultDescriptionTypeString {
 }
 
 #[doc = "Describes a result that was achieved."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct ResultTemp {
     #[doc = "If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the `id` of the RubricCriterionLevel in linked ResultDescription."]
     #[serde(
@@ -330,7 +330,7 @@ impl std::convert::TryFrom<String> for ResultTempStatus {
         value.parse()
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum ResultTempType {
     SingleString(String),
@@ -347,7 +347,7 @@ impl From<Vec<String>> for ResultTempType {
     }
 }
 #[doc = "Describes a rubric criterion level."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct RubricCriterionLevel {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub alignment: Vec<alignment::Alignment>,
@@ -377,7 +377,7 @@ impl RubricCriterionLevel {
         builder::RubricCriterionLevel::default()
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum RubricCriterionLevelType {
     SingleString(String),
@@ -397,7 +397,7 @@ impl From<Vec<String>> for RubricCriterionLevelType {
 pub mod builder {
     use crate::json_schema::alignment;
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct ResultDescription {
         alignment: Result<Vec<alignment::Alignment>, String>,
         allowed_value: Result<Vec<String>, String>,
@@ -580,7 +580,7 @@ pub mod builder {
     }
 
     // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct DescriptionResultType {
         type_enum: Result<Option<super::ResultDescriptionTypeEnum>, String>,
         type_string: Result<Option<super::ResultDescriptionTypeString>, String>,
@@ -632,7 +632,7 @@ pub mod builder {
             }
         }
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct ResultTemp {
         achieved_level: Result<Option<String>, String>,
         alignment: Result<Vec<alignment::Alignment>, String>,
@@ -744,7 +744,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct RubricCriterionLevel {
         alignment: Result<Vec<alignment::Alignment>, String>,
         description: Result<Option<String>, String>,

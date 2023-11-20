@@ -2,7 +2,7 @@ use super::{endorsement, general, identity};
 use serde::{Deserialize, Serialize};
 
 #[doc = "A Profile is a collection of information that describes the entity or organization using Open Badges. Issuers must be represented as Profiles, and endorsers, or other entities may also be represented using this vocabulary. Each Profile that represents an Issuer may be referenced in many BadgeClasses that it has defined. Anyone can create and host an Issuer file to start issuing Open Badges. Issuers may also serve as recipients of Open Badges, often identified within an Assertion by specific properties, like their url or contact email address."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Profile {
     #[doc = "Additional name. Includes what is often referred to as 'middle name' in the western world."]
     #[serde(
@@ -172,7 +172,7 @@ impl<'de> serde::Deserialize<'de> for ProfileEndorsementJwtItem {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum ProfileType {
     SingleString(String),
@@ -190,7 +190,7 @@ impl From<Vec<String>> for ProfileType {
 }
 
 #[doc = "An address for the described entity."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Address {
     #[doc = "A country."]
     #[serde(
@@ -257,7 +257,7 @@ impl Address {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AddressType {
     SingleString(String),
@@ -275,7 +275,7 @@ impl From<Vec<String>> for AddressType {
 }
 
 #[doc = "The geographic coordinates of a location."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct GeoCoordinates {
     pub latitude: f64,
     pub longitude: f64,
@@ -297,7 +297,7 @@ impl GeoCoordinates {
 pub mod builder {
     use crate::json_schema::{endorsement, general, identity};
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Profile {
         additional_name: Result<Option<String>, String>,
         address: Result<Option<super::Address>, String>,
@@ -642,7 +642,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Address {
         address_country: Result<Option<String>, String>,
         address_country_code: Result<Option<String>, String>,
@@ -802,7 +802,7 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct GeoCoordinates {
         latitude: Result<f64, String>,
         longitude: Result<f64, String>,

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[doc = "Identifies a related achievement."]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Related {
     #[doc = "The related achievement."]
     pub id: String,
@@ -97,7 +97,7 @@ impl<'de> serde::Deserialize<'de> for RelatedLanguage {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum RelatedType {
     SingleString(String),
@@ -118,7 +118,7 @@ impl From<Vec<String>> for RelatedType {
 
 pub mod builder {
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     pub struct Related {
         id: Result<String, String>,
         language: Result<Option<super::RelatedLanguage>, String>,
