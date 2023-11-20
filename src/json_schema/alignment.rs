@@ -56,7 +56,7 @@ impl Alignment {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AlignmentTargetType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<AlignmentTargetTypeEnum>, 
+    pub type_enum: Option<AlignmentTargetTypeEnum>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_string: Option<AlignmentTargetTypeString>,
 }
@@ -347,7 +347,7 @@ pub mod builder {
     // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
     #[derive(Clone, Debug)]
     pub struct AlignmentTargetType {
-        type_enum: Result<Option<super::AlignmentTargetTypeEnum>, String>, 
+        type_enum: Result<Option<super::AlignmentTargetTypeEnum>, String>,
         type_string: Result<Option<super::AlignmentTargetTypeString>, String>,
     }
     impl Default for AlignmentTargetType {

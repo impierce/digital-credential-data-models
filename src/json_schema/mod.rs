@@ -6,7 +6,7 @@ pub mod identity;
 pub mod profile;
 pub mod result;
 
+pub mod alignment;
 pub mod general;
 pub mod proof_evidence;
-pub mod alignment;
 pub mod related;

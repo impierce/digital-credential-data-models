@@ -105,7 +105,7 @@ impl Proof {
 }
 
 pub mod builder {
-    
+
     #[derive(Clone, Debug)]
     pub struct Evidence {
         audience: Result<Option<String>, String>,

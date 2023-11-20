@@ -1,5 +1,5 @@
+use super::{achievement, general, identity, profile, result};
 use serde::{Deserialize, Serialize};
-use super::{achievement, profile, result, identity, general};
 
 #[doc = "A collection of information about the recipient of an achievement. Maps to Credential Subject in [[VC-DATA-MODEL]]."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -83,9 +83,8 @@ impl From<Vec<String>> for AchievementSubjectType {
 }
 
 pub mod builder {
-    use crate::json_schema::{achievement, identity, general, result, profile};
+    use crate::json_schema::{achievement, general, identity, profile, result};
 
-    
     #[derive(Clone, Debug)]
     pub struct AchievementSubject {
         achievement: Result<achievement::Achievement, String>,

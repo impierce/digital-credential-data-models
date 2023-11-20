@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::{achievement_credential, general, profile, proof_evidence};
-
+use serde::{Deserialize, Serialize};
 
 #[doc = "A verifiable credential that asserts a claim about an entity. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -195,9 +194,8 @@ impl From<Vec<String>> for EndorsementSubjectType {
 }
 
 pub mod builder {
-    use crate::json_schema::{general, profile, achievement_credential};
+    use crate::json_schema::{achievement_credential, general, profile};
 
-    
     #[derive(Clone, Debug)]
     pub struct EndorsementCredential {
         awarded_date: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,

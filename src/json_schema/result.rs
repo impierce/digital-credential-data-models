@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::alignment;
+use serde::{Deserialize, Serialize};
 
 #[doc = "Describes a possible achievement result."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -83,7 +83,7 @@ impl From<Vec<String>> for DescriptionType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ResultDescriptionType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<ResultDescriptionTypeEnum>, 
+    pub type_enum: Option<ResultDescriptionTypeEnum>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_string: Option<ResultDescriptionTypeString>,
 }
@@ -394,7 +394,6 @@ impl From<Vec<String>> for RubricCriterionLevelType {
     }
 }
 
-
 pub mod builder {
     use crate::json_schema::alignment;
 
@@ -583,7 +582,7 @@ pub mod builder {
     // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
     #[derive(Clone, Debug)]
     pub struct DescriptionResultType {
-        type_enum: Result<Option<super::ResultDescriptionTypeEnum>, String>, 
+        type_enum: Result<Option<super::ResultDescriptionTypeEnum>, String>,
         type_string: Result<Option<super::ResultDescriptionTypeString>, String>,
     }
     impl Default for DescriptionResultType {

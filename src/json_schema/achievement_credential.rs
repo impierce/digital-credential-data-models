@@ -1,5 +1,5 @@
+use super::{achievement_subject, endorsement, general, profile, proof_evidence};
 use serde::{Deserialize, Serialize};
-use super::{achievement_subject, general, profile, proof_evidence, endorsement};
 
 #[doc = "AchievementCredentials are representations of an awarded achievement, used to share information about a achievement belonging to one earner. Maps to a Verifiable Credential as defined in the [[VC-DATA-MODEL]]. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -291,7 +291,7 @@ impl CredentialStatus {
 }
 
 pub mod builder {
-    use crate::json_schema::{profile, general, proof_evidence, endorsement, achievement_subject};
+    use crate::json_schema::{achievement_subject, endorsement, general, profile, proof_evidence};
 
     #[derive(Clone, Debug)]
     pub struct AchievementCredential {

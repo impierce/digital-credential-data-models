@@ -1,5 +1,7 @@
+use super::{
+    alignment, endorsement, general, identity, profile, related, result::ResultDescription,
+};
 use serde::{Deserialize, Serialize};
-use super::{endorsement, profile, result::ResultDescription, identity, general, alignment, related};
 
 #[doc = "A collection of information about the accomplishment recognized by the Assertion. Many assertions may be created corresponding to one Achievement."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -29,7 +31,7 @@ pub struct Achievement {
     #[doc = "A short description of the achievement."]
     pub description: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub endorsement: Vec<endorsement::EndorsementCredential>, 
+    pub endorsement: Vec<endorsement::EndorsementCredential>,
     #[serde(
         rename = "endorsementJwt",
         default,
@@ -92,7 +94,7 @@ impl Achievement {
 // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of achievement. This is an extensible vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AchievementType { 
+pub struct AchievementType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_enum: Option<AchievementTypeEnum>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
@@ -430,7 +432,6 @@ impl<'de> serde::Deserialize<'de> for AchievementEndorsementJwtItem {
     }
 }
 
-
 #[doc = "The language of the achievement."]
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct AchievementLanguage(String);
@@ -502,8 +503,7 @@ impl<'de> serde::Deserialize<'de> for AchievementLanguage {
 }
 
 pub mod builder {
-    use crate::json_schema::{alignment, profile, endorsement, general, identity, related, result};
-
+    use crate::json_schema::{alignment, endorsement, general, identity, profile, related, result};
 
     #[derive(Clone, Debug)]
     pub struct Achievement {

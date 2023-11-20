@@ -29,7 +29,7 @@ impl IdentifierEntry {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct IdentifierEntryType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<IdentifierEntryTypeEnum>, 
+    pub type_enum: Option<IdentifierEntryTypeEnum>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_string: Option<IdentifierEntryTypeString>,
 }
@@ -253,7 +253,7 @@ impl IdentityObject {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct IdentityObjectType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<IdentityObjectTypeEnum>, 
+    pub type_enum: Option<IdentityObjectTypeEnum>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_string: Option<IdentityObjectTypeString>,
 }
@@ -442,7 +442,6 @@ impl<'de> serde::Deserialize<'de> for IdentityObjectTypeString {
             .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
     }
 }
-
 
 pub mod builder {
     #[derive(Clone, Debug)]

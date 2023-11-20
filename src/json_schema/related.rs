@@ -117,7 +117,7 @@ impl From<Vec<String>> for RelatedType {
 }
 
 pub mod builder {
-    
+
     #[derive(Clone, Debug)]
     pub struct Related {
         id: Result<String, String>,

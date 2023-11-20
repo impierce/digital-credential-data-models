@@ -1,5 +1,5 @@
+use super::{endorsement, general, identity};
 use serde::{Deserialize, Serialize};
-use super::{endorsement, identity, general};
 
 #[doc = "A Profile is a collection of information that describes the entity or organization using Open Badges. Issuers must be represented as Profiles, and endorsers, or other entities may also be represented using this vocabulary. Each Profile that represents an Issuer may be referenced in many BadgeClasses that it has defined. Anyone can create and host an Issuer file to start issuing Open Badges. Issuers may also serve as recipients of Open Badges, often identified within an Assertion by specific properties, like their url or contact email address."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -189,7 +189,6 @@ impl From<Vec<String>> for ProfileType {
     }
 }
 
-
 #[doc = "An address for the described entity."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Address {
@@ -275,7 +274,6 @@ impl From<Vec<String>> for AddressType {
     }
 }
 
-
 #[doc = "The geographic coordinates of a location."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GeoCoordinates {
@@ -298,7 +296,6 @@ impl GeoCoordinates {
 
 pub mod builder {
     use crate::json_schema::{endorsement, general, identity};
-
 
     #[derive(Clone, Debug)]
     pub struct Profile {
