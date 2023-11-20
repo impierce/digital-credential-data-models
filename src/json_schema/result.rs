@@ -78,12 +78,12 @@ impl From<Vec<String>> for DescriptionType {
     }
 }
 
-
+// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ResultDescriptionType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<ResultDescriptionTypeEnum>, ////////////////
+    pub type_enum: Option<ResultDescriptionTypeEnum>, 
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_string: Option<ResultDescriptionTypeString>,
 }
@@ -579,9 +579,11 @@ pub mod builder {
             }
         }
     }
+
+    // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
     #[derive(Clone, Debug)]
     pub struct DescriptionResultType {
-        type_enum: Result<Option<super::ResultDescriptionTypeEnum>, String>, /////////////
+        type_enum: Result<Option<super::ResultDescriptionTypeEnum>, String>, 
         type_string: Result<Option<super::ResultDescriptionTypeString>, String>,
     }
     impl Default for DescriptionResultType {

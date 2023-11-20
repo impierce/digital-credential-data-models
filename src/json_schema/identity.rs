@@ -23,11 +23,13 @@ impl IdentifierEntry {
         builder::IdentifierEntry::default()
     }
 }
+
+// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The identifier type."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct IdentifierEntryType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<IdentifierEntryTypeEnum>, ////////////
+    pub type_enum: Option<IdentifierEntryTypeEnum>, 
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_string: Option<IdentifierEntryTypeString>,
 }
@@ -245,11 +247,13 @@ impl IdentityObject {
         builder::IdentityObject::default()
     }
 }
+
+// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The identity type."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct IdentityObjectType {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<IdentityObjectTypeEnum>, //////////////
+    pub type_enum: Option<IdentityObjectTypeEnum>, 
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_string: Option<IdentityObjectTypeString>,
 }

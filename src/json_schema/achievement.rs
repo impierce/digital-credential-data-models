@@ -89,9 +89,10 @@ impl Achievement {
     }
 }
 
+// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of achievement. This is an extensible vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AchievementType { //////////////// Enum of struct? XOR of OR?
+pub struct AchievementType { 
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub type_enum: Option<AchievementTypeEnum>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
