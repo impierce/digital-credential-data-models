@@ -346,7 +346,7 @@ impl Criteria {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Type {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 

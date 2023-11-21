@@ -62,7 +62,7 @@ impl ResultDescription {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum DescriptionType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 
@@ -333,7 +333,7 @@ impl std::convert::TryFrom<String> for ResultTempStatus {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum ResultTempType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&ResultTempType> for ResultTempType {
@@ -380,7 +380,7 @@ impl RubricCriterionLevel {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum RubricCriterionLevelType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&RubricCriterionLevelType> for RubricCriterionLevelType {

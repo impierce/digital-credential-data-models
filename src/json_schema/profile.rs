@@ -175,7 +175,7 @@ impl<'de> serde::Deserialize<'de> for ProfileEndorsementJwtItem {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum ProfileType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&ProfileType> for ProfileType {
@@ -260,7 +260,7 @@ impl Address {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AddressType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&AddressType> for AddressType {

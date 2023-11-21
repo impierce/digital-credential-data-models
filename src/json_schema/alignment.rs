@@ -200,7 +200,7 @@ impl<'de> serde::Deserialize<'de> for AlignmentTargetTypeString {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AlignmentType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&AlignmentType> for AlignmentType {

@@ -75,7 +75,7 @@ impl EndorsementCredential {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialCredentialSchema {
-    SingleSchema(achievement_credential::CredentialSchema),
+    Schema(achievement_credential::CredentialSchema),
     VecSchema(Vec<achievement_credential::CredentialSchema>),
 }
 impl From<&EndorsementCredentialCredentialSchema> for EndorsementCredentialCredentialSchema {
@@ -85,7 +85,7 @@ impl From<&EndorsementCredentialCredentialSchema> for EndorsementCredentialCrede
 }
 impl From<achievement_credential::CredentialSchema> for EndorsementCredentialCredentialSchema {
     fn from(value: achievement_credential::CredentialSchema) -> Self {
-        Self::SingleSchema(value)
+        Self::Schema(value)
     }
 }
 impl From<Vec<achievement_credential::CredentialSchema>> for EndorsementCredentialCredentialSchema {
@@ -96,7 +96,7 @@ impl From<Vec<achievement_credential::CredentialSchema>> for EndorsementCredenti
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialProof {
-    SingleProof(proof_evidence::Proof),
+    Proof(proof_evidence::Proof),
     VecProof(Vec<proof_evidence::Proof>),
 }
 impl From<&EndorsementCredentialProof> for EndorsementCredentialProof {
@@ -106,7 +106,7 @@ impl From<&EndorsementCredentialProof> for EndorsementCredentialProof {
 }
 impl From<proof_evidence::Proof> for EndorsementCredentialProof {
     fn from(value: proof_evidence::Proof) -> Self {
-        Self::SingleProof(value)
+        Self::Proof(value)
     }
 }
 impl From<Vec<proof_evidence::Proof>> for EndorsementCredentialProof {
@@ -117,7 +117,7 @@ impl From<Vec<proof_evidence::Proof>> for EndorsementCredentialProof {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialTermsOfUse {
-    SingleTermsOfUse(general::TermsOfUse),
+    TermsOfUse(general::TermsOfUse),
     VecTermsOfUse(Vec<general::TermsOfUse>),
 }
 impl From<&EndorsementCredentialTermsOfUse> for EndorsementCredentialTermsOfUse {
@@ -127,7 +127,7 @@ impl From<&EndorsementCredentialTermsOfUse> for EndorsementCredentialTermsOfUse 
 }
 impl From<general::TermsOfUse> for EndorsementCredentialTermsOfUse {
     fn from(value: general::TermsOfUse) -> Self {
-        Self::SingleTermsOfUse(value)
+        Self::TermsOfUse(value)
     }
 }
 impl From<Vec<general::TermsOfUse>> for EndorsementCredentialTermsOfUse {
@@ -138,7 +138,7 @@ impl From<Vec<general::TermsOfUse>> for EndorsementCredentialTermsOfUse {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&EndorsementCredentialType> for EndorsementCredentialType {
@@ -179,7 +179,7 @@ impl EndorsementSubject {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementSubjectType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&EndorsementSubjectType> for EndorsementSubjectType {

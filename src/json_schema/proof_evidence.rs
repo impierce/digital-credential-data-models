@@ -37,7 +37,7 @@ impl Evidence {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EvidenceType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&EvidenceType> for EvidenceType {

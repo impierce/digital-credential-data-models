@@ -68,7 +68,7 @@ impl AchievementSubject {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementSubjectType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 impl From<&AchievementSubjectType> for AchievementSubjectType {

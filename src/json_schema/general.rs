@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Context {
-    MapStringJsonValue(serde_json::Map<String, serde_json::Value>),
-    SingleString(String),
+    Map(serde_json::Map<String, serde_json::Value>),
+    String(String),
 }
 impl From<&Context> for Context {
     fn from(value: &Context) -> Self {
@@ -14,9 +14,22 @@ impl From<&Context> for Context {
 }
 impl From<serde_json::Map<String, serde_json::Value>> for Context {
     fn from(value: serde_json::Map<String, serde_json::Value>) -> Self {
-        Self::MapStringJsonValue(value)
+        Self::Map(value)
     }
 }
+
+impl From<String> for Context {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
+
+impl From<&str> for Context {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+} 
+
 
 #[doc = "Metadata about images that represent assertions, achieve or profiles. These properties can typically be represented as just the id string of the image, but using a fleshed-out document allows for including captions and other applicable metadata."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]

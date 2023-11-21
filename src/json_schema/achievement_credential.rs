@@ -4,6 +4,12 @@ use serde::{Deserialize, Serialize};
 #[doc = "AchievementCredentials are representations of an awarded achievement, used to share information about a achievement belonging to one earner. Maps to a Verifiable Credential as defined in the [[VC-DATA-MODEL]]. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AchievementCredential {
+    #[serde(rename = "@context")]
+    pub context: Vec<general::Context>,
+    #[doc = "Unambiguous reference to the credential."]
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_: AchievementCredentialType,
     #[doc = "Timestamp of when the credential was awarded. `issuanceDate` is used to determine the most recent version of a Credential in conjunction with `issuer` and `id`. Consequently, the only way to update a Credental is to update the `issuanceDate`, losing the date when the Credential was originally awarded. `awardedDate` is meant to keep this original date."]
     #[serde(
         rename = "awardedDate",
@@ -11,8 +17,6 @@ pub struct AchievementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub awarded_date: Option<chrono::DateTime<chrono::offset::Utc>>,
-    #[serde(rename = "@context")]
-    pub context: Vec<general::Context>,
     #[serde(
         rename = "credentialSchema",
         default,
@@ -47,8 +51,6 @@ pub struct AchievementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub expiration_date: Option<chrono::DateTime<chrono::offset::Utc>>,
-    #[doc = "Unambiguous reference to the credential."]
-    pub id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub image: Option<general::Image>,
     #[doc = "Timestamp of when the credential was issued."]
@@ -71,8 +73,6 @@ pub struct AchievementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub terms_of_use: Option<AchievementCredentialTermsOfUse>,
-    #[serde(rename = "type")]
-    pub type_: AchievementCredentialType,
 }
 
 impl From<&AchievementCredential> for AchievementCredential {
@@ -90,7 +90,7 @@ impl AchievementCredential {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialSchema {
-    SingleSchema(CredentialSchema),
+    Schema(CredentialSchema),
     VecSchema(Vec<CredentialSchema>),
 }
 
@@ -102,7 +102,7 @@ impl From<&AchievementCredentialSchema> for AchievementCredentialSchema {
 
 impl From<CredentialSchema> for AchievementCredentialSchema {
     fn from(value: CredentialSchema) -> Self {
-        Self::SingleSchema(value)
+        Self::Schema(value)
     }
 }
 
@@ -185,7 +185,7 @@ impl<'de> serde::Deserialize<'de> for AchievementCredentialEndorsementJwtItem {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialProof {
-    SingleProof(proof_evidence::Proof),
+    Proof(proof_evidence::Proof),
     VecProof(Vec<proof_evidence::Proof>),
 }
 
@@ -197,7 +197,7 @@ impl From<&AchievementCredentialProof> for AchievementCredentialProof {
 
 impl From<proof_evidence::Proof> for AchievementCredentialProof {
     fn from(value: proof_evidence::Proof) -> Self {
-        Self::SingleProof(value)
+        Self::Proof(value)
     }
 }
 
@@ -210,7 +210,7 @@ impl From<Vec<proof_evidence::Proof>> for AchievementCredentialProof {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialTermsOfUse {
-    SingleTermsOfUse(general::TermsOfUse),
+    TermsOfUse(general::TermsOfUse),
     VecTermsOfUse(Vec<general::TermsOfUse>),
 }
 
@@ -222,7 +222,7 @@ impl From<&AchievementCredentialTermsOfUse> for AchievementCredentialTermsOfUse 
 
 impl From<general::TermsOfUse> for AchievementCredentialTermsOfUse {
     fn from(value: general::TermsOfUse) -> Self {
-        Self::SingleTermsOfUse(value)
+        Self::TermsOfUse(value)
     }
 }
 
@@ -235,7 +235,7 @@ impl From<Vec<general::TermsOfUse>> for AchievementCredentialTermsOfUse {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 

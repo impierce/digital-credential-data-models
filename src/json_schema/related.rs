@@ -100,7 +100,7 @@ impl<'de> serde::Deserialize<'de> for RelatedLanguage {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum RelatedType {
-    SingleString(String),
+    String(String),
     VecString(Vec<String>),
 }
 
