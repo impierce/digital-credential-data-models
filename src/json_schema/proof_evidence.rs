@@ -45,11 +45,28 @@ impl From<&EvidenceType> for EvidenceType {
         value.clone()
     }
 }
+impl From<String> for EvidenceType {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
+impl From<&str> for EvidenceType {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+}
 impl From<Vec<String>> for EvidenceType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
     }
 }
+impl From<Vec<&str>> for EvidenceType {
+    fn from(value: Vec<&str>) -> Self {
+        let v = value.iter().map(|v| v.to_string()).collect();
+        Self::VecString(v)
+    }
+}
+
 #[doc = "A JSON-LD Linked Data proof."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Proof {

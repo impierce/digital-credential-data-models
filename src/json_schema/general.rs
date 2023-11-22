@@ -97,7 +97,6 @@ impl TermsOfUse {
 }
 
 pub mod builder {
-
     #[derive(Clone, Debug, PartialEq)]
     pub struct Image {
         caption: Result<Option<String>, String>,

@@ -388,9 +388,24 @@ impl From<&RubricCriterionLevelType> for RubricCriterionLevelType {
         value.clone()
     }
 }
+impl From<String> for RubricCriterionLevelType {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}impl From<&str> for RubricCriterionLevelType {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+}
 impl From<Vec<String>> for RubricCriterionLevelType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
+    }
+}
+impl From<Vec<&str>> for RubricCriterionLevelType {
+    fn from(value: Vec<&str>) -> Self {
+        let v = value.iter().map(|v| v.to_string()).collect();
+        Self::VecString(v)
     }
 }
 

@@ -103,16 +103,30 @@ pub enum RelatedType {
     String(String),
     VecString(Vec<String>),
 }
-
 impl From<&RelatedType> for RelatedType {
     fn from(value: &RelatedType) -> Self {
         value.clone()
     }
 }
-
+impl From<String> for RelatedType {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
+impl From<&str> for RelatedType {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+}
 impl From<Vec<String>> for RelatedType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
+    }
+}
+impl From<Vec<&str>> for RelatedType {
+    fn from(value: Vec<&str>) -> Self {
+        let v = value.iter().map(|v| v.to_string()).collect();
+        Self::VecString(v)
     }
 }
 
