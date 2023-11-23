@@ -4,6 +4,30 @@ use serde::{Deserialize, Serialize};
 #[doc = "A verifiable credential that asserts a claim about an entity. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct EndorsementCredential {
+    #[serde(rename = "@context")]
+    pub context: Vec<general::Context>,
+    #[serde(rename = "type")]
+    pub type_: EndorsementCredentialType,
+    #[doc = "Unambiguous reference to the credential."]
+    pub id: String,
+    #[doc = "The name of the credential for display purposes in wallets. For example, in a list of credentials and in detail views."]
+    pub name: String,
+    #[doc = "The short description of the credential for display purposes in wallets."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "credentialSubject")]
+    pub credential_subject: EndorsementSubject,
+    pub issuer: profile::Profile,
+    #[doc = "Timestamp of when the credential was issued."]
+    #[serde(rename = "issuanceDate")]
+    pub issuance_date: chrono::DateTime<chrono::offset::Utc>,
+    #[doc = "If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired."]
+    #[serde(
+        rename = "expirationDate",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub expiration_date: Option<chrono::DateTime<chrono::offset::Utc>>,
     #[doc = "Timestamp of when the credential was awarded. `issuanceDate` is used to determine the most recent version of a Credential in conjunction with `issuer` and `id`. Consequently, the only way to update a Credental is to update the `issuanceDate`, losing the date when the Credential was originally awarded. `awardedDate` is meant to keep this original date."]
     #[serde(
         rename = "awardedDate",
@@ -11,8 +35,8 @@ pub struct EndorsementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub awarded_date: Option<chrono::DateTime<chrono::offset::Utc>>,
-    #[serde(rename = "@context")]
-    pub context: Vec<general::Context>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub proof: Option<EndorsementCredentialProof>,
     #[serde(
         rename = "credentialSchema",
         default,
@@ -25,28 +49,6 @@ pub struct EndorsementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub credential_status: Option<achievement_credential::CredentialStatus>,
-    #[serde(rename = "credentialSubject")]
-    pub credential_subject: EndorsementSubject,
-    #[doc = "The short description of the credential for display purposes in wallets."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    #[doc = "If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired."]
-    #[serde(
-        rename = "expirationDate",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub expiration_date: Option<chrono::DateTime<chrono::offset::Utc>>,
-    #[doc = "Unambiguous reference to the credential."]
-    pub id: String,
-    #[doc = "Timestamp of when the credential was issued."]
-    #[serde(rename = "issuanceDate")]
-    pub issuance_date: chrono::DateTime<chrono::offset::Utc>,
-    pub issuer: profile::Profile,
-    #[doc = "The name of the credential for display purposes in wallets. For example, in a list of credentials and in detail views."]
-    pub name: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub proof: Option<EndorsementCredentialProof>,
     #[serde(
         rename = "refreshService",
         default,
@@ -59,8 +61,6 @@ pub struct EndorsementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub terms_of_use: Option<EndorsementCredentialTermsOfUse>,
-    #[serde(rename = "type")]
-    pub type_: EndorsementCredentialType,
 }
 impl From<&EndorsementCredential> for EndorsementCredential {
     fn from(value: &EndorsementCredential) -> Self {
@@ -154,6 +154,10 @@ impl From<Vec<String>> for EndorsementCredentialType {
 #[doc = "A collection of information about the subject of the endorsement."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct EndorsementSubject {
+    #[doc = "The identifier of the individual, entity, organization, assertion, or achievement that is endorsed."]
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_: EndorsementSubjectType,
     #[doc = "Allows endorsers to make a simple claim in writing about the entity."]
     #[serde(
         rename = "endorsementComment",
@@ -161,10 +165,6 @@ pub struct EndorsementSubject {
         skip_serializing_if = "Option::is_none"
     )]
     pub endorsement_comment: Option<String>,
-    #[doc = "The identifier of the individual, entity, organization, assertion, or achievement that is endorsed."]
-    pub id: String,
-    #[serde(rename = "type")]
-    pub type_: EndorsementSubjectType,
 }
 impl From<&EndorsementSubject> for EndorsementSubject {
     fn from(value: &EndorsementSubject) -> Self {

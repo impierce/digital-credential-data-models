@@ -4,14 +4,14 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IdentifierEntry {
+    #[doc = "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'IdentifierEntry'."]
+    #[serde(rename = "type")]
+    pub type_: String,
     #[doc = "An identifier."]
     pub identifier: String,
     #[doc = "The identifier type."]
     #[serde(rename = "identifierType")]
     pub identifier_type: IdentifierEntryType,
-    #[doc = "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'IdentifierEntry'."]
-    #[serde(rename = "type")]
-    pub type_: String,
 }
 impl From<&IdentifierEntry> for IdentifierEntry {
     fn from(value: &IdentifierEntry) -> Self {
@@ -222,6 +222,9 @@ impl<'de> serde::Deserialize<'de> for IdentifierEntryTypeString {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IdentityObject {
+    #[doc = "MUST be the IRI 'IdentityObject'."]
+    #[serde(rename = "type")]
+    pub type_: String,
     #[doc = "Whether or not the `identityHash` value is hashed."]
     pub hashed: bool,
     #[doc = "Either the IdentityHash of the identity or the plaintext value. If it's possible that the plaintext transmission and storage of the identity value would leak personally identifiable information where there is an expectation of privacy, it is strongly recommended that an IdentityHash be used."]
@@ -233,9 +236,6 @@ pub struct IdentityObject {
     #[doc = "If the `identityHash` is hashed, this should contain the string used to salt the hash. If this value is not provided, it should be assumed that the hash was not salted."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub salt: Option<String>,
-    #[doc = "MUST be the IRI 'IdentityObject'."]
-    #[serde(rename = "type")]
-    pub type_: String,
 }
 impl From<&IdentityObject> for IdentityObject {
     fn from(value: &IdentityObject) -> Self {

@@ -4,6 +4,10 @@ use serde::{Deserialize, Serialize};
 #[doc = "Describes a possible achievement result."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct ResultDescription {
+    #[doc = "The unique URI for this result description. Required so a result can link to this result description."]
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_: DescriptionType,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub alignment: Vec<alignment::Alignment>,
     #[serde(
@@ -12,8 +16,6 @@ pub struct ResultDescription {
         skip_serializing_if = "Vec::is_empty"
     )]
     pub allowed_value: Vec<String>,
-    #[doc = "The unique URI for this result description. Required so a result can link to this result description."]
-    pub id: String,
     #[doc = "The name of the result."]
     pub name: String,
     #[doc = "The `id` of the rubric criterion level required to pass as determined by the achievement creator."]
@@ -39,8 +41,6 @@ pub struct ResultDescription {
         skip_serializing_if = "Vec::is_empty"
     )]
     pub rubric_criterion_level: Vec<RubricCriterionLevel>,
-    #[serde(rename = "type")]
-    pub type_: DescriptionType,
     #[doc = "The maximum possible `value` that may be asserted in a linked result."]
     #[serde(rename = "valueMax", default, skip_serializing_if = "Option::is_none")]
     pub value_max: Option<String>,
@@ -235,7 +235,8 @@ impl<'de> serde::Deserialize<'de> for ResultDescriptionTypeString {
 
 #[doc = "Describes a result that was achieved."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub struct ResultTemp {
+#[serde(rename = "Result")]
+pub struct Result_ {
     #[doc = "If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the `id` of the RubricCriterionLevel in linked ResultDescription."]
     #[serde(
         rename = "achievedLevel",
@@ -254,26 +255,26 @@ pub struct ResultTemp {
     pub result_description: Option<String>,
     #[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub status: Option<ResultTempStatus>,
+    pub status: Option<ResultStatus>,
     #[serde(rename = "type")]
-    pub type_: ResultTempType,
+    pub type_: ResultType,
     #[doc = "A string representing the result of the performance, or demonstration, of the achievement. For example, 'A' if the recipient received an A grade in class."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
-impl From<&ResultTemp> for ResultTemp {
-    fn from(value: &ResultTemp) -> Self {
+impl From<&Result_> for Result_ {
+    fn from(value: &Result_) -> Self {
         value.clone()
     }
 }
-impl ResultTemp {
-    pub fn builder() -> builder::ResultTemp {
-        builder::ResultTemp::default()
+impl Result_ {
+    pub fn builder() -> builder::Result_ {
+        builder::Result_::default()
     }
 }
 #[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum ResultTempStatus {
+pub enum ResultStatus {
     Completed,
     Enrolled,
     Failed,
@@ -281,12 +282,12 @@ pub enum ResultTempStatus {
     OnHold,
     Withdrew,
 }
-impl From<&ResultTempStatus> for ResultTempStatus {
-    fn from(value: &ResultTempStatus) -> Self {
+impl From<&ResultStatus> for ResultStatus {
+    fn from(value: &ResultStatus) -> Self {
         value.clone()
     }
 }
-impl ToString for ResultTempStatus {
+impl ToString for ResultStatus {
     fn to_string(&self) -> String {
         match *self {
             Self::Completed => "Completed".to_string(),
@@ -298,7 +299,7 @@ impl ToString for ResultTempStatus {
         }
     }
 }
-impl std::str::FromStr for ResultTempStatus {
+impl std::str::FromStr for ResultStatus {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
         match value {
@@ -312,19 +313,19 @@ impl std::str::FromStr for ResultTempStatus {
         }
     }
 }
-impl std::convert::TryFrom<&str> for ResultTempStatus {
+impl std::convert::TryFrom<&str> for ResultStatus {
     type Error = &'static str;
     fn try_from(value: &str) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for ResultTempStatus {
+impl std::convert::TryFrom<&String> for ResultStatus {
     type Error = &'static str;
     fn try_from(value: &String) -> Result<Self, &'static str> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for ResultTempStatus {
+impl std::convert::TryFrom<String> for ResultStatus {
     type Error = &'static str;
     fn try_from(value: String) -> Result<Self, &'static str> {
         value.parse()
@@ -332,16 +333,16 @@ impl std::convert::TryFrom<String> for ResultTempStatus {
 }
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
-pub enum ResultTempType {
+pub enum ResultType {
     String(String),
     VecString(Vec<String>),
 }
-impl From<&ResultTempType> for ResultTempType {
-    fn from(value: &ResultTempType) -> Self {
+impl From<&ResultType> for ResultType {
+    fn from(value: &ResultType) -> Self {
         value.clone()
     }
 }
-impl From<Vec<String>> for ResultTempType {
+impl From<Vec<String>> for ResultType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
     }
@@ -349,13 +350,15 @@ impl From<Vec<String>> for ResultTempType {
 #[doc = "Describes a rubric criterion level."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct RubricCriterionLevel {
+    #[doc = "The unique URI for this rubric criterion level. Required so a result can link to this rubric criterion level."]
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_: RubricCriterionLevelType,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub alignment: Vec<alignment::Alignment>,
     #[doc = "Description of the rubric criterion level."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc = "The unique URI for this rubric criterion level. Required so a result can link to this rubric criterion level."]
-    pub id: String,
     #[doc = "The rubric performance level in terms of success."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub level: Option<String>,
@@ -364,8 +367,6 @@ pub struct RubricCriterionLevel {
     #[doc = "The points associated with this rubric criterion level."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub points: Option<String>,
-    #[serde(rename = "type")]
-    pub type_: RubricCriterionLevelType,
 }
 impl From<&RubricCriterionLevel> for RubricCriterionLevel {
     fn from(value: &RubricCriterionLevel) -> Self {
@@ -392,7 +393,8 @@ impl From<String> for RubricCriterionLevelType {
     fn from(value: String) -> Self {
         Self::String(value)
     }
-}impl From<&str> for RubricCriterionLevelType {
+}
+impl From<&str> for RubricCriterionLevelType {
     fn from(value: &str) -> Self {
         Self::String(value.to_string())
     }
@@ -648,15 +650,15 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug, PartialEq)]
-    pub struct ResultTemp {
+    pub struct Result_ {
         achieved_level: Result<Option<String>, String>,
         alignment: Result<Vec<alignment::Alignment>, String>,
         result_description: Result<Option<String>, String>,
-        status: Result<Option<super::ResultTempStatus>, String>,
-        type_: Result<super::ResultTempType, String>,
+        status: Result<Option<super::ResultStatus>, String>,
+        type_: Result<super::ResultType, String>,
         value: Result<Option<String>, String>,
     }
-    impl Default for ResultTemp {
+    impl Default for Result_ {
         fn default() -> Self {
             Self {
                 achieved_level: Ok(Default::default()),
@@ -668,7 +670,7 @@ pub mod builder {
             }
         }
     }
-    impl ResultTemp {
+    impl Result_ {
         pub fn achieved_level<T>(mut self, value: T) -> Self
         where
             T: std::convert::TryInto<Option<String>>,
@@ -704,7 +706,7 @@ pub mod builder {
         }
         pub fn status<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ResultTempStatus>>,
+            T: std::convert::TryInto<Option<super::ResultStatus>>,
             T::Error: std::fmt::Display,
         {
             self.status = value
@@ -714,7 +716,7 @@ pub mod builder {
         }
         pub fn type_<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::ResultTempType>,
+            T: std::convert::TryInto<super::ResultType>,
             T::Error: std::fmt::Display,
         {
             self.type_ = value
@@ -733,9 +735,9 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<ResultTemp> for super::ResultTemp {
+    impl std::convert::TryFrom<Result_> for super::Result_ {
         type Error = String;
-        fn try_from(value: ResultTemp) -> Result<Self, String> {
+        fn try_from(value: Result_) -> Result<Self, String> {
             Ok(Self {
                 achieved_level: value.achieved_level?,
                 alignment: value.alignment?,
@@ -746,8 +748,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::ResultTemp> for ResultTemp {
-        fn from(value: super::ResultTemp) -> Self {
+    impl From<super::Result_> for Result_ {
+        fn from(value: super::Result_) -> Self {
             Self {
                 achieved_level: Ok(value.achieved_level),
                 alignment: Ok(value.alignment),

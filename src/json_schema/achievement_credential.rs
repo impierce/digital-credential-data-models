@@ -10,6 +10,36 @@ pub struct AchievementCredential {
     pub id: String,
     #[serde(rename = "type")]
     pub type_: AchievementCredentialType,
+    #[doc = "The name of the credential for display purposes in wallets. For example, in a list of credentials and in detail views."]
+    pub name: String,
+    #[doc = "The short description of the credential for display purposes in wallets."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub image: Option<general::Image>,
+    #[serde(rename = "credentialSubject")]
+    pub credential_subject: achievement_subject::AchievementSubject,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub endorsement: Vec<endorsement::EndorsementCredential>,
+    #[serde(
+        rename = "endorsementJwt",
+        default,
+        skip_serializing_if = "Vec::is_empty"
+    )]
+    pub endorsement_jwt: Vec<AchievementCredentialEndorsementJwtItem>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub evidence: Vec<proof_evidence::Evidence>,
+    pub issuer: profile::Profile,
+    #[doc = "Timestamp of when the credential was issued."]
+    #[serde(rename = "issuanceDate")]
+    pub issuance_date: chrono::DateTime<chrono::offset::Utc>,
+    #[doc = "If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired."]
+    #[serde(
+        rename = "expirationDate",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub expiration_date: Option<chrono::DateTime<chrono::offset::Utc>>,
     #[doc = "Timestamp of when the credential was awarded. `issuanceDate` is used to determine the most recent version of a Credential in conjunction with `issuer` and `id`. Consequently, the only way to update a Credental is to update the `issuanceDate`, losing the date when the Credential was originally awarded. `awardedDate` is meant to keep this original date."]
     #[serde(
         rename = "awardedDate",
@@ -17,6 +47,8 @@ pub struct AchievementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub awarded_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub proof: Option<AchievementCredentialProof>,
     #[serde(
         rename = "credentialSchema",
         default,
@@ -29,38 +61,6 @@ pub struct AchievementCredential {
         skip_serializing_if = "Option::is_none"
     )]
     pub credential_status: Option<CredentialStatus>,
-    #[serde(rename = "credentialSubject")]
-    pub credential_subject: achievement_subject::AchievementSubject,
-    #[doc = "The short description of the credential for display purposes in wallets."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub endorsement: Vec<endorsement::EndorsementCredential>,
-    #[serde(
-        rename = "endorsementJwt",
-        default,
-        skip_serializing_if = "Vec::is_empty"
-    )]
-    pub endorsement_jwt: Vec<AchievementCredentialEndorsementJwtItem>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub evidence: Vec<proof_evidence::Evidence>,
-    #[doc = "If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired."]
-    #[serde(
-        rename = "expirationDate",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub expiration_date: Option<chrono::DateTime<chrono::offset::Utc>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub image: Option<general::Image>,
-    #[doc = "Timestamp of when the credential was issued."]
-    #[serde(rename = "issuanceDate")]
-    pub issuance_date: chrono::DateTime<chrono::offset::Utc>,
-    pub issuer: profile::Profile,
-    #[doc = "The name of the credential for display purposes in wallets. For example, in a list of credentials and in detail views."]
-    pub name: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub proof: Option<AchievementCredentialProof>,
     #[serde(
         rename = "refreshService",
         default,

@@ -3,26 +3,26 @@ use serde::{Deserialize, Serialize};
 #[doc = "Descriptive metadata about evidence related to the achievement assertion. Each instance of the evidence class present in an assertion corresponds to one entity, though a single entry can describe a set of items collectively. There may be multiple evidence entries referenced from an assertion. The narrative property is also in scope of the assertion class to provide an overall description of the achievement related to the assertion in rich text. It is used here to provide a narrative of achievement of the specific entity described. If both the description and narrative properties are present, displayers can assume the narrative value goes into more detail and is not simply a recapitulation of description."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Evidence {
-    #[doc = "A description of the intended audience for a piece of evidence."]
+    #[doc = "The URL of a webpage presenting evidence of achievement or the evidence encoded as a Data URI. The schema of the webpage is undefined."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub audience: Option<String>,
+    pub id: Option<String>,
+    #[serde(rename = "type")]
+    pub type_: EvidenceType,
+    #[doc = "A narrative that describes the evidence and process of achievement that led to an assertion."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub narrative: Option<String>,
+    #[doc = "A descriptive title of the evidence."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     #[doc = "A longer description of the evidence."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[doc = "A string that describes the type of evidence. For example, Poetry, Prose, Film."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub genre: Option<String>,
-    #[doc = "The URL of a webpage presenting evidence of achievement or the evidence encoded as a Data URI. The schema of the webpage is undefined."]
+    #[doc = "A description of the intended audience for a piece of evidence."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
-    #[doc = "A descriptive title of the evidence."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[doc = "A narrative that describes the evidence and process of achievement that led to an assertion."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub narrative: Option<String>,
-    #[serde(rename = "type")]
-    pub type_: EvidenceType,
+    pub audience: Option<String>,
 }
 impl From<&Evidence> for Evidence {
     fn from(value: &Evidence) -> Self {
@@ -70,6 +70,9 @@ impl From<Vec<&str>> for EvidenceType {
 #[doc = "A JSON-LD Linked Data proof."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Proof {
+    #[doc = "Signature suite used to produce proof."]
+    #[serde(rename = "type")]
+    pub type_: String,
     #[doc = "A value chosen by the verifier to mitigate authentication proof replay attacks."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub challenge: Option<String>,
@@ -99,9 +102,6 @@ pub struct Proof {
         skip_serializing_if = "Option::is_none"
     )]
     pub proof_value: Option<String>,
-    #[doc = "Signature suite used to produce proof."]
-    #[serde(rename = "type")]
-    pub type_: String,
     #[doc = "The URL of the public key that can verify the signature."]
     #[serde(
         rename = "verificationMethod",

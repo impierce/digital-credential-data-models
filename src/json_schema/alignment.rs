@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 #[doc = "Describes an alignment between an achievement and a node in an educational framework."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Alignment {
+    #[serde(rename = "type")]
+    pub type_: AlignmentType,
     #[doc = "If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl."]
     #[serde(
         rename = "targetCode",
@@ -17,6 +19,9 @@ pub struct Alignment {
         skip_serializing_if = "Option::is_none"
     )]
     pub target_description: Option<String>,
+    #[doc = "Name of the alignment."]
+    #[serde(rename = "targetName")]
+    pub target_name: String,
     #[doc = "Name of the framework the alignment target."]
     #[serde(
         rename = "targetFramework",
@@ -24,9 +29,6 @@ pub struct Alignment {
         skip_serializing_if = "Option::is_none"
     )]
     pub target_framework: Option<String>,
-    #[doc = "Name of the alignment."]
-    #[serde(rename = "targetName")]
-    pub target_name: String,
     #[doc = "The type of the alignment target node."]
     #[serde(
         rename = "targetType",
@@ -37,8 +39,6 @@ pub struct Alignment {
     #[doc = "URL linking to the official description of the alignment target, for example an individual standard within an educational framework."]
     #[serde(rename = "targetUrl")]
     pub target_url: String,
-    #[serde(rename = "type")]
-    pub type_: AlignmentType,
 }
 impl From<&Alignment> for Alignment {
     fn from(value: &Alignment) -> Self {

@@ -4,7 +4,11 @@ use serde::{Deserialize, Serialize};
 #[doc = "A collection of information about the recipient of an achievement. Maps to Credential Subject in [[VC-DATA-MODEL]]."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AchievementSubject {
-    pub achievement: achievement::Achievement,
+    #[doc = "An identifier for the Credential Subject. Either `id` or at least one `identifier` MUST be supplied."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "type")]
+    pub type_: AchievementSubjectType,
     #[doc = "The datetime the activity ended."]
     #[serde(
         rename = "activityEndDate",
@@ -25,9 +29,7 @@ pub struct AchievementSubject {
         skip_serializing_if = "Option::is_none"
     )]
     pub credits_earned: Option<f64>,
-    #[doc = "An identifier for the Credential Subject. Either `id` or at least one `identifier` MUST be supplied."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub achievement: achievement::Achievement,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub identifier: Vec<identity::IdentityObject>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -43,7 +45,7 @@ pub struct AchievementSubject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub narrative: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub result: Vec<result::ResultTemp>,
+    pub result: Vec<result::Result_>,
     #[doc = "Role, position, or title of the learner when demonstrating or performing the achievement or evidence of learning being asserted. Examples include 'Student President', 'Intern', 'Captain', etc."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -52,8 +54,6 @@ pub struct AchievementSubject {
     #[doc = "The academic term in which this assertion was achieved."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub term: Option<String>,
-    #[serde(rename = "type")]
-    pub type_: AchievementSubjectType,
 }
 impl From<&AchievementSubject> for AchievementSubject {
     fn from(value: &AchievementSubject) -> Self {
@@ -112,7 +112,7 @@ pub mod builder {
         image: Result<Option<general::Image>, String>,
         license_number: Result<Option<String>, String>,
         narrative: Result<Option<String>, String>,
-        result: Result<Vec<result::ResultTemp>, String>,
+        result: Result<Vec<result::Result_>, String>,
         role: Result<Option<String>, String>,
         source: Result<Option<profile::Profile>, String>,
         term: Result<Option<String>, String>,
@@ -237,7 +237,7 @@ pub mod builder {
         }
         pub fn result<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Vec<result::ResultTemp>>,
+            T: std::convert::TryInto<Vec<result::Result_>>,
             T::Error: std::fmt::Display,
         {
             self.result = value

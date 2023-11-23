@@ -10,6 +10,8 @@ pub struct Achievement {
     pub id: String,
     #[serde(rename = "type")]
     pub type_: Type,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub alignment: Vec<alignment::Alignment>,
     #[doc = "The type of achievement. This is an extensible vocabulary."]
     #[serde(
         rename = "achievementType",
@@ -17,8 +19,6 @@ pub struct Achievement {
         skip_serializing_if = "Option::is_none"
     )]
     pub achievement_type: Option<AchievementType>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub alignment: Vec<alignment::Alignment>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub creator: Option<profile::Profile>,
     #[serde(

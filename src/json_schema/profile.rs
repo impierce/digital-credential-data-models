@@ -4,28 +4,22 @@ use serde::{Deserialize, Serialize};
 #[doc = "A Profile is a collection of information that describes the entity or organization using Open Badges. Issuers must be represented as Profiles, and endorsers, or other entities may also be represented using this vocabulary. Each Profile that represents an Issuer may be referenced in many BadgeClasses that it has defined. Anyone can create and host an Issuer file to start issuing Open Badges. Issuers may also serve as recipients of Open Badges, often identified within an Assertion by specific properties, like their url or contact email address."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Profile {
-    #[doc = "Additional name. Includes what is often referred to as 'middle name' in the western world."]
-    #[serde(
-        rename = "additionalName",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub additional_name: Option<String>,
+    #[doc = "Unique URI for the Issuer/Profile file."]
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_: ProfileType,
+    #[doc = "The name of the entity or organization."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub address: Option<Address>,
-    #[doc = "Birthdate of the person."]
-    #[serde(
-        rename = "dateOfBirth",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub date_of_birth: Option<chrono::naive::NaiveDate>,
+    pub name: Option<String>,
+    #[doc = "The homepage or social media profile of the entity, whether individual or institutional. Should be a URL/URI Accessible via HTTP."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    #[doc = "A phone number."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub phone: Option<String>,
     #[doc = "A short description of the issuer entity or organization."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc = "An email address."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub email: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub endorsement: Vec<endorsement::EndorsementCredential>,
     #[serde(
@@ -34,6 +28,24 @@ pub struct Profile {
         skip_serializing_if = "Vec::is_empty"
     )]
     pub endorsement_jwt: Vec<ProfileEndorsementJwtItem>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub image: Option<general::Image>,
+    #[doc = "An email address."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub address: Option<Address>,
+    #[serde(
+        rename = "otherIdentifier",
+        default,
+        skip_serializing_if = "Vec::is_empty"
+    )]
+    pub other_identifier: Vec<identity::IdentifierEntry>,
+    #[doc = "If the entity is an organization, `official` is the name of an authorized official of the organization."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub official: Option<String>,
+    #[serde(rename = "parentOrg", default, skip_serializing_if = "Option::is_none")]
+    pub parent_org: Box<Option<Profile>>,
     #[doc = "Family name. In the western world, often referred to as the 'last name' of a person."]
     #[serde(
         rename = "familyName",
@@ -41,16 +53,23 @@ pub struct Profile {
         skip_serializing_if = "Option::is_none"
     )]
     pub family_name: Option<String>,
-    #[doc = "Family name prefix. As used in some locales, this is the leading part of a family name (e.g. 'de' in the name 'de Boer')."]
-    #[serde(
-        rename = "familyNamePrefix",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub family_name_prefix: Option<String>,
     #[doc = "Given name. In the western world, often referred to as the 'first name' of a person."]
     #[serde(rename = "givenName", default, skip_serializing_if = "Option::is_none")]
     pub given_name: Option<String>,
+    #[doc = "Additional name. Includes what is often referred to as 'middle name' in the western world."]
+    #[serde(
+        rename = "additionalName",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub additional_name: Option<String>,
+    #[doc = "Patronymic name."]
+    #[serde(
+        rename = "patronymicName",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub patronymic_name: Option<String>,
     #[doc = "Honorific prefix(es) preceding a person's name (e.g. 'Dr', 'Mrs' or 'Mr')."]
     #[serde(
         rename = "honorificPrefix",
@@ -65,39 +84,20 @@ pub struct Profile {
         skip_serializing_if = "Option::is_none"
     )]
     pub honorific_suffix: Option<String>,
-    #[doc = "Unique URI for the Issuer/Profile file."]
-    pub id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub image: Option<general::Image>,
-    #[doc = "The name of the entity or organization."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[doc = "If the entity is an organization, `official` is the name of an authorized official of the organization."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub official: Option<String>,
+    #[doc = "Family name prefix. As used in some locales, this is the leading part of a family name (e.g. 'de' in the name 'de Boer')."]
     #[serde(
-        rename = "otherIdentifier",
-        default,
-        skip_serializing_if = "Vec::is_empty"
-    )]
-    pub other_identifier: Vec<identity::IdentifierEntry>,
-    #[serde(rename = "parentOrg", default)]
-    pub parent_org: Box<Option<Profile>>,
-    #[doc = "Patronymic name."]
-    #[serde(
-        rename = "patronymicName",
+        rename = "familyNamePrefix",
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub patronymic_name: Option<String>,
-    #[doc = "A phone number."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub phone: Option<String>,
-    #[serde(rename = "type")]
-    pub type_: ProfileType,
-    #[doc = "The homepage or social media profile of the entity, whether individual or institutional. Should be a URL/URI Accessible via HTTP."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub url: Option<String>,
+    pub family_name_prefix: Option<String>,
+    #[doc = "Birthdate of the person."]
+    #[serde(
+        rename = "dateOfBirth",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub date_of_birth: Option<chrono::naive::NaiveDate>,
 }
 impl From<&Profile> for Profile {
     fn from(value: &Profile) -> Self {
@@ -208,6 +208,8 @@ impl From<Vec<&str>> for ProfileType {
 #[doc = "An address for the described entity."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Address {
+    #[serde(rename = "type")]
+    pub type_: AddressType,
     #[doc = "A country."]
     #[serde(
         rename = "addressCountry",
@@ -222,13 +224,6 @@ pub struct Address {
         skip_serializing_if = "Option::is_none"
     )]
     pub address_country_code: Option<String>,
-    #[doc = "A locality within the region."]
-    #[serde(
-        rename = "addressLocality",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub address_locality: Option<String>,
     #[doc = "A region within the country."]
     #[serde(
         rename = "addressRegion",
@@ -236,8 +231,20 @@ pub struct Address {
         skip_serializing_if = "Option::is_none"
     )]
     pub address_region: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub geo: Option<GeoCoordinates>,
+    #[doc = "A locality within the region."]
+    #[serde(
+        rename = "addressLocality",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub address_locality: Option<String>,
+    #[doc = "A street address within the locality."]
+    #[serde(
+        rename = "streetAddress",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub street_address: Option<String>,
     #[doc = "A post office box number for PO box addresses."]
     #[serde(
         rename = "postOfficeBoxNumber",
@@ -252,15 +259,8 @@ pub struct Address {
         skip_serializing_if = "Option::is_none"
     )]
     pub postal_code: Option<String>,
-    #[doc = "A street address within the locality."]
-    #[serde(
-        rename = "streetAddress",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub street_address: Option<String>,
-    #[serde(rename = "type")]
-    pub type_: AddressType,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub geo: Option<GeoCoordinates>,
 }
 impl From<&Address> for Address {
     fn from(value: &Address) -> Self {
@@ -309,11 +309,11 @@ impl From<Vec<&str>> for AddressType {
 #[doc = "The geographic coordinates of a location."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct GeoCoordinates {
-    pub latitude: f64,
-    pub longitude: f64,
     #[doc = "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'GeoCoordinates'."]
     #[serde(rename = "type")]
     pub type_: String,
+    pub latitude: f64,
+    pub longitude: f64,
 }
 impl From<&GeoCoordinates> for GeoCoordinates {
     fn from(value: &GeoCoordinates) -> Self {

@@ -5,11 +5,11 @@ use serde::{Deserialize, Serialize};
 pub struct Related {
     #[doc = "The related achievement."]
     pub id: String,
+    #[serde(rename = "type")]
+    pub type_: RelatedType,
     #[doc = "The language of the related achievement."]
     #[serde(rename = "@language", default, skip_serializing_if = "Option::is_none")]
     pub language: Option<RelatedLanguage>,
-    #[serde(rename = "type")]
-    pub type_: RelatedType,
     #[doc = "The version of the related achievement."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,

@@ -35,14 +35,14 @@ impl From<&str> for Context {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Image {
-    #[doc = "The caption for the image."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub caption: Option<String>,
     #[doc = "The URI or Data URI of the image."]
     pub id: String,
     #[doc = "MUST be the IRI 'Image'."]
     #[serde(rename = "type")]
     pub type_: String,
+    #[doc = "The caption for the image."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub caption: Option<String>,
 }
 impl From<&Image> for Image {
     fn from(value: &Image) -> Self {
