@@ -237,6 +237,8 @@ impl<'de> serde::Deserialize<'de> for ResultDescriptionTypeString {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename = "Result")]
 pub struct Result_ {
+    #[serde(rename = "type")]
+    pub type_: ResultType,
     #[doc = "If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the `id` of the RubricCriterionLevel in linked ResultDescription."]
     #[serde(
         rename = "achievedLevel",
@@ -256,8 +258,6 @@ pub struct Result_ {
     #[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<ResultStatus>,
-    #[serde(rename = "type")]
-    pub type_: ResultType,
     #[doc = "A string representing the result of the performance, or demonstration, of the achievement. For example, 'A' if the recipient received an A grade in class."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,

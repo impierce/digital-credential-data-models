@@ -28,8 +28,7 @@ impl From<&str> for Context {
     fn from(value: &str) -> Self {
         Self::String(value.to_string())
     }
-} 
-
+}
 
 #[doc = "Metadata about images that represent assertions, achieve or profiles. These properties can typically be represented as just the id string of the image, but using a fleshed-out document allows for including captions and other applicable metadata."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]

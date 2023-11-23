@@ -8,8 +8,8 @@ pub struct AchievementCredential {
     pub context: Vec<general::Context>,
     #[doc = "Unambiguous reference to the credential."]
     pub id: String,
-    #[serde(rename = "type")]
-    pub type_: AchievementCredentialType,
+    #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
+    pub type_: Option<AchievementCredentialType>,
     #[doc = "The name of the credential for display purposes in wallets. For example, in a list of credentials and in detail views."]
     pub name: String,
     #[doc = "The short description of the credential for display purposes in wallets."]
@@ -238,13 +238,16 @@ pub enum AchievementCredentialType {
     String(String),
     VecString(Vec<String>),
 }
-
 impl From<&AchievementCredentialType> for AchievementCredentialType {
     fn from(value: &AchievementCredentialType) -> Self {
         value.clone()
     }
 }
-
+impl From<String> for AchievementCredentialType {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
 impl From<Vec<String>> for AchievementCredentialType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
@@ -313,7 +316,7 @@ pub mod builder {
         proof: Result<Option<super::AchievementCredentialProof>, String>,
         refresh_service: Result<Option<general::RefreshService>, String>,
         terms_of_use: Result<Option<super::AchievementCredentialTermsOfUse>, String>,
-        type_: Result<super::AchievementCredentialType, String>,
+        type_: Result<Option<super::AchievementCredentialType>, String>,
     }
     impl Default for AchievementCredential {
         fn default() -> Self {
@@ -336,7 +339,7 @@ pub mod builder {
                 proof: Ok(Default::default()),
                 refresh_service: Ok(Default::default()),
                 terms_of_use: Ok(Default::default()),
-                type_: Err("no value supplied for type_".to_string()),
+                type_: Ok(Default::default()),
             }
         }
     }
@@ -532,7 +535,7 @@ pub mod builder {
         }
         pub fn type_<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::AchievementCredentialType>,
+            T: std::convert::TryInto<Option<super::AchievementCredentialType>>,
             T::Error: std::fmt::Display,
         {
             self.type_ = value
