@@ -91,25 +91,25 @@ impl Achievement {
     }
 }
 
-// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of achievement. This is an extensible vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub struct AchievementType {
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<AchievementTypeEnum>,
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_string: Option<AchievementTypeString>,
+pub enum AchievementType {
+    Enum(AchievementTypeEnum),
+    String(AchievementTypeString),
 }
-
 impl From<&AchievementType> for AchievementType {
     fn from(value: &AchievementType) -> Self {
         value.clone()
     }
 }
-
-impl AchievementType {
-    pub fn builder() -> builder::AchievementAchievementType {
-        builder::AchievementAchievementType::default()
+impl From<AchievementTypeEnum> for AchievementType {
+    fn from(value: AchievementTypeEnum) -> Self {
+        Self::Enum(value)
+    }
+}
+impl From<AchievementTypeString> for AchievementType {
+    fn from(value: AchievementTypeString) -> Self {
+        Self::String(value)
     }
 }
 
@@ -847,59 +847,6 @@ pub mod builder {
                 tag: Ok(value.tag),
                 type_: Ok(value.type_),
                 version: Ok(value.version),
-            }
-        }
-    }
-
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AchievementAchievementType {
-        subtype_0: Result<Option<super::AchievementTypeEnum>, String>,
-        subtype_1: Result<Option<super::AchievementTypeString>, String>,
-    }
-    impl Default for AchievementAchievementType {
-        fn default() -> Self {
-            Self {
-                subtype_0: Ok(Default::default()),
-                subtype_1: Ok(Default::default()),
-            }
-        }
-    }
-    impl AchievementAchievementType {
-        pub fn subtype_0<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::AchievementTypeEnum>>,
-            T::Error: std::fmt::Display,
-        {
-            self.subtype_0 = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for subtype_0: {}", e));
-            self
-        }
-        pub fn subtype_1<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::AchievementTypeString>>,
-            T::Error: std::fmt::Display,
-        {
-            self.subtype_1 = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for subtype_1: {}", e));
-            self
-        }
-    }
-    impl std::convert::TryFrom<AchievementAchievementType> for super::AchievementType {
-        type Error = String;
-        fn try_from(value: AchievementAchievementType) -> Result<Self, String> {
-            Ok(Self {
-                type_enum: value.subtype_0?,
-                type_string: value.subtype_1?,
-            })
-        }
-    }
-    impl From<super::AchievementType> for AchievementAchievementType {
-        fn from(value: super::AchievementType) -> Self {
-            Self {
-                subtype_0: Ok(value.type_enum),
-                subtype_1: Ok(value.type_string),
             }
         }
     }

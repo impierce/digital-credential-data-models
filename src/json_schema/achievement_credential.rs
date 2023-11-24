@@ -248,9 +248,20 @@ impl From<String> for AchievementCredentialType {
         Self::String(value)
     }
 }
+impl From<&str> for AchievementCredentialType {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+}
 impl From<Vec<String>> for AchievementCredentialType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
+    }
+}
+impl From<Vec<&str>> for AchievementCredentialType {
+    fn from(value: Vec<&str>) -> Self {
+        let v = value.iter().map(|v| v.to_string()).collect();
+        Self::VecString(v)
     }
 }
 

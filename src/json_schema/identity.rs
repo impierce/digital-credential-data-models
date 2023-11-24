@@ -24,7 +24,6 @@ impl IdentifierEntry {
     }
 }
 
-// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The identifier type."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]

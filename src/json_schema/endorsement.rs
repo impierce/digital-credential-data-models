@@ -146,9 +146,25 @@ impl From<&EndorsementCredentialType> for EndorsementCredentialType {
         value.clone()
     }
 }
+impl From<String> for EndorsementCredentialType {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
+impl From<&str> for EndorsementCredentialType {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+}
 impl From<Vec<String>> for EndorsementCredentialType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
+    }
+}
+impl From<Vec<&str>> for EndorsementCredentialType {
+    fn from(value: Vec<&str>) -> Self {
+        let v = value.iter().map(|v| v.to_string()).collect();
+        Self::VecString(v)
     }
 }
 #[doc = "A collection of information about the subject of the endorsement."]

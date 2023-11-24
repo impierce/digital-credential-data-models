@@ -51,25 +51,28 @@ impl Alignment {
     }
 }
 
-// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of the alignment target node."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub struct AlignmentTargetType {
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<AlignmentTargetTypeEnum>,
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_string: Option<AlignmentTargetTypeString>,
+pub enum AlignmentTargetType {
+    Enum(AlignmentTargetTypeEnum),
+    String(AlignmentTargetTypeString),
 }
 impl From<&AlignmentTargetType> for AlignmentTargetType {
     fn from(value: &AlignmentTargetType) -> Self {
         value.clone()
     }
 }
-impl AlignmentTargetType {
-    pub fn builder() -> builder::AlignmentTargetType {
-        builder::AlignmentTargetType::default()
+impl From<AlignmentTargetTypeEnum> for AlignmentTargetType {
+    fn from(value: AlignmentTargetTypeEnum) -> Self {
+        Self::Enum(value)
     }
 }
+impl From<AlignmentTargetTypeString> for AlignmentTargetType {
+    fn from(value: AlignmentTargetTypeString) -> Self {
+        Self::String(value)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum AlignmentTargetTypeEnum {
     #[serde(rename = "ceasn:Competency")]
@@ -356,60 +359,6 @@ pub mod builder {
                 target_type: Ok(value.target_type),
                 target_url: Ok(value.target_url),
                 type_: Ok(value.type_),
-            }
-        }
-    }
-
-    // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AlignmentTargetType {
-        type_enum: Result<Option<super::AlignmentTargetTypeEnum>, String>,
-        type_string: Result<Option<super::AlignmentTargetTypeString>, String>,
-    }
-    impl Default for AlignmentTargetType {
-        fn default() -> Self {
-            Self {
-                type_enum: Ok(Default::default()),
-                type_string: Ok(Default::default()),
-            }
-        }
-    }
-    impl AlignmentTargetType {
-        pub fn subtype_0<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::AlignmentTargetTypeEnum>>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_enum = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for subtype_0: {}", e));
-            self
-        }
-        pub fn subtype_1<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::AlignmentTargetTypeString>>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_string = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for subtype_1: {}", e));
-            self
-        }
-    }
-    impl std::convert::TryFrom<AlignmentTargetType> for super::AlignmentTargetType {
-        type Error = String;
-        fn try_from(value: AlignmentTargetType) -> Result<Self, String> {
-            Ok(Self {
-                type_enum: value.type_enum?,
-                type_string: value.type_string?,
-            })
-        }
-    }
-    impl From<super::AlignmentTargetType> for AlignmentTargetType {
-        fn from(value: super::AlignmentTargetType) -> Self {
-            Self {
-                type_enum: Ok(value.type_enum),
-                type_string: Ok(value.type_string),
             }
         }
     }

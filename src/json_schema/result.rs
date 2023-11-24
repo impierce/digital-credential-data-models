@@ -71,32 +71,50 @@ impl From<&DescriptionType> for DescriptionType {
         value.clone()
     }
 }
-
+impl From<String> for DescriptionType {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
+impl From<&str> for DescriptionType {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+}
 impl From<Vec<String>> for DescriptionType {
     fn from(value: Vec<String>) -> Self {
         Self::VecString(value)
     }
 }
+impl From<Vec<&str>> for DescriptionType {
+    fn from(value: Vec<&str>) -> Self {
+        let v = value.iter().map(|v| v.to_string()).collect();
+        Self::VecString(v)
+    }
+}
 
-// TODO: https://github.com/1EdTech/openbadges-specification/issues/553
 #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub struct ResultDescriptionType {
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_enum: Option<ResultDescriptionTypeEnum>,
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub type_string: Option<ResultDescriptionTypeString>,
+pub enum ResultDescriptionType {
+    Enum(ResultDescriptionTypeEnum),
+    String(ResultDescriptionTypeString),
 }
 impl From<&ResultDescriptionType> for ResultDescriptionType {
     fn from(value: &ResultDescriptionType) -> Self {
         value.clone()
     }
 }
-impl ResultDescriptionType {
-    pub fn builder() -> builder::DescriptionResultType {
-        builder::DescriptionResultType::default()
+impl From<ResultDescriptionTypeEnum> for ResultDescriptionType {
+    fn from(value: ResultDescriptionTypeEnum) -> Self {
+        Self::Enum(value)
     }
 }
+impl From<ResultDescriptionTypeString> for ResultDescriptionType {
+    fn from(value: ResultDescriptionTypeString) -> Self {
+        Self::String(value)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum ResultDescriptionTypeEnum {
     GradePointAverage,
@@ -596,59 +614,6 @@ pub mod builder {
         }
     }
 
-    // TODO: https://github.com/1EdTech/openbadges-specification/issues/553
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DescriptionResultType {
-        type_enum: Result<Option<super::ResultDescriptionTypeEnum>, String>,
-        type_string: Result<Option<super::ResultDescriptionTypeString>, String>,
-    }
-    impl Default for DescriptionResultType {
-        fn default() -> Self {
-            Self {
-                type_enum: Ok(Default::default()),
-                type_string: Ok(Default::default()),
-            }
-        }
-    }
-    impl DescriptionResultType {
-        pub fn subtype_0<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::ResultDescriptionTypeEnum>>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_enum = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for subtype_0: {}", e));
-            self
-        }
-        pub fn subtype_1<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::ResultDescriptionTypeString>>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_string = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for subtype_1: {}", e));
-            self
-        }
-    }
-    impl std::convert::TryFrom<DescriptionResultType> for super::ResultDescriptionType {
-        type Error = String;
-        fn try_from(value: DescriptionResultType) -> Result<Self, String> {
-            Ok(Self {
-                type_enum: value.type_enum?,
-                type_string: value.type_string?,
-            })
-        }
-    }
-    impl From<super::ResultDescriptionType> for DescriptionResultType {
-        fn from(value: super::ResultDescriptionType) -> Self {
-            Self {
-                type_enum: Ok(value.type_enum),
-                type_string: Ok(value.type_string),
-            }
-        }
-    }
     #[derive(Clone, Debug, PartialEq)]
     pub struct Result_ {
         achieved_level: Result<Option<String>, String>,
