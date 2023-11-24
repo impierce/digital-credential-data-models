@@ -1,6 +1,137 @@
 use super::alignment;
 use serde::{Deserialize, Serialize};
 
+#[doc = "Describes a result that was achieved."]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename = "Result")]
+pub struct Result_ {
+    #[serde(rename = "type")]
+    pub type_: ResultType,
+    #[doc = "If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the `id` of the RubricCriterionLevel in linked ResultDescription."]
+    #[serde(
+        rename = "achievedLevel",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub achieved_level: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub alignment: Vec<alignment::Alignment>,
+    #[doc = "An achievement can have many result descriptions describing possible results. The value of `resultDescription` is the `id` of the result description linked to this result. The linked result description must be in the achievement that is being asserted."]
+    #[serde(
+        rename = "resultDescription",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub result_description: Option<String>,
+    #[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<ResultStatus>,
+    #[doc = "A string representing the result of the performance, or demonstration, of the achievement. For example, 'A' if the recipient received an A grade in class."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+impl From<&Result_> for Result_ {
+    fn from(value: &Result_) -> Self {
+        value.clone()
+    }
+}
+impl Result_ {
+    pub fn builder() -> builder::Result_ {
+        builder::Result_::default()
+    }
+}
+#[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum ResultStatus {
+    Completed,
+    Enrolled,
+    Failed,
+    InProgress,
+    OnHold,
+    Withdrew,
+}
+impl From<&ResultStatus> for ResultStatus {
+    fn from(value: &ResultStatus) -> Self {
+        value.clone()
+    }
+}
+impl ToString for ResultStatus {
+    fn to_string(&self) -> String {
+        match *self {
+            Self::Completed => "Completed".to_string(),
+            Self::Enrolled => "Enrolled".to_string(),
+            Self::Failed => "Failed".to_string(),
+            Self::InProgress => "InProgress".to_string(),
+            Self::OnHold => "OnHold".to_string(),
+            Self::Withdrew => "Withdrew".to_string(),
+        }
+    }
+}
+impl std::str::FromStr for ResultStatus {
+    type Err = &'static str;
+    fn from_str(value: &str) -> Result<Self, &'static str> {
+        match value {
+            "Completed" => Ok(Self::Completed),
+            "Enrolled" => Ok(Self::Enrolled),
+            "Failed" => Ok(Self::Failed),
+            "InProgress" => Ok(Self::InProgress),
+            "OnHold" => Ok(Self::OnHold),
+            "Withdrew" => Ok(Self::Withdrew),
+            _ => Err("invalid value"),
+        }
+    }
+}
+impl std::convert::TryFrom<&str> for ResultStatus {
+    type Error = &'static str;
+    fn try_from(value: &str) -> Result<Self, &'static str> {
+        value.parse()
+    }
+}
+impl std::convert::TryFrom<&String> for ResultStatus {
+    type Error = &'static str;
+    fn try_from(value: &String) -> Result<Self, &'static str> {
+        value.parse()
+    }
+}
+impl std::convert::TryFrom<String> for ResultStatus {
+    type Error = &'static str;
+    fn try_from(value: String) -> Result<Self, &'static str> {
+        value.parse()
+    }
+}
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
+pub enum ResultType {
+    String(String),
+    VecString(Vec<String>),
+}
+impl From<&ResultType> for ResultType {
+    fn from(value: &ResultType) -> Self {
+        value.clone()
+    }
+}
+impl From<String> for ResultType {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
+impl From<&str> for ResultType {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_string())
+    }
+}
+impl From<Vec<String>> for ResultType {
+    fn from(value: Vec<String>) -> Self {
+        Self::VecString(value)
+    }
+}
+impl From<Vec<&str>> for ResultType {
+    fn from(value: Vec<&str>) -> Self {
+        let v = value.iter().map(|v| v.to_string()).collect();
+        Self::VecString(v)
+    }
+}
+
 #[doc = "Describes a possible achievement result."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct ResultDescription {
@@ -95,6 +226,7 @@ impl From<Vec<&str>> for DescriptionType {
 
 #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum ResultDescriptionType {
     Enum(ResultDescriptionTypeEnum),
     String(ResultDescriptionTypeString),
@@ -109,9 +241,14 @@ impl From<ResultDescriptionTypeEnum> for ResultDescriptionType {
         Self::Enum(value)
     }
 }
-impl From<ResultDescriptionTypeString> for ResultDescriptionType {
-    fn from(value: ResultDescriptionTypeString) -> Self {
-        Self::String(value)
+impl From<String> for ResultDescriptionType {
+    fn from(value: String) -> Self {
+        Self::String(ResultDescriptionTypeString(value))
+    }
+}
+impl From<&str> for ResultDescriptionType {
+    fn from(value: &str) -> Self {
+        Self::String(ResultDescriptionTypeString(value.to_string()))
     }
 }
 
@@ -248,121 +385,6 @@ impl<'de> serde::Deserialize<'de> for ResultDescriptionTypeString {
         String::deserialize(deserializer)?
             .parse()
             .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
-    }
-}
-
-#[doc = "Describes a result that was achieved."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(rename = "Result")]
-pub struct Result_ {
-    #[serde(rename = "type")]
-    pub type_: ResultType,
-    #[doc = "If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the `id` of the RubricCriterionLevel in linked ResultDescription."]
-    #[serde(
-        rename = "achievedLevel",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub achieved_level: Option<String>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub alignment: Vec<alignment::Alignment>,
-    #[doc = "An achievement can have many result descriptions describing possible results. The value of `resultDescription` is the `id` of the result description linked to this result. The linked result description must be in the achievement that is being asserted."]
-    #[serde(
-        rename = "resultDescription",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub result_description: Option<String>,
-    #[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub status: Option<ResultStatus>,
-    #[doc = "A string representing the result of the performance, or demonstration, of the achievement. For example, 'A' if the recipient received an A grade in class."]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
-}
-impl From<&Result_> for Result_ {
-    fn from(value: &Result_) -> Self {
-        value.clone()
-    }
-}
-impl Result_ {
-    pub fn builder() -> builder::Result_ {
-        builder::Result_::default()
-    }
-}
-#[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum ResultStatus {
-    Completed,
-    Enrolled,
-    Failed,
-    InProgress,
-    OnHold,
-    Withdrew,
-}
-impl From<&ResultStatus> for ResultStatus {
-    fn from(value: &ResultStatus) -> Self {
-        value.clone()
-    }
-}
-impl ToString for ResultStatus {
-    fn to_string(&self) -> String {
-        match *self {
-            Self::Completed => "Completed".to_string(),
-            Self::Enrolled => "Enrolled".to_string(),
-            Self::Failed => "Failed".to_string(),
-            Self::InProgress => "InProgress".to_string(),
-            Self::OnHold => "OnHold".to_string(),
-            Self::Withdrew => "Withdrew".to_string(),
-        }
-    }
-}
-impl std::str::FromStr for ResultStatus {
-    type Err = &'static str;
-    fn from_str(value: &str) -> Result<Self, &'static str> {
-        match value {
-            "Completed" => Ok(Self::Completed),
-            "Enrolled" => Ok(Self::Enrolled),
-            "Failed" => Ok(Self::Failed),
-            "InProgress" => Ok(Self::InProgress),
-            "OnHold" => Ok(Self::OnHold),
-            "Withdrew" => Ok(Self::Withdrew),
-            _ => Err("invalid value"),
-        }
-    }
-}
-impl std::convert::TryFrom<&str> for ResultStatus {
-    type Error = &'static str;
-    fn try_from(value: &str) -> Result<Self, &'static str> {
-        value.parse()
-    }
-}
-impl std::convert::TryFrom<&String> for ResultStatus {
-    type Error = &'static str;
-    fn try_from(value: &String) -> Result<Self, &'static str> {
-        value.parse()
-    }
-}
-impl std::convert::TryFrom<String> for ResultStatus {
-    type Error = &'static str;
-    fn try_from(value: String) -> Result<Self, &'static str> {
-        value.parse()
-    }
-}
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(untagged)]
-pub enum ResultType {
-    String(String),
-    VecString(Vec<String>),
-}
-impl From<&ResultType> for ResultType {
-    fn from(value: &ResultType) -> Self {
-        value.clone()
-    }
-}
-impl From<Vec<String>> for ResultType {
-    fn from(value: Vec<String>) -> Self {
-        Self::VecString(value)
     }
 }
 #[doc = "Describes a rubric criterion level."]

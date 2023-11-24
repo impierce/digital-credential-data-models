@@ -46,6 +46,16 @@ impl From<IdentifierTypeString> for IdentifierType {
         Self::String(value)
     }
 }
+impl From<String> for IdentifierType {
+    fn from(value:String ) -> Self {
+        Self::String(IdentifierTypeString(value))
+    }
+}
+impl From<&str> for IdentifierType {
+    fn from(value: &str) -> Self {
+        Self::String(IdentifierTypeString(value.to_string()))
+    }
+}
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum IdentifierTypeEnum {
@@ -254,6 +264,7 @@ impl IdentityObject {
 
 #[doc = "The identity type."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum IdentityObjectType {
     Enum(IdentityObjectTypeEnum),
     String(IdentityObjectTypeString)
@@ -273,6 +284,18 @@ impl From<IdentityObjectTypeString> for IdentityObjectType {
         Self::String(value)
     }
 }
+impl From<String> for IdentityObjectType {
+    fn from(value:String ) -> Self {
+        Self::String(IdentityObjectTypeString(value))
+    }
+}
+impl From<&str> for IdentityObjectType {
+    fn from(value: &str) -> Self {
+        Self::String(IdentityObjectTypeString(value.to_string()))
+    }
+}
+
+
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum IdentityObjectTypeEnum {
     #[serde(rename = "name")]

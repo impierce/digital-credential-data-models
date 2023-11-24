@@ -93,6 +93,7 @@ impl Achievement {
 
 #[doc = "The type of achievement. This is an extensible vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum AchievementType {
     Enum(AchievementTypeEnum),
     String(AchievementTypeString),
@@ -110,6 +111,16 @@ impl From<AchievementTypeEnum> for AchievementType {
 impl From<AchievementTypeString> for AchievementType {
     fn from(value: AchievementTypeString) -> Self {
         Self::String(value)
+    }
+}
+impl From<String> for AchievementType {
+    fn from(value: String) -> Self {
+        Self::String(AchievementTypeString(value))
+    }
+}
+impl From<&str> for AchievementType {
+    fn from(value: &str) -> Self {
+        Self::String(AchievementTypeString(value.to_string()))
     }
 }
 

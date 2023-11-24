@@ -53,6 +53,7 @@ impl Alignment {
 
 #[doc = "The type of the alignment target node."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum AlignmentTargetType {
     Enum(AlignmentTargetTypeEnum),
     String(AlignmentTargetTypeString),
@@ -70,6 +71,16 @@ impl From<AlignmentTargetTypeEnum> for AlignmentTargetType {
 impl From<AlignmentTargetTypeString> for AlignmentTargetType {
     fn from(value: AlignmentTargetTypeString) -> Self {
         Self::String(value)
+    }
+}
+impl From<String> for AlignmentTargetType {
+    fn from(value: String) -> Self {
+        Self::String(AlignmentTargetTypeString(value))
+    }
+}
+impl From<&str> for AlignmentTargetType {
+    fn from(value: &str) -> Self {
+        Self::String(AlignmentTargetTypeString(value.to_string()))
     }
 }
 
