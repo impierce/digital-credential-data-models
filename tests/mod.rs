@@ -1,1 +1,1 @@
-mod obv3_examples_tests;
+mod tests;
