@@ -66,7 +66,7 @@ fn basic_achievement_credential() {
         .unwrap();
 
     let file = File::open("tests/obv3_json_examples/basic_achievement_credential.json").expect("Failed to open file");
-    let json_v_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
+    let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(achievement_credential_builder).unwrap(), json_v_file);
+    assert_eq!(serde_json::to_value(achievement_credential_builder).unwrap(), json_value_from_file);
 }

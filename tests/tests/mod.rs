@@ -1,4 +1,4 @@
-mod obv3_examples_tests;
+// The following tests all examples of the OBv3 website: https://www.imsglobal.org/spec/ob/v3p0#examples-0
 mod basic_achievement_credential;
 mod full_achievement_credential;
 mod endorsement_credential;
