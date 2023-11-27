@@ -21,11 +21,11 @@ impl From<&Related> for Related {
     }
 }
 
-impl Related {
-    pub fn builder() -> builder::Related {
-        builder::Related::default()
-    }
-}
+// impl Related {
+//     pub fn builder() -> builder::RelatedBuilder {
+//         builder::RelatedBuilder::default()
+//     }
+// }
 
 #[doc = "The language of the related achievement."]
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
@@ -57,9 +57,7 @@ impl std::str::FromStr for RelatedLanguage {
             .find(value)
             .is_none()
         {
-            return Err(
-                "doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"",
-            );
+            return Err("doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"");
         }
         Ok(Self(value.to_string()))
     }
@@ -130,86 +128,85 @@ impl From<Vec<&str>> for RelatedType {
     }
 }
 
-pub mod builder {
+// pub mod builder
 
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct Related {
-        id: Result<String, String>,
-        language: Result<Option<super::RelatedLanguage>, String>,
-        type_: Result<super::RelatedType, String>,
-        version: Result<Option<String>, String>,
-    }
-    impl Default for Related {
-        fn default() -> Self {
-            Self {
-                id: Err("no value supplied for id".to_string()),
-                language: Ok(Default::default()),
-                type_: Err("no value supplied for type_".to_string()),
-                version: Ok(Default::default()),
-            }
+#[derive(Clone, Debug, PartialEq)]
+pub struct RelatedBuilder {
+    id: Result<String, String>,
+    language: Result<Option<RelatedLanguage>, String>,
+    type_: Result<RelatedType, String>,
+    version: Result<Option<String>, String>,
+}
+impl Default for RelatedBuilder {
+    fn default() -> Self {
+        Self {
+            id: Err("no value supplied for id".to_string()),
+            language: Ok(Default::default()),
+            type_: Err("no value supplied for type_".to_string()),
+            version: Ok(Default::default()),
         }
     }
-    impl Related {
-        pub fn id<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.id = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for id: {}", e));
-            self
-        }
-        pub fn language<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::RelatedLanguage>>,
-            T::Error: std::fmt::Display,
-        {
-            self.language = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for language: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<super::RelatedType>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
-        }
-        pub fn version<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.version = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for version: {}", e));
-            self
-        }
+}
+impl RelatedBuilder {
+    pub fn id<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.id = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for id: {}", e));
+        self
     }
-    impl std::convert::TryFrom<Related> for super::Related {
-        type Error = String;
-        fn try_from(value: Related) -> Result<Self, String> {
-            Ok(Self {
-                id: value.id?,
-                language: value.language?,
-                type_: value.type_?,
-                version: value.version?,
-            })
-        }
+    pub fn language<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<RelatedLanguage>>,
+        T::Error: std::fmt::Display,
+    {
+        self.language = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for language: {}", e));
+        self
     }
-    impl From<super::Related> for Related {
-        fn from(value: super::Related) -> Self {
-            Self {
-                id: Ok(value.id),
-                language: Ok(value.language),
-                type_: Ok(value.type_),
-                version: Ok(value.version),
-            }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<RelatedType>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
+    }
+    pub fn version<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.version = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for version: {}", e));
+        self
+    }
+}
+impl std::convert::TryFrom<RelatedBuilder> for Related {
+    type Error = String;
+    fn try_from(value: RelatedBuilder) -> Result<Self, String> {
+        Ok(Self {
+            id: value.id?,
+            language: value.language?,
+            type_: value.type_?,
+            version: value.version?,
+        })
+    }
+}
+impl From<Related> for RelatedBuilder {
+    fn from(value: Related) -> Self {
+        Self {
+            id: Ok(value.id),
+            language: Ok(value.language),
+            type_: Ok(value.type_),
+            version: Ok(value.version),
         }
     }
 }

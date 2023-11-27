@@ -6,35 +6,19 @@ pub struct Alignment {
     #[serde(rename = "type")]
     pub type_: AlignmentType,
     #[doc = "If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl."]
-    #[serde(
-        rename = "targetCode",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "targetCode", default, skip_serializing_if = "Option::is_none")]
     pub target_code: Option<String>,
     #[doc = "Short description of the alignment target."]
-    #[serde(
-        rename = "targetDescription",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "targetDescription", default, skip_serializing_if = "Option::is_none")]
     pub target_description: Option<String>,
     #[doc = "Name of the alignment."]
     #[serde(rename = "targetName")]
     pub target_name: String,
     #[doc = "Name of the framework the alignment target."]
-    #[serde(
-        rename = "targetFramework",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "targetFramework", default, skip_serializing_if = "Option::is_none")]
     pub target_framework: Option<String>,
     #[doc = "The type of the alignment target node."]
-    #[serde(
-        rename = "targetType",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "targetType", default, skip_serializing_if = "Option::is_none")]
     pub target_type: Option<AlignmentTargetType>,
     #[doc = "URL linking to the official description of the alignment target, for example an individual standard within an educational framework."]
     #[serde(rename = "targetUrl")]
@@ -45,11 +29,12 @@ impl From<&Alignment> for Alignment {
         value.clone()
     }
 }
-impl Alignment {
-    pub fn builder() -> builder::Alignment {
-        builder::Alignment::default()
-    }
-}
+
+// impl Alignment {
+//     pub fn builder() -> builder::AlignmentBuilder {
+//         builder::AlignmentBuilder::default()
+//     }
+// }
 
 #[doc = "The type of the alignment target node."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -244,133 +229,127 @@ impl From<Vec<&str>> for AlignmentType {
     }
 }
 
-pub mod builder {
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct Alignment {
-        target_code: Result<Option<String>, String>,
-        target_description: Result<Option<String>, String>,
-        target_framework: Result<Option<String>, String>,
-        target_name: Result<String, String>,
-        target_type: Result<Option<super::AlignmentTargetType>, String>,
-        target_url: Result<String, String>,
-        type_: Result<super::AlignmentType, String>,
-    }
-    impl Default for Alignment {
-        fn default() -> Self {
-            Self {
-                target_code: Ok(Default::default()),
-                target_description: Ok(Default::default()),
-                target_framework: Ok(Default::default()),
-                target_name: Err("no value supplied for target_name".to_string()),
-                target_type: Ok(Default::default()),
-                target_url: Err("no value supplied for target_url".to_string()),
-                type_: Err("no value supplied for type_".to_string()),
-            }
+// pub mod builder
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct AlignmentBuilder {
+    target_code: Result<Option<String>, String>,
+    target_description: Result<Option<String>, String>,
+    target_framework: Result<Option<String>, String>,
+    target_name: Result<String, String>,
+    target_type: Result<Option<AlignmentTargetType>, String>,
+    target_url: Result<String, String>,
+    type_: Result<AlignmentType, String>,
+}
+impl Default for AlignmentBuilder {
+    fn default() -> Self {
+        Self {
+            target_code: Ok(Default::default()),
+            target_description: Ok(Default::default()),
+            target_framework: Ok(Default::default()),
+            target_name: Err("no value supplied for target_name".to_string()),
+            target_type: Ok(Default::default()),
+            target_url: Err("no value supplied for target_url".to_string()),
+            type_: Err("no value supplied for type_".to_string()),
         }
     }
-    impl Alignment {
-        pub fn target_code<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.target_code = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for target_code: {}", e));
-            self
-        }
-        pub fn target_description<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.target_description = value.try_into().map_err(|e| {
-                format!(
-                    "error converting supplied value for target_description: {}",
-                    e
-                )
-            });
-            self
-        }
-        pub fn target_framework<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.target_framework = value.try_into().map_err(|e| {
-                format!(
-                    "error converting supplied value for target_framework: {}",
-                    e
-                )
-            });
-            self
-        }
-        pub fn target_name<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.target_name = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for target_name: {}", e));
-            self
-        }
-        pub fn target_type<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::AlignmentTargetType>>,
-            T::Error: std::fmt::Display,
-        {
-            self.target_type = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for target_type: {}", e));
-            self
-        }
-        pub fn target_url<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.target_url = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for target_url: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<super::AlignmentType>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
-        }
+}
+impl AlignmentBuilder {
+    pub fn target_code<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.target_code = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for target_code: {}", e));
+        self
     }
-    impl std::convert::TryFrom<Alignment> for super::Alignment {
-        type Error = String;
-        fn try_from(value: Alignment) -> Result<Self, String> {
-            Ok(Self {
-                target_code: value.target_code?,
-                target_description: value.target_description?,
-                target_framework: value.target_framework?,
-                target_name: value.target_name?,
-                target_type: value.target_type?,
-                target_url: value.target_url?,
-                type_: value.type_?,
-            })
-        }
+    pub fn target_description<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.target_description = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for target_description: {}", e));
+        self
     }
-    impl From<super::Alignment> for Alignment {
-        fn from(value: super::Alignment) -> Self {
-            Self {
-                target_code: Ok(value.target_code),
-                target_description: Ok(value.target_description),
-                target_framework: Ok(value.target_framework),
-                target_name: Ok(value.target_name),
-                target_type: Ok(value.target_type),
-                target_url: Ok(value.target_url),
-                type_: Ok(value.type_),
-            }
+    pub fn target_framework<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.target_framework = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for target_framework: {}", e));
+        self
+    }
+    pub fn target_name<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.target_name = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for target_name: {}", e));
+        self
+    }
+    pub fn target_type<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<AlignmentTargetType>>,
+        T::Error: std::fmt::Display,
+    {
+        self.target_type = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for target_type: {}", e));
+        self
+    }
+    pub fn target_url<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.target_url = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for target_url: {}", e));
+        self
+    }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<AlignmentType>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
+    }
+}
+impl std::convert::TryFrom<AlignmentBuilder> for Alignment {
+    type Error = String;
+    fn try_from(value: AlignmentBuilder) -> Result<Self, String> {
+        Ok(Self {
+            target_code: value.target_code?,
+            target_description: value.target_description?,
+            target_framework: value.target_framework?,
+            target_name: value.target_name?,
+            target_type: value.target_type?,
+            target_url: value.target_url?,
+            type_: value.type_?,
+        })
+    }
+}
+impl From<Alignment> for AlignmentBuilder {
+    fn from(value: Alignment) -> Self {
+        Self {
+            target_code: Ok(value.target_code),
+            target_description: Ok(value.target_description),
+            target_framework: Ok(value.target_framework),
+            target_name: Ok(value.target_name),
+            target_type: Ok(value.target_type),
+            target_url: Ok(value.target_url),
+            type_: Ok(value.type_),
         }
     }
 }

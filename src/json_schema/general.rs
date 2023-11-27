@@ -48,11 +48,12 @@ impl From<&Image> for Image {
         value.clone()
     }
 }
-impl Image {
-    pub fn builder() -> builder::Image {
-        builder::Image::default()
-    }
-}
+
+// impl Image {
+//     pub fn builder() -> builder::ImageBuilder {
+//         builder::ImageBuilder::default()
+//     }
+// }
 
 #[doc = "The information in RefreshService is used to refresh the verifiable credential."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -68,11 +69,12 @@ impl From<&RefreshService> for RefreshService {
         value.clone()
     }
 }
-impl RefreshService {
-    pub fn builder() -> builder::RefreshService {
-        builder::RefreshService::default()
-    }
-}
+
+// impl RefreshService {
+//     pub fn builder() -> builder::RefreshServiceBuilder {
+//         builder::RefreshServiceBuilder::default()
+//     }
+// }
 
 #[doc = "Terms of use can be utilized by an issuer or a holder to communicate the terms under which a verifiable credential or verifiable presentation was issued"]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -89,183 +91,184 @@ impl From<&TermsOfUse> for TermsOfUse {
         value.clone()
     }
 }
-impl TermsOfUse {
-    pub fn builder() -> builder::TermsOfUse {
-        builder::TermsOfUse::default()
+
+// impl TermsOfUse {
+//     pub fn builder() -> builder::TermsOfUseBuilder {
+//         builder::TermsOfUseBuilder::default()
+//     }
+// }
+
+// pub mod builder
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ImageBuilder {
+    caption: Result<Option<String>, String>,
+    id: Result<String, String>,
+    type_: Result<String, String>,
+}
+impl Default for ImageBuilder {
+    fn default() -> Self {
+        Self {
+            caption: Ok(Default::default()),
+            id: Err("no value supplied for id".to_string()),
+            type_: Err("no value supplied for type_".to_string()),
+        }
+    }
+}
+impl ImageBuilder {
+    pub fn caption<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.caption = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for caption: {}", e));
+        self
+    }
+    pub fn id<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.id = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for id: {}", e));
+        self
+    }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
+    }
+}
+impl std::convert::TryFrom<ImageBuilder> for Image {
+    type Error = String;
+    fn try_from(value: ImageBuilder) -> Result<Self, String> {
+        Ok(Self {
+            caption: value.caption?,
+            id: value.id?,
+            type_: value.type_?,
+        })
+    }
+}
+impl From<Image> for ImageBuilder {
+    fn from(value: Image) -> Self {
+        Self {
+            caption: Ok(value.caption),
+            id: Ok(value.id),
+            type_: Ok(value.type_),
+        }
     }
 }
 
-pub mod builder {
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct Image {
-        caption: Result<Option<String>, String>,
-        id: Result<String, String>,
-        type_: Result<String, String>,
-    }
-    impl Default for Image {
-        fn default() -> Self {
-            Self {
-                caption: Ok(Default::default()),
-                id: Err("no value supplied for id".to_string()),
-                type_: Err("no value supplied for type_".to_string()),
-            }
+#[derive(Clone, Debug, PartialEq)]
+pub struct RefreshServiceBuilder {
+    id: Result<String, String>,
+    type_: Result<String, String>,
+}
+impl Default for RefreshServiceBuilder {
+    fn default() -> Self {
+        Self {
+            id: Err("no value supplied for id".to_string()),
+            type_: Err("no value supplied for type_".to_string()),
         }
     }
-    impl Image {
-        pub fn caption<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.caption = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for caption: {}", e));
-            self
-        }
-        pub fn id<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.id = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for id: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
+}
+impl RefreshServiceBuilder {
+    pub fn id<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.id = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for id: {}", e));
+        self
+    }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
+    }
+}
+impl std::convert::TryFrom<RefreshServiceBuilder> for RefreshService {
+    type Error = String;
+    fn try_from(value: RefreshServiceBuilder) -> Result<Self, String> {
+        Ok(Self {
+            id: value.id?,
+            type_: value.type_?,
+        })
+    }
+}
+impl From<RefreshService> for RefreshServiceBuilder {
+    fn from(value: RefreshService) -> Self {
+        Self {
+            id: Ok(value.id),
+            type_: Ok(value.type_),
         }
     }
-    impl std::convert::TryFrom<Image> for super::Image {
-        type Error = String;
-        fn try_from(value: Image) -> Result<Self, String> {
-            Ok(Self {
-                caption: value.caption?,
-                id: value.id?,
-                type_: value.type_?,
-            })
-        }
-    }
-    impl From<super::Image> for Image {
-        fn from(value: super::Image) -> Self {
-            Self {
-                caption: Ok(value.caption),
-                id: Ok(value.id),
-                type_: Ok(value.type_),
-            }
-        }
-    }
+}
 
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct RefreshService {
-        id: Result<String, String>,
-        type_: Result<String, String>,
-    }
-    impl Default for RefreshService {
-        fn default() -> Self {
-            Self {
-                id: Err("no value supplied for id".to_string()),
-                type_: Err("no value supplied for type_".to_string()),
-            }
+#[derive(Clone, Debug, PartialEq)]
+pub struct TermsOfUseBuilder {
+    id: Result<Option<String>, String>,
+    type_: Result<String, String>,
+}
+impl Default for TermsOfUseBuilder {
+    fn default() -> Self {
+        Self {
+            id: Ok(Default::default()),
+            type_: Err("no value supplied for type_".to_string()),
         }
     }
-    impl RefreshService {
-        pub fn id<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.id = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for id: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
-        }
+}
+impl TermsOfUseBuilder {
+    pub fn id<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.id = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for id: {}", e));
+        self
     }
-    impl std::convert::TryFrom<RefreshService> for super::RefreshService {
-        type Error = String;
-        fn try_from(value: RefreshService) -> Result<Self, String> {
-            Ok(Self {
-                id: value.id?,
-                type_: value.type_?,
-            })
-        }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
     }
-    impl From<super::RefreshService> for RefreshService {
-        fn from(value: super::RefreshService) -> Self {
-            Self {
-                id: Ok(value.id),
-                type_: Ok(value.type_),
-            }
-        }
+}
+impl std::convert::TryFrom<TermsOfUseBuilder> for TermsOfUse {
+    type Error = String;
+    fn try_from(value: TermsOfUseBuilder) -> Result<Self, String> {
+        Ok(Self {
+            id: value.id?,
+            type_: value.type_?,
+        })
     }
-
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct TermsOfUse {
-        id: Result<Option<String>, String>,
-        type_: Result<String, String>,
-    }
-    impl Default for TermsOfUse {
-        fn default() -> Self {
-            Self {
-                id: Ok(Default::default()),
-                type_: Err("no value supplied for type_".to_string()),
-            }
-        }
-    }
-    impl TermsOfUse {
-        pub fn id<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.id = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for id: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
-        }
-    }
-    impl std::convert::TryFrom<TermsOfUse> for super::TermsOfUse {
-        type Error = String;
-        fn try_from(value: TermsOfUse) -> Result<Self, String> {
-            Ok(Self {
-                id: value.id?,
-                type_: value.type_?,
-            })
-        }
-    }
-    impl From<super::TermsOfUse> for TermsOfUse {
-        fn from(value: super::TermsOfUse) -> Self {
-            Self {
-                id: Ok(value.id),
-                type_: Ok(value.type_),
-            }
+}
+impl From<TermsOfUse> for TermsOfUseBuilder {
+    fn from(value: TermsOfUse) -> Self {
+        Self {
+            id: Ok(value.id),
+            type_: Ok(value.type_),
         }
     }
 }

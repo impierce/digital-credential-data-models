@@ -18,11 +18,12 @@ impl From<&IdentifierEntry> for IdentifierEntry {
         value.clone()
     }
 }
-impl IdentifierEntry {
-    pub fn builder() -> builder::IdentifierEntry {
-        builder::IdentifierEntry::default()
-    }
-}
+
+// impl IdentifierEntry {
+//     pub fn builder() -> builder::IdentifierEntryBuilder {
+//         builder::IdentifierEntryBuilder::default()
+//     }
+// }
 
 #[doc = "The identifier type."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -47,7 +48,7 @@ impl From<IdentifierTypeString> for IdentifierType {
     }
 }
 impl From<String> for IdentifierType {
-    fn from(value:String ) -> Self {
+    fn from(value: String) -> Self {
         Self::String(IdentifierTypeString(value))
     }
 }
@@ -256,18 +257,19 @@ impl From<&IdentityObject> for IdentityObject {
         value.clone()
     }
 }
-impl IdentityObject {
-    pub fn builder() -> builder::IdentityObject {
-        builder::IdentityObject::default()
-    }
-}
+
+// impl IdentityObject {
+//     pub fn builder() -> builder::IdentityObjectBuilder {
+//         builder::IdentityObjectBuilder::default()
+//     }
+// }
 
 #[doc = "The identity type."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum IdentityObjectType {
     Enum(IdentityObjectTypeEnum),
-    String(IdentityObjectTypeString)
+    String(IdentityObjectTypeString),
 }
 impl From<&IdentityObjectType> for IdentityObjectType {
     fn from(value: &IdentityObjectType) -> Self {
@@ -285,7 +287,7 @@ impl From<IdentityObjectTypeString> for IdentityObjectType {
     }
 }
 impl From<String> for IdentityObjectType {
-    fn from(value:String ) -> Self {
+    fn from(value: String) -> Self {
         Self::String(IdentityObjectTypeString(value))
     }
 }
@@ -294,7 +296,6 @@ impl From<&str> for IdentityObjectType {
         Self::String(IdentityObjectTypeString(value.to_string()))
     }
 }
-
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum IdentityObjectTypeEnum {
@@ -472,165 +473,165 @@ impl<'de> serde::Deserialize<'de> for IdentityObjectTypeString {
     }
 }
 
-pub mod builder {
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct IdentifierEntry {
-        identifier: Result<String, String>,
-        identifier_type: Result<super::IdentifierType, String>,
-        type_: Result<String, String>,
-    }
-    impl Default for IdentifierEntry {
-        fn default() -> Self {
-            Self {
-                identifier: Err("no value supplied for identifier".to_string()),
-                identifier_type: Err("no value supplied for identifier_type".to_string()),
-                type_: Err("no value supplied for type_".to_string()),
-            }
+// pub mod builder
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct IdentifierEntryBuilder {
+    identifier: Result<String, String>,
+    identifier_type: Result<IdentifierType, String>,
+    type_: Result<String, String>,
+}
+impl Default for IdentifierEntryBuilder {
+    fn default() -> Self {
+        Self {
+            identifier: Err("no value supplied for identifier".to_string()),
+            identifier_type: Err("no value supplied for identifier_type".to_string()),
+            type_: Err("no value supplied for type_".to_string()),
         }
     }
-    impl IdentifierEntry {
-        pub fn identifier<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.identifier = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for identifier: {}", e));
-            self
-        }
-        pub fn identifier_type<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<super::IdentifierType>,
-            T::Error: std::fmt::Display,
-        {
-            self.identifier_type = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for identifier_type: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
+}
+impl IdentifierEntryBuilder {
+    pub fn identifier<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.identifier = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for identifier: {}", e));
+        self
+    }
+    pub fn identifier_type<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<IdentifierType>,
+        T::Error: std::fmt::Display,
+    {
+        self.identifier_type = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for identifier_type: {}", e));
+        self
+    }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
+    }
+}
+impl std::convert::TryFrom<IdentifierEntryBuilder> for IdentifierEntry {
+    type Error = String;
+    fn try_from(value: IdentifierEntryBuilder) -> Result<Self, String> {
+        Ok(Self {
+            identifier: value.identifier?,
+            identifier_type: value.identifier_type?,
+            type_: value.type_?,
+        })
+    }
+}
+impl From<IdentifierEntry> for IdentifierEntryBuilder {
+    fn from(value: IdentifierEntry) -> Self {
+        Self {
+            identifier: Ok(value.identifier),
+            identifier_type: Ok(value.identifier_type),
+            type_: Ok(value.type_),
         }
     }
-    impl std::convert::TryFrom<IdentifierEntry> for super::IdentifierEntry {
-        type Error = String;
-        fn try_from(value: IdentifierEntry) -> Result<Self, String> {
-            Ok(Self {
-                identifier: value.identifier?,
-                identifier_type: value.identifier_type?,
-                type_: value.type_?,
-            })
+}
+#[derive(Clone, Debug, PartialEq)]
+pub struct IdentityObjectBuilder {
+    hashed: Result<bool, String>,
+    identity_hash: Result<String, String>,
+    identity_type: Result<IdentityObjectType, String>,
+    salt: Result<Option<String>, String>,
+    type_: Result<String, String>,
+}
+impl Default for IdentityObjectBuilder {
+    fn default() -> Self {
+        Self {
+            hashed: Err("no value supplied for hashed".to_string()),
+            identity_hash: Err("no value supplied for identity_hash".to_string()),
+            identity_type: Err("no value supplied for identity_type".to_string()),
+            salt: Ok(Default::default()),
+            type_: Err("no value supplied for type_".to_string()),
         }
     }
-    impl From<super::IdentifierEntry> for IdentifierEntry {
-        fn from(value: super::IdentifierEntry) -> Self {
-            Self {
-                identifier: Ok(value.identifier),
-                identifier_type: Ok(value.identifier_type),
-                type_: Ok(value.type_),
-            }
-        }
+}
+impl IdentityObjectBuilder {
+    pub fn hashed<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<bool>,
+        T::Error: std::fmt::Display,
+    {
+        self.hashed = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for hashed: {}", e));
+        self
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct IdentityObject {
-        hashed: Result<bool, String>,
-        identity_hash: Result<String, String>,
-        identity_type: Result<super::IdentityObjectType, String>,
-        salt: Result<Option<String>, String>,
-        type_: Result<String, String>,
+    pub fn identity_hash<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.identity_hash = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for identity_hash: {}", e));
+        self
     }
-    impl Default for IdentityObject {
-        fn default() -> Self {
-            Self {
-                hashed: Err("no value supplied for hashed".to_string()),
-                identity_hash: Err("no value supplied for identity_hash".to_string()),
-                identity_type: Err("no value supplied for identity_type".to_string()),
-                salt: Ok(Default::default()),
-                type_: Err("no value supplied for type_".to_string()),
-            }
-        }
+    pub fn identity_type<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<IdentityObjectType>,
+        T::Error: std::fmt::Display,
+    {
+        self.identity_type = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for identity_type: {}", e));
+        self
     }
-    impl IdentityObject {
-        pub fn hashed<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<bool>,
-            T::Error: std::fmt::Display,
-        {
-            self.hashed = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for hashed: {}", e));
-            self
-        }
-        pub fn identity_hash<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.identity_hash = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for identity_hash: {}", e));
-            self
-        }
-        pub fn identity_type<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<super::IdentityObjectType>,
-            T::Error: std::fmt::Display,
-        {
-            self.identity_type = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for identity_type: {}", e));
-            self
-        }
-        pub fn salt<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.salt = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for salt: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
-        }
+    pub fn salt<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.salt = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for salt: {}", e));
+        self
     }
-    impl std::convert::TryFrom<IdentityObject> for super::IdentityObject {
-        type Error = String;
-        fn try_from(value: IdentityObject) -> Result<Self, String> {
-            Ok(Self {
-                hashed: value.hashed?,
-                identity_hash: value.identity_hash?,
-                identity_type: value.identity_type?,
-                salt: value.salt?,
-                type_: value.type_?,
-            })
-        }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
     }
-    impl From<super::IdentityObject> for IdentityObject {
-        fn from(value: super::IdentityObject) -> Self {
-            Self {
-                hashed: Ok(value.hashed),
-                identity_hash: Ok(value.identity_hash),
-                identity_type: Ok(value.identity_type),
-                salt: Ok(value.salt),
-                type_: Ok(value.type_),
-            }
+}
+impl std::convert::TryFrom<IdentityObjectBuilder> for IdentityObject {
+    type Error = String;
+    fn try_from(value: IdentityObjectBuilder) -> Result<Self, String> {
+        Ok(Self {
+            hashed: value.hashed?,
+            identity_hash: value.identity_hash?,
+            identity_type: value.identity_type?,
+            salt: value.salt?,
+            type_: value.type_?,
+        })
+    }
+}
+impl From<IdentityObject> for IdentityObjectBuilder {
+    fn from(value: IdentityObject) -> Self {
+        Self {
+            hashed: Ok(value.hashed),
+            identity_hash: Ok(value.identity_hash),
+            identity_type: Ok(value.identity_type),
+            salt: Ok(value.salt),
+            type_: Ok(value.type_),
         }
     }
 }

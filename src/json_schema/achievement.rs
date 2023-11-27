@@ -1,6 +1,4 @@
-use super::{
-    alignment, endorsement, general, identity, profile, related, result::ResultDescription,
-};
+use super::{alignment, endorsement, general, identity, profile, related, result::ResultDescription};
 use serde::{Deserialize, Serialize};
 
 #[doc = "A collection of information about the accomplishment recognized by the Assertion. Many assertions may be created corresponding to one Achievement."]
@@ -13,37 +11,21 @@ pub struct Achievement {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub alignment: Vec<alignment::Alignment>,
     #[doc = "The type of achievement. This is an extensible vocabulary."]
-    #[serde(
-        rename = "achievementType",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "achievementType", default, skip_serializing_if = "Option::is_none")]
     pub achievement_type: Option<AchievementType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub creator: Option<profile::Profile>,
-    #[serde(
-        rename = "creditsAvailable",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "creditsAvailable", default, skip_serializing_if = "Option::is_none")]
     pub credits_available: Option<f64>,
     pub criteria: Criteria,
     #[doc = "A short description of the achievement."]
     pub description: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub endorsement: Vec<endorsement::EndorsementCredential>,
-    #[serde(
-        rename = "endorsementJwt",
-        default,
-        skip_serializing_if = "Vec::is_empty"
-    )]
+    #[serde(rename = "endorsementJwt", default, skip_serializing_if = "Vec::is_empty")]
     pub endorsement_jwt: Vec<AchievementEndorsementJwtItem>,
     #[doc = "Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology."]
-    #[serde(
-        rename = "fieldOfStudy",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "fieldOfStudy", default, skip_serializing_if = "Option::is_none")]
     pub field_of_study: Option<String>,
     #[doc = "The code, generally human readable, associated with an achievement."]
     #[serde(rename = "humanCode", default, skip_serializing_if = "Option::is_none")]
@@ -55,19 +37,11 @@ pub struct Achievement {
     pub language: Option<AchievementLanguage>,
     #[doc = "The name of the achievement."]
     pub name: String,
-    #[serde(
-        rename = "otherIdentifier",
-        default,
-        skip_serializing_if = "Vec::is_empty"
-    )]
+    #[serde(rename = "otherIdentifier", default, skip_serializing_if = "Vec::is_empty")]
     pub other_identifier: Vec<identity::IdentifierEntry>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub related: Vec<related::Related>,
-    #[serde(
-        rename = "resultDescription",
-        default,
-        skip_serializing_if = "Vec::is_empty"
-    )]
+    #[serde(rename = "resultDescription", default, skip_serializing_if = "Vec::is_empty")]
     pub result_description: Vec<ResultDescription>,
     #[doc = "Name given to the focus, concentration, or specific area of study defined in the achievement. Examples include 'Entrepreneurship', 'Technical Communication', and 'Finance'."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -85,11 +59,11 @@ impl From<&Achievement> for Achievement {
     }
 }
 
-impl Achievement {
-    pub fn builder() -> builder::Achievement {
-        builder::Achievement::default()
-    }
-}
+// impl Achievement {
+//     pub fn builder() -> builder::AchievementBuilder {
+//         builder::AchievementBuilder::default()
+//     }
+// }
 
 #[doc = "The type of achievement. This is an extensible vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -348,11 +322,11 @@ impl From<&Criteria> for Criteria {
     }
 }
 
-impl Criteria {
-    pub fn builder() -> builder::Criteria {
-        builder::Criteria::default()
-    }
-}
+// impl Criteria {
+//     pub fn builder() -> builder::CriteriaBuilder {
+//         builder::CriteriaBuilder::default()
+//     }
+// }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -418,9 +392,7 @@ impl std::str::FromStr for AchievementEndorsementJwtItem {
             .find(value)
             .is_none()
         {
-            return Err(
-                "doesn't match pattern \"^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$\"",
-            );
+            return Err("doesn't match pattern \"^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$\"");
         }
         Ok(Self(value.to_string()))
     }
@@ -488,9 +460,7 @@ impl std::str::FromStr for AchievementLanguage {
             .find(value)
             .is_none()
         {
-            return Err(
-                "doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"",
-            );
+            return Err("doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"");
         }
         Ok(Self(value.to_string()))
     }
@@ -528,390 +498,376 @@ impl<'de> serde::Deserialize<'de> for AchievementLanguage {
     }
 }
 
-pub mod builder {
-    use crate::json_schema::{alignment, endorsement, general, identity, profile, related, result};
+// pub mod builder
 
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct Achievement {
-        achievement_type: Result<Option<super::AchievementType>, String>,
-        alignment: Result<Vec<alignment::Alignment>, String>,
-        creator: Result<Option<profile::Profile>, String>,
-        credits_available: Result<Option<f64>, String>,
-        criteria: Result<super::Criteria, String>,
-        description: Result<String, String>,
-        endorsement: Result<Vec<endorsement::EndorsementCredential>, String>,
-        endorsement_jwt: Result<Vec<super::AchievementEndorsementJwtItem>, String>,
-        field_of_study: Result<Option<String>, String>,
-        human_code: Result<Option<String>, String>,
-        id: Result<String, String>,
-        image: Result<Option<general::Image>, String>,
-        language: Result<Option<super::AchievementLanguage>, String>,
-        name: Result<String, String>,
-        other_identifier: Result<Vec<identity::IdentifierEntry>, String>,
-        related: Result<Vec<related::Related>, String>,
-        result_description: Result<Vec<result::ResultDescription>, String>,
-        specialization: Result<Option<String>, String>,
-        tag: Result<Vec<String>, String>,
-        type_: Result<super::Type, String>,
-        version: Result<Option<String>, String>,
-    }
-    impl Default for Achievement {
-        fn default() -> Self {
-            Self {
-                achievement_type: Ok(Default::default()),
-                alignment: Ok(Default::default()),
-                creator: Ok(Default::default()),
-                credits_available: Ok(Default::default()),
-                criteria: Err("no value supplied for criteria".to_string()),
-                description: Err("no value supplied for description".to_string()),
-                endorsement: Ok(Default::default()),
-                endorsement_jwt: Ok(Default::default()),
-                field_of_study: Ok(Default::default()),
-                human_code: Ok(Default::default()),
-                id: Err("no value supplied for id".to_string()),
-                image: Ok(Default::default()),
-                language: Ok(Default::default()),
-                name: Err("no value supplied for name".to_string()),
-                other_identifier: Ok(Default::default()),
-                related: Ok(Default::default()),
-                result_description: Ok(Default::default()),
-                specialization: Ok(Default::default()),
-                tag: Ok(Default::default()),
-                type_: Err("no value supplied for type_".to_string()),
-                version: Ok(Default::default()),
-            }
+#[derive(Clone, Debug, PartialEq)]
+pub struct AchievementBuilder {
+    achievement_type: Result<Option<AchievementType>, String>,
+    alignment: Result<Vec<alignment::Alignment>, String>,
+    creator: Result<Option<profile::Profile>, String>,
+    credits_available: Result<Option<f64>, String>,
+    criteria: Result<Criteria, String>,
+    description: Result<String, String>,
+    endorsement: Result<Vec<endorsement::EndorsementCredential>, String>,
+    endorsement_jwt: Result<Vec<AchievementEndorsementJwtItem>, String>,
+    field_of_study: Result<Option<String>, String>,
+    human_code: Result<Option<String>, String>,
+    id: Result<String, String>,
+    image: Result<Option<general::Image>, String>,
+    language: Result<Option<AchievementLanguage>, String>,
+    name: Result<String, String>,
+    other_identifier: Result<Vec<identity::IdentifierEntry>, String>,
+    related: Result<Vec<related::Related>, String>,
+    result_description: Result<Vec<ResultDescription>, String>,
+    specialization: Result<Option<String>, String>,
+    tag: Result<Vec<String>, String>,
+    type_: Result<Type, String>,
+    version: Result<Option<String>, String>,
+}
+impl Default for AchievementBuilder {
+    fn default() -> Self {
+        Self {
+            achievement_type: Ok(Default::default()),
+            alignment: Ok(Default::default()),
+            creator: Ok(Default::default()),
+            credits_available: Ok(Default::default()),
+            criteria: Err("no value supplied for criteria".to_string()),
+            description: Err("no value supplied for description".to_string()),
+            endorsement: Ok(Default::default()),
+            endorsement_jwt: Ok(Default::default()),
+            field_of_study: Ok(Default::default()),
+            human_code: Ok(Default::default()),
+            id: Err("no value supplied for id".to_string()),
+            image: Ok(Default::default()),
+            language: Ok(Default::default()),
+            name: Err("no value supplied for name".to_string()),
+            other_identifier: Ok(Default::default()),
+            related: Ok(Default::default()),
+            result_description: Ok(Default::default()),
+            specialization: Ok(Default::default()),
+            tag: Ok(Default::default()),
+            type_: Err("no value supplied for type_".to_string()),
+            version: Ok(Default::default()),
         }
     }
-    impl Achievement {
-        pub fn achievement_type<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::AchievementType>>,
-            T::Error: std::fmt::Display,
-        {
-            self.achievement_type = value.try_into().map_err(|e| {
-                format!(
-                    "error converting supplied value for achievement_type: {}",
-                    e
-                )
-            });
-            self
-        }
-        pub fn alignment<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Vec<alignment::Alignment>>,
-            T::Error: std::fmt::Display,
-        {
-            self.alignment = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for alignment: {}", e));
-            self
-        }
-        pub fn creator<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<profile::Profile>>,
-            T::Error: std::fmt::Display,
-        {
-            self.creator = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for creator: {}", e));
-            self
-        }
-        pub fn credits_available<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<f64>>,
-            T::Error: std::fmt::Display,
-        {
-            self.credits_available = value.try_into().map_err(|e| {
-                format!(
-                    "error converting supplied value for credits_available: {}",
-                    e
-                )
-            });
-            self
-        }
-        pub fn criteria<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<super::Criteria>,
-            T::Error: std::fmt::Display,
-        {
-            self.criteria = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for criteria: {}", e));
-            self
-        }
-        pub fn description<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.description = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for description: {}", e));
-            self
-        }
-        pub fn endorsement<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Vec<endorsement::EndorsementCredential>>,
-            T::Error: std::fmt::Display,
-        {
-            self.endorsement = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for endorsement: {}", e));
-            self
-        }
-        pub fn endorsement_jwt<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Vec<super::AchievementEndorsementJwtItem>>,
-            T::Error: std::fmt::Display,
-        {
-            self.endorsement_jwt = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e));
-            self
-        }
-        pub fn field_of_study<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.field_of_study = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for field_of_study: {}", e));
-            self
-        }
-        pub fn human_code<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.human_code = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for human_code: {}", e));
-            self
-        }
-        pub fn id<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.id = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for id: {}", e));
-            self
-        }
-        pub fn image<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<general::Image>>,
-            T::Error: std::fmt::Display,
-        {
-            self.image = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for image: {}", e));
-            self
-        }
-        pub fn language<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<super::AchievementLanguage>>,
-            T::Error: std::fmt::Display,
-        {
-            self.language = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for language: {}", e));
-            self
-        }
-        pub fn name<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<String>,
-            T::Error: std::fmt::Display,
-        {
-            self.name = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for name: {}", e));
-            self
-        }
-        pub fn other_identifier<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Vec<identity::IdentifierEntry>>,
-            T::Error: std::fmt::Display,
-        {
-            self.other_identifier = value.try_into().map_err(|e| {
-                format!(
-                    "error converting supplied value for other_identifier: {}",
-                    e
-                )
-            });
-            self
-        }
-        pub fn related<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Vec<related::Related>>,
-            T::Error: std::fmt::Display,
-        {
-            self.related = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for related: {}", e));
-            self
-        }
-        pub fn result_description<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Vec<result::ResultDescription>>,
-            T::Error: std::fmt::Display,
-        {
-            self.result_description = value.try_into().map_err(|e| {
-                format!(
-                    "error converting supplied value for result_description: {}",
-                    e
-                )
-            });
-            self
-        }
-        pub fn specialization<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.specialization = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for specialization: {}", e));
-            self
-        }
-        pub fn tag<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Vec<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.tag = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for tag: {}", e));
-            self
-        }
-        pub fn type_<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<super::Type>,
-            T::Error: std::fmt::Display,
-        {
-            self.type_ = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for type_: {}", e));
-            self
-        }
-        pub fn version<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.version = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for version: {}", e));
-            self
+}
+impl AchievementBuilder {
+    pub fn achievement_type<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<AchievementType>>,
+        T::Error: std::fmt::Display,
+    {
+        self.achievement_type = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for achievement_type: {}", e));
+        self
+    }
+    pub fn alignment<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Vec<alignment::Alignment>>,
+        T::Error: std::fmt::Display,
+    {
+        self.alignment = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for alignment: {}", e));
+        self
+    }
+    pub fn creator<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<profile::Profile>>,
+        T::Error: std::fmt::Display,
+    {
+        self.creator = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for creator: {}", e));
+        self
+    }
+    pub fn credits_available<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<f64>>,
+        T::Error: std::fmt::Display,
+    {
+        self.credits_available = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for credits_available: {}", e));
+        self
+    }
+    pub fn criteria<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Criteria>,
+        T::Error: std::fmt::Display,
+    {
+        self.criteria = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for criteria: {}", e));
+        self
+    }
+    pub fn description<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.description = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for description: {}", e));
+        self
+    }
+    pub fn endorsement<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Vec<endorsement::EndorsementCredential>>,
+        T::Error: std::fmt::Display,
+    {
+        self.endorsement = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for endorsement: {}", e));
+        self
+    }
+    pub fn endorsement_jwt<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Vec<AchievementEndorsementJwtItem>>,
+        T::Error: std::fmt::Display,
+    {
+        self.endorsement_jwt = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e));
+        self
+    }
+    pub fn field_of_study<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.field_of_study = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for field_of_study: {}", e));
+        self
+    }
+    pub fn human_code<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.human_code = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for human_code: {}", e));
+        self
+    }
+    pub fn id<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.id = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for id: {}", e));
+        self
+    }
+    pub fn image<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<general::Image>>,
+        T::Error: std::fmt::Display,
+    {
+        self.image = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for image: {}", e));
+        self
+    }
+    pub fn language<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<AchievementLanguage>>,
+        T::Error: std::fmt::Display,
+    {
+        self.language = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for language: {}", e));
+        self
+    }
+    pub fn name<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<String>,
+        T::Error: std::fmt::Display,
+    {
+        self.name = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for name: {}", e));
+        self
+    }
+    pub fn other_identifier<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Vec<identity::IdentifierEntry>>,
+        T::Error: std::fmt::Display,
+    {
+        self.other_identifier = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for other_identifier: {}", e));
+        self
+    }
+    pub fn related<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Vec<related::Related>>,
+        T::Error: std::fmt::Display,
+    {
+        self.related = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for related: {}", e));
+        self
+    }
+    pub fn result_description<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Vec<ResultDescription>>,
+        T::Error: std::fmt::Display,
+    {
+        self.result_description = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for result_description: {}", e));
+        self
+    }
+    pub fn specialization<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.specialization = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for specialization: {}", e));
+        self
+    }
+    pub fn tag<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Vec<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.tag = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for tag: {}", e));
+        self
+    }
+    pub fn type_<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Type>,
+        T::Error: std::fmt::Display,
+    {
+        self.type_ = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for type_: {}", e));
+        self
+    }
+    pub fn version<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.version = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for version: {}", e));
+        self
+    }
+}
+impl std::convert::TryFrom<AchievementBuilder> for Achievement {
+    type Error = String;
+    fn try_from(value: AchievementBuilder) -> Result<Self, String> {
+        Ok(Self {
+            achievement_type: value.achievement_type?,
+            alignment: value.alignment?,
+            creator: value.creator?,
+            credits_available: value.credits_available?,
+            criteria: value.criteria?,
+            description: value.description?,
+            endorsement: value.endorsement?,
+            endorsement_jwt: value.endorsement_jwt?,
+            field_of_study: value.field_of_study?,
+            human_code: value.human_code?,
+            id: value.id?,
+            image: value.image?,
+            language: value.language?,
+            name: value.name?,
+            other_identifier: value.other_identifier?,
+            related: value.related?,
+            result_description: value.result_description?,
+            specialization: value.specialization?,
+            tag: value.tag?,
+            type_: value.type_?,
+            version: value.version?,
+        })
+    }
+}
+impl From<Achievement> for AchievementBuilder {
+    fn from(value: Achievement) -> Self {
+        Self {
+            achievement_type: Ok(value.achievement_type),
+            alignment: Ok(value.alignment),
+            creator: Ok(value.creator),
+            credits_available: Ok(value.credits_available),
+            criteria: Ok(value.criteria),
+            description: Ok(value.description),
+            endorsement: Ok(value.endorsement),
+            endorsement_jwt: Ok(value.endorsement_jwt),
+            field_of_study: Ok(value.field_of_study),
+            human_code: Ok(value.human_code),
+            id: Ok(value.id),
+            image: Ok(value.image),
+            language: Ok(value.language),
+            name: Ok(value.name),
+            other_identifier: Ok(value.other_identifier),
+            related: Ok(value.related),
+            result_description: Ok(value.result_description),
+            specialization: Ok(value.specialization),
+            tag: Ok(value.tag),
+            type_: Ok(value.type_),
+            version: Ok(value.version),
         }
     }
-    impl std::convert::TryFrom<Achievement> for super::Achievement {
-        type Error = String;
-        fn try_from(value: Achievement) -> Result<Self, String> {
-            Ok(Self {
-                achievement_type: value.achievement_type?,
-                alignment: value.alignment?,
-                creator: value.creator?,
-                credits_available: value.credits_available?,
-                criteria: value.criteria?,
-                description: value.description?,
-                endorsement: value.endorsement?,
-                endorsement_jwt: value.endorsement_jwt?,
-                field_of_study: value.field_of_study?,
-                human_code: value.human_code?,
-                id: value.id?,
-                image: value.image?,
-                language: value.language?,
-                name: value.name?,
-                other_identifier: value.other_identifier?,
-                related: value.related?,
-                result_description: value.result_description?,
-                specialization: value.specialization?,
-                tag: value.tag?,
-                type_: value.type_?,
-                version: value.version?,
-            })
-        }
-    }
-    impl From<super::Achievement> for Achievement {
-        fn from(value: super::Achievement) -> Self {
-            Self {
-                achievement_type: Ok(value.achievement_type),
-                alignment: Ok(value.alignment),
-                creator: Ok(value.creator),
-                credits_available: Ok(value.credits_available),
-                criteria: Ok(value.criteria),
-                description: Ok(value.description),
-                endorsement: Ok(value.endorsement),
-                endorsement_jwt: Ok(value.endorsement_jwt),
-                field_of_study: Ok(value.field_of_study),
-                human_code: Ok(value.human_code),
-                id: Ok(value.id),
-                image: Ok(value.image),
-                language: Ok(value.language),
-                name: Ok(value.name),
-                other_identifier: Ok(value.other_identifier),
-                related: Ok(value.related),
-                result_description: Ok(value.result_description),
-                specialization: Ok(value.specialization),
-                tag: Ok(value.tag),
-                type_: Ok(value.type_),
-                version: Ok(value.version),
-            }
-        }
-    }
+}
 
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct Criteria {
-        id: Result<Option<String>, String>,
-        narrative: Result<Option<String>, String>,
-    }
-    impl Default for Criteria {
-        fn default() -> Self {
-            Self {
-                id: Ok(Default::default()),
-                narrative: Ok(Default::default()),
-            }
+#[derive(Clone, Debug, PartialEq)]
+pub struct CriteriaBuilder {
+    id: Result<Option<String>, String>,
+    narrative: Result<Option<String>, String>,
+}
+impl Default for CriteriaBuilder {
+    fn default() -> Self {
+        Self {
+            id: Ok(Default::default()),
+            narrative: Ok(Default::default()),
         }
     }
-    impl Criteria {
-        pub fn id<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.id = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for id: {}", e));
-            self
-        }
-        pub fn narrative<T>(mut self, value: T) -> Self
-        where
-            T: std::convert::TryInto<Option<String>>,
-            T::Error: std::fmt::Display,
-        {
-            self.narrative = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for narrative: {}", e));
-            self
-        }
+}
+impl CriteriaBuilder {
+    pub fn id<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.id = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for id: {}", e));
+        self
     }
-    impl std::convert::TryFrom<Criteria> for super::Criteria {
-        type Error = String;
-        fn try_from(value: Criteria) -> Result<Self, String> {
-            Ok(Self {
-                id: value.id?,
-                narrative: value.narrative?,
-            })
-        }
+    pub fn narrative<T>(mut self, value: T) -> Self
+    where
+        T: std::convert::TryInto<Option<String>>,
+        T::Error: std::fmt::Display,
+    {
+        self.narrative = value
+            .try_into()
+            .map_err(|e| format!("error converting supplied value for narrative: {}", e));
+        self
     }
-    impl From<super::Criteria> for Criteria {
-        fn from(value: super::Criteria) -> Self {
-            Self {
-                id: Ok(value.id),
-                narrative: Ok(value.narrative),
-            }
+}
+impl std::convert::TryFrom<CriteriaBuilder> for Criteria {
+    type Error = String;
+    fn try_from(value: CriteriaBuilder) -> Result<Self, String> {
+        Ok(Self {
+            id: value.id?,
+            narrative: value.narrative?,
+        })
+    }
+}
+impl From<Criteria> for CriteriaBuilder {
+    fn from(value: Criteria) -> Self {
+        Self {
+            id: Ok(value.id),
+            narrative: Ok(value.narrative),
         }
     }
 }
