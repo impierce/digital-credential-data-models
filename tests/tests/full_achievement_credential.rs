@@ -3,9 +3,9 @@ use openbadges::json_schema::{
     achievement::{Achievement, AchievementBuilder, Criteria, CriteriaBuilder, AchievementType},
     achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType, CredentialSchema, CredentialSchemaBuilder, CredentialStatus, CredentialStatusBuilder, AchievementCredentialSchema},
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    profile::{Profile, ProfileBuilder, self, Address, AddressBuilder, GeoCoordinates, GeoCoordinatesBuilder}, general::{ImageBuilder, Image, RefreshService, RefreshServiceBuilder}, identity::{IdentityObject, IdentityObjectBuilder, IdentifierEntry, IdentifierEntryBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubjectBuilder, EndorsementSubject, EndorsementCredentialType, EndorsementCredentialSchema, EndorsementCredentialProof, self}, proof_evidence::{Proof, ProofBuilder, Evidence, EvidenceBuilder}, result::{ResultDescription, ResultDescriptionBuilder, RubricCriterionLevel, RubricCriterionLevelBuilder, Result_, ResultBuilder, ResultStatus},
+    profile::{Profile, ProfileBuilder, Address, AddressBuilder, GeoCoordinates, GeoCoordinatesBuilder}, general::{ImageBuilder, Image, RefreshService, RefreshServiceBuilder}, identity::{IdentityObject, IdentityObjectBuilder, IdentifierEntry, IdentifierEntryBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubjectBuilder, EndorsementSubject, EndorsementCredentialType, EndorsementCredentialSchema, EndorsementCredentialProof}, proof_evidence::{Proof, ProofBuilder, Evidence, EvidenceBuilder}, result::{ResultDescription, ResultDescriptionBuilder, RubricCriterionLevel, RubricCriterionLevelBuilder, Result_, ResultBuilder, ResultStatus},
 };
-use std::{fs::File, process::id, str::FromStr};
+use std::{fs::File, str::FromStr};
 
 #[test]
 fn full_achievement_credential() {
@@ -97,7 +97,7 @@ fn full_achievement_credential() {
                 .target_description("1EdTech University Degree programs.".to_string())
                 .target_name("1EdTech University Degree")
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
-                .target_type(AlignmentTargetType::from("CFItem"))
+                .target_type(AlignmentTargetType::from("CFItem".to_string()))
                 .target_url("https://1edtech.edu/catalog/degree")
                 .try_into()
                 .unwrap();
@@ -970,8 +970,12 @@ fn full_achievement_credential() {
     .try_into()
     .unwrap();
 
-    let file = File::open("tests/obv3_json_examples/basic_achievement_credential.json").expect("Failed to open file");
-    let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
+    ///// (First) Error occurs at AlignmentTargetType. String not automatically recognized as Enum value
 
-    assert_eq!(serde_json::to_value(full_achievement_credential).unwrap(), json_value_from_file)
+    let file = File::open("tests/obv3_json_examples/full_achievement_credential.json").expect("Failed to open file");
+    let full_ach_cred_from_file: AchievementCredential = serde_json::from_reader(file).expect("Couldn't read from file");
+    // let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
+
+    assert_eq!(full_achievement_credential, full_ach_cred_from_file)
 }
+
