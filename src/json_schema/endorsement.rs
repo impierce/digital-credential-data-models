@@ -30,7 +30,7 @@ pub struct EndorsementCredential {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proof: Option<EndorsementCredentialProof>,
     #[serde(rename = "credentialSchema", default, skip_serializing_if = "Option::is_none")]
-    pub credential_schema: Option<EndorsementCredentialCredentialSchema>,
+    pub credential_schema: Option<EndorsementCredentialSchema>,
     #[serde(rename = "credentialStatus", default, skip_serializing_if = "Option::is_none")]
     pub credential_status: Option<achievement_credential::CredentialStatus>,
     #[serde(rename = "refreshService", default, skip_serializing_if = "Option::is_none")]
@@ -52,21 +52,21 @@ impl From<&EndorsementCredential> for EndorsementCredential {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
-pub enum EndorsementCredentialCredentialSchema {
+pub enum EndorsementCredentialSchema {
     Schema(achievement_credential::CredentialSchema),
     VecSchema(Vec<achievement_credential::CredentialSchema>),
 }
-impl From<&EndorsementCredentialCredentialSchema> for EndorsementCredentialCredentialSchema {
-    fn from(value: &EndorsementCredentialCredentialSchema) -> Self {
+impl From<&EndorsementCredentialSchema> for EndorsementCredentialSchema {
+    fn from(value: &EndorsementCredentialSchema) -> Self {
         value.clone()
     }
 }
-impl From<achievement_credential::CredentialSchema> for EndorsementCredentialCredentialSchema {
+impl From<achievement_credential::CredentialSchema> for EndorsementCredentialSchema {
     fn from(value: achievement_credential::CredentialSchema) -> Self {
         Self::Schema(value)
     }
 }
-impl From<Vec<achievement_credential::CredentialSchema>> for EndorsementCredentialCredentialSchema {
+impl From<Vec<achievement_credential::CredentialSchema>> for EndorsementCredentialSchema {
     fn from(value: Vec<achievement_credential::CredentialSchema>) -> Self {
         Self::VecSchema(value)
     }
@@ -207,7 +207,7 @@ impl From<Vec<&str>> for EndorsementSubjectType {
 pub struct EndorsementCredentialBuilder {
     awarded_date: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
     context: Result<Vec<general::Context>, String>,
-    credential_schema: Result<Option<EndorsementCredentialCredentialSchema>, String>,
+    credential_schema: Result<Option<EndorsementCredentialSchema>, String>,
     credential_status: Result<Option<achievement_credential::CredentialStatus>, String>,
     credential_subject: Result<EndorsementSubject, String>,
     description: Result<Option<String>, String>,
@@ -265,7 +265,7 @@ impl EndorsementCredentialBuilder {
     }
     pub fn credential_schema<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<EndorsementCredentialCredentialSchema>>,
+        T: std::convert::TryInto<Option<EndorsementCredentialSchema>>,
         T::Error: std::fmt::Display,
     {
         self.credential_schema = value
