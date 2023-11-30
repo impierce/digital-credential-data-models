@@ -21,12 +21,6 @@ impl From<&Related> for Related {
     }
 }
 
-// impl Related {
-//     pub fn builder() -> builder::RelatedBuilder {
-//         builder::RelatedBuilder::default()
-//     }
-// }
-
 #[doc = "The language of the related achievement."]
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct RelatedLanguage(String);
@@ -127,8 +121,6 @@ impl From<Vec<&str>> for RelatedType {
         Self::VecString(v)
     }
 }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct RelatedBuilder {

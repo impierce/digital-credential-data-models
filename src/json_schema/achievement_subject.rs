@@ -45,12 +45,6 @@ impl From<&AchievementSubject> for AchievementSubject {
     }
 }
 
-// impl AchievementSubject {
-//     pub fn builder() -> builder::AchievementSubjectBuilder {
-//         builder::AchievementSubjectBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementSubjectType {
@@ -83,8 +77,6 @@ impl From<Vec<&str>> for AchievementSubjectType {
         Self::VecString(v)
     }
 }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AchievementSubjectBuilder {

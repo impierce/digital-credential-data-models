@@ -44,12 +44,6 @@ impl From<&EndorsementCredential> for EndorsementCredential {
     }
 }
 
-// impl EndorsementCredential {
-//     pub fn builder() -> builder::EndorsementCredentialBuilder {
-//         builder::EndorsementCredentialBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementCredentialSchema {
@@ -162,12 +156,6 @@ impl From<&EndorsementSubject> for EndorsementSubject {
     }
 }
 
-// impl EndorsementSubject {
-//     pub fn builder() -> builder::EndorsementSubjectBuilder {
-//         builder::EndorsementSubjectBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EndorsementSubjectType {
@@ -200,8 +188,6 @@ impl From<Vec<&str>> for EndorsementSubjectType {
         Self::VecString(v)
     }
 }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct EndorsementCredentialBuilder {

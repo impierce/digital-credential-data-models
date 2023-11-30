@@ -30,12 +30,6 @@ impl From<&Evidence> for Evidence {
     }
 }
 
-// impl Evidence {
-//     pub fn builder() -> builder::EvidenceBuilder {
-//         builder::EvidenceBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum EvidenceType {
@@ -105,14 +99,6 @@ impl From<&Proof> for Proof {
         value.clone()
     }
 }
-
-// impl Proof {
-//     pub fn builder() -> builder::ProofBuilder {
-//         builder::ProofBuilder::default()
-//     }
-// }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct EvidenceBuilder {

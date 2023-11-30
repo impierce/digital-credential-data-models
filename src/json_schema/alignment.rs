@@ -30,12 +30,6 @@ impl From<&Alignment> for Alignment {
     }
 }
 
-// impl Alignment {
-//     pub fn builder() -> builder::AlignmentBuilder {
-//         builder::AlignmentBuilder::default()
-//     }
-// }
-
 #[doc = "The type of the alignment target node."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -58,14 +52,13 @@ impl From<AlignmentTargetTypeString> for AlignmentTargetType {
         Self::String(value)
     }
 }
-impl From<String> for AlignmentTargetType {
-    fn from(value: String) -> Self {
-        Self::String(AlignmentTargetTypeString(value))
-    }
-}
-impl From<&str> for AlignmentTargetType {
-    fn from(value: &str) -> Self {
-        Self::String(AlignmentTargetTypeString(value.to_string()))
+
+impl std::str::FromStr for AlignmentTargetType {
+    type Err = &'static str;
+    fn from_str(value: &str) -> Result<Self, &'static str> {
+        AlignmentTargetTypeEnum::from_str(value)
+            .map(Self::Enum)
+            .or_else(|_| AlignmentTargetTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
     }
 }
 
@@ -228,8 +221,6 @@ impl From<Vec<&str>> for AlignmentType {
         Self::VecString(v)
     }
 }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AlignmentBuilder {

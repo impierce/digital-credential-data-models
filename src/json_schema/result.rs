@@ -28,12 +28,6 @@ impl From<&Result_> for Result_ {
     }
 }
 
-// impl Result_ {
-//     pub fn builder() -> builder::ResultBuilder {
-//         builder::ResultBuilder::default()
-//     }
-// }
-
 #[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum ResultStatus {
@@ -147,7 +141,7 @@ pub struct ResultDescription {
     pub required_value: Option<String>,
     #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
     #[serde(rename = "resultType")]
-    pub result_type: ResultDescriptionType,
+    pub result_description_type: ResultDescriptionType,
     #[serde(rename = "rubricCriterionLevel", default, skip_serializing_if = "Vec::is_empty")]
     pub rubric_criterion_level: Vec<RubricCriterionLevel>,
     #[doc = "The maximum possible `value` that may be asserted in a linked result."]
@@ -162,12 +156,6 @@ impl From<&ResultDescription> for ResultDescription {
         value.clone()
     }
 }
-
-// impl ResultDescription {
-//     pub fn builder() -> builder::ResultDescriptionBuilder {
-//         builder::ResultDescriptionBuilder::default()
-//     }
-// }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -220,14 +208,13 @@ impl From<ResultDescriptionTypeEnum> for ResultDescriptionType {
         Self::Enum(value)
     }
 }
-impl From<String> for ResultDescriptionType {
-    fn from(value: String) -> Self {
-        Self::String(ResultDescriptionTypeString(value))
-    }
-}
-impl From<&str> for ResultDescriptionType {
-    fn from(value: &str) -> Self {
-        Self::String(ResultDescriptionTypeString(value.to_string()))
+
+impl std::str::FromStr for ResultDescriptionType {
+    type Err = &'static str;
+    fn from_str(value: &str) -> Result<Self, &'static str> {
+        ResultDescriptionTypeEnum::from_str(value)
+            .map(Self::Enum)
+            .or_else(|_| ResultDescriptionTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
     }
 }
 
@@ -393,12 +380,6 @@ impl From<&RubricCriterionLevel> for RubricCriterionLevel {
     }
 }
 
-// impl RubricCriterionLevel {
-//     pub fn builder() -> builder::RubricCriterionLevelBuilder {
-//         builder::RubricCriterionLevelBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum RubricCriterionLevelType {
@@ -432,8 +413,6 @@ impl From<Vec<&str>> for RubricCriterionLevelType {
     }
 }
 
-// pub mod builder
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct ResultDescriptionBuilder {
     alignment: Result<Vec<alignment::Alignment>, String>,
@@ -442,7 +421,7 @@ pub struct ResultDescriptionBuilder {
     name: Result<String, String>,
     required_level: Result<Option<String>, String>,
     required_value: Result<Option<String>, String>,
-    result_type: Result<ResultDescriptionType, String>,
+    result_description_type: Result<ResultDescriptionType, String>,
     rubric_criterion_level: Result<Vec<RubricCriterionLevel>, String>,
     type_: Result<DescriptionType, String>,
     value_max: Result<Option<String>, String>,
@@ -457,7 +436,7 @@ impl Default for ResultDescriptionBuilder {
             name: Err("no value supplied for name".to_string()),
             required_level: Ok(Default::default()),
             required_value: Ok(Default::default()),
-            result_type: Err("no value supplied for result_type".to_string()),
+            result_description_type: Err("no value supplied for result_description_type".to_string()),
             rubric_criterion_level: Ok(Default::default()),
             type_: Err("no value supplied for type_".to_string()),
             value_max: Ok(Default::default()),
@@ -526,14 +505,14 @@ impl ResultDescriptionBuilder {
             .map_err(|e| format!("error converting supplied value for required_value: {}", e));
         self
     }
-    pub fn result_type<T>(mut self, value: T) -> Self
+    pub fn result_description_type<T>(mut self, value: T) -> Self
     where
         T: std::convert::TryInto<ResultDescriptionType>,
         T::Error: std::fmt::Display,
     {
-        self.result_type = value
+        self.result_description_type = value
             .try_into()
-            .map_err(|e| format!("error converting supplied value for result_type: {}", e));
+            .map_err(|e| format!("error converting supplied value for result_description_type: {}", e));
         self
     }
     pub fn rubric_criterion_level<T>(mut self, value: T) -> Self
@@ -587,7 +566,7 @@ impl std::convert::TryFrom<ResultDescriptionBuilder> for ResultDescription {
             name: value.name?,
             required_level: value.required_level?,
             required_value: value.required_value?,
-            result_type: value.result_type?,
+            result_description_type: value.result_description_type?,
             rubric_criterion_level: value.rubric_criterion_level?,
             type_: value.type_?,
             value_max: value.value_max?,
@@ -604,7 +583,7 @@ impl From<ResultDescription> for ResultDescriptionBuilder {
             name: Ok(value.name),
             required_level: Ok(value.required_level),
             required_value: Ok(value.required_value),
-            result_type: Ok(value.result_type),
+            result_description_type: Ok(value.result_description_type),
             rubric_criterion_level: Ok(value.rubric_criterion_level),
             type_: Ok(value.type_),
             value_max: Ok(value.value_max),

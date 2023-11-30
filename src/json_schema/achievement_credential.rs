@@ -53,12 +53,6 @@ impl From<&AchievementCredential> for AchievementCredential {
     }
 }
 
-// impl AchievementCredential {
-//     pub fn builder() -> builder::AchievementCredentialBuilder {
-//         builder::AchievementCredentialBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AchievementCredentialSchema {
@@ -250,12 +244,6 @@ impl From<&CredentialSchema> for CredentialSchema {
     }
 }
 
-// impl CredentialSchema {
-//     pub fn builder() -> builder::CredentialSchemaBuilder {
-//         builder::CredentialSchemaBuilder::default()
-//     }
-// }
-
 #[doc = "The information in CredentialStatus is used to discover information about the current status of a verifiable credential, such as whether it is suspended or revoked."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct CredentialStatus {
@@ -271,13 +259,6 @@ impl From<&CredentialStatus> for CredentialStatus {
     }
 }
 
-// impl CredentialStatus {
-//     pub fn builder() -> builder::CredentialStatusBuilder {
-//         builder::CredentialStatusBuilder::default()
-//     }
-// }
-
-// pub mod builder
 #[derive(Clone, Debug, PartialEq)]
 pub struct AchievementCredentialBuilder {
     awarded_date: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,

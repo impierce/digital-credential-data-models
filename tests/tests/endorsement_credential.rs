@@ -85,6 +85,15 @@ fn endorsement_credential() {
     .try_into()
     .unwrap();
 
+    // Here we test the built struct against the struct deserialized from the example .json file.
+    
+    let file = File::open("tests/obv3_json_examples/endorsement_credential.json").expect("Failed to open file");
+    let endorsement_cred_from_file: EndorsementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
+    
+    assert_eq!(endorsement_credential_builder, endorsement_cred_from_file);
+    
+    // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
+
     let file = File::open("tests/obv3_json_examples/endorsement_credential.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 

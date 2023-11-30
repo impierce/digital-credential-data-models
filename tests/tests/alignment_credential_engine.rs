@@ -5,7 +5,7 @@ use openbadges::json_schema::{
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
     profile::{Profile, ProfileBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
 };
-use std::fs::File;
+use std::{fs::File, str::FromStr};
 
 #[test]
 fn alignment_credential_engine() {
@@ -59,7 +59,7 @@ fn alignment_credential_engine() {
                 .target_code("ce-cf4dee18-7cea-443a-b920-158a0762c6bf".to_string())
                 .target_framework("Edmonds College Course Catalog".to_string())
                 .target_name("Requirements Analysis")
-                .target_type(AlignmentTargetType::from("ceterms:Credential"))
+                .target_type(AlignmentTargetType::from_str("ceterms:Credential").unwrap())
                 .target_url("https://credentialfinder.org/credential/20229/Requirements_Analysis")
                 .try_into()
                 .unwrap();
@@ -79,9 +79,18 @@ fn alignment_credential_engine() {
     .try_into()
     .unwrap();
 
+    // Here we test the built struct against the struct deserialized from the example .json file.
+
+    let file = File::open("tests/obv3_json_examples/alignment_credential_engine.json").expect("Failed to open file");
+    let alignment_credential_engine_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
+    
+    assert_eq!(alignment_credential_engine_builder, alignment_credential_engine_from_file);
+    
+    // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
+
     let file = File::open("tests/obv3_json_examples/alignment_credential_engine.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
     assert_eq!(serde_json::to_value(alignment_credential_engine_builder).unwrap(), json_value_from_file);
- 
+
 }

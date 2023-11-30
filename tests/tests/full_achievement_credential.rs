@@ -3,7 +3,7 @@ use openbadges::json_schema::{
     achievement::{Achievement, AchievementBuilder, Criteria, CriteriaBuilder, AchievementType},
     achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType, CredentialSchema, CredentialSchemaBuilder, CredentialStatus, CredentialStatusBuilder, AchievementCredentialSchema},
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    profile::{Profile, ProfileBuilder, Address, AddressBuilder, GeoCoordinates, GeoCoordinatesBuilder}, general::{ImageBuilder, Image, RefreshService, RefreshServiceBuilder}, identity::{IdentityObject, IdentityObjectBuilder, IdentifierEntry, IdentifierEntryBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubjectBuilder, EndorsementSubject, EndorsementCredentialType, EndorsementCredentialSchema, EndorsementCredentialProof}, proof_evidence::{Proof, ProofBuilder, Evidence, EvidenceBuilder}, result::{ResultDescription, ResultDescriptionBuilder, RubricCriterionLevel, RubricCriterionLevelBuilder, Result_, ResultBuilder, ResultStatus},
+    profile::{Profile, ProfileBuilder, Address, AddressBuilder, GeoCoordinates, GeoCoordinatesBuilder}, general::{ImageBuilder, Image, RefreshService, RefreshServiceBuilder}, identity::{IdentityObject, IdentityObjectBuilder, IdentifierEntry, IdentifierEntryBuilder, IdentifierType, IdentityObjectType}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubjectBuilder, EndorsementSubject, EndorsementCredentialType, EndorsementCredentialSchema, EndorsementCredentialProof}, proof_evidence::{Proof, ProofBuilder, Evidence, EvidenceBuilder}, result::{ResultDescription, ResultDescriptionBuilder, RubricCriterionLevel, RubricCriterionLevelBuilder, Result_, ResultBuilder, ResultStatus, ResultDescriptionType},
 };
 use std::{fs::File, str::FromStr};
 
@@ -16,7 +16,7 @@ fn full_achievement_credential() {
     
     // Next, the builders are tested against the OBv3 examples 
 
-    let full_achievement_credential: AchievementCredential = AchievementCredentialBuilder::default()
+    let full_achievement_credential_builder: AchievementCredential = AchievementCredentialBuilder::default()
     .context([
         "https://www.w3.org/2018/credentials/v1".into(),
         "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
@@ -69,7 +69,7 @@ fn full_achievement_credential() {
             let identifier_student: IdentityObject = IdentityObjectBuilder::default()
             .type_("IdentityObject")
             .identity_hash("student@1edtech.edu")
-            .identity_type("emailAddress")
+            .identity_object_type(IdentityObjectType::from_str("emailAddress").unwrap())
             .hashed(false)
             .salt("not-used".to_string())
             .try_into()
@@ -78,7 +78,7 @@ fn full_achievement_credential() {
             let identifier_somebody: IdentityObject = IdentityObjectBuilder::default()
             .type_("IdentityObject")
             .identity_hash("somebody@gmail.com")
-            .identity_type("emailAddress")
+            .identity_object_type(IdentityObjectType::from_str("emailAddress").unwrap())
             .hashed(false)
             .salt("not-used".to_string())            
             .try_into()
@@ -97,7 +97,7 @@ fn full_achievement_credential() {
                 .target_description("1EdTech University Degree programs.".to_string())
                 .target_name("1EdTech University Degree")
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
-                .target_type(AlignmentTargetType::from("CFItem".to_string()))
+                .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://1edtech.edu/catalog/degree")
                 .try_into()
                 .unwrap();
@@ -108,14 +108,14 @@ fn full_achievement_credential() {
                 .target_description("1EdTech University Degree programs.".to_string())
                 .target_name("1EdTech University Degree")
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
-                .target_type(AlignmentTargetType::from("CTDL"))
-                .target_url("https://1edtech.edu/catalog/degree")
+                .target_type(AlignmentTargetType::from_str("CTDL").unwrap())
+                .target_url("https://credentialengineregistry.org/resources/ce-98cb027b-95ef-4494-908d-6f7790ec6b6b")
                 .try_into()
                 .unwrap();
 
                 vec![alignment_cfitem, alignment_ctdl]
             })
-            .achievement_type(AchievementType::from("Degree"))
+            .achievement_type(AchievementType::from_str("Degree").unwrap())
             .creator({
                 let creator: Profile = ProfileBuilder::default()
                 .id("https://1edtech.edu/issuers/565049")
@@ -203,7 +203,7 @@ fn full_achievement_credential() {
                         .try_into()
                         .unwrap();
 
-                        EndorsementCredentialProof::from(proof)
+                        EndorsementCredentialProof::from(vec![proof])
                     })
                     .try_into()
                     .unwrap();
@@ -286,7 +286,7 @@ fn full_achievement_credential() {
                         .try_into()
                         .unwrap();
 
-                        EndorsementCredentialProof::from(proof)
+                        EndorsementCredentialProof::from(vec![proof])
                     })
                     .try_into()
                     .unwrap();
@@ -306,7 +306,7 @@ fn full_achievement_credential() {
                 .email("registrar@1edtech.edu".to_string())
                 .address({
                     let address: Address = AddressBuilder::default()
-                    .type_("Address")
+                    .type_(vec!["Address"])
                     .address_country("USA".to_string())
                     .address_country_code("US".to_string())
                     .address_region("TX".to_string())
@@ -333,14 +333,14 @@ fn full_achievement_credential() {
                     let identifier1: IdentifierEntry = IdentifierEntryBuilder::default()
                     .type_("IdentifierEntry")
                     .identifier("12345")
-                    .identifier_type("sourcedId")
+                    .identifier_type(IdentifierType::from_str("sourcedId").unwrap())
                     .try_into()
                     .unwrap();
 
                     let identifier2: IdentifierEntry = IdentifierEntryBuilder::default()
                     .type_("IdentifierEntry")
                     .identifier("67890")
-                    .identifier_type("nationalIdentityNumber")
+                    .identifier_type(IdentifierType::from_str("nationalIdentityNumber").unwrap())
                     .try_into()
                     .unwrap();
 
@@ -450,7 +450,7 @@ fn full_achievement_credential() {
                     .try_into()
                     .unwrap();
 
-                    EndorsementCredentialProof::from(proof)
+                    EndorsementCredentialProof::from(vec![proof])
                 })
                 .try_into()
                 .unwrap();
@@ -474,7 +474,7 @@ fn full_achievement_credential() {
                 let other_identifier: IdentifierEntry = IdentifierEntryBuilder::default()
                 .type_("IdentifierEntry")
                 .identifier("abde")
-                .identifier_type("identifier")
+                .identifier_type(IdentifierType::from_str("identifier").unwrap())
                 .try_into()
                 .unwrap();
 
@@ -491,7 +491,7 @@ fn full_achievement_credential() {
                     .target_description("Project description".to_string())
                     .target_name("Final Project")
                     .target_framework("1EdTech University Program and Course Catalog".to_string())
-                    .target_type(AlignmentTargetType::from("CFItem"))
+                    .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                     .target_url("https://1edtech.edu/catalog/degree/project")
                     .try_into()
                     .unwrap();
@@ -501,7 +501,7 @@ fn full_achievement_credential() {
                 .allowed_value(vec!["D".to_string(), "C".to_string(), "B".to_string(), "A".to_string()])
                 .name("Final Project Grade")
                 .required_value("C".to_string())
-                .result_type("LetterGrade")
+                .result_description_type(ResultDescriptionType::from_str("LetterGrade").unwrap())
                 .try_into()
                 .unwrap();
 
@@ -515,7 +515,7 @@ fn full_achievement_credential() {
                     .target_description("Project description".to_string())
                     .target_name("Final Project")
                     .target_framework("1EdTech University Program and Course Catalog".to_string())
-                    .target_type(AlignmentTargetType::from("CFItem"))
+                    .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                     .target_url("https://1edtech.edu/catalog/degree/project")
                     .try_into()
                     .unwrap();
@@ -525,7 +525,7 @@ fn full_achievement_credential() {
                 .allowed_value(vec!["D".to_string(), "C".to_string(), "B".to_string(), "A".to_string()])
                 .name("Final Project Grade")
                 .required_level("urn:uuid:d05a0867-d0ad-4b03-bdb5-28fb5d2aab7a".to_string())
-                .result_type("RubricCriterionLevel")
+                .result_description_type(ResultDescriptionType::from_str("RubricCriterionLevel").unwrap())
                 .rubric_criterion_level({
                     let rubric1: RubricCriterionLevel = RubricCriterionLevelBuilder::default()
                     .id("urn:uuid:d05a0867-d0ad-4b03-bdb5-28fb5d2aab7a")
@@ -537,7 +537,7 @@ fn full_achievement_credential() {
                         .target_description("Project description".to_string())
                         .target_name("Final Project")
                         .target_framework("1EdTech University Program and Course Catalog".to_string())
-                        .target_type(AlignmentTargetType::from("CFRubricCriterionLevel"))
+                        .target_type(AlignmentTargetType::from_str("CFRubricCriterionLevel").unwrap())
                         .target_url("https://1edtech.edu/catalog/degree/project/rubric/levels/mastered")
                         .try_into()
                         .unwrap();
@@ -561,7 +561,7 @@ fn full_achievement_credential() {
                         .target_description("Project description".to_string())
                         .target_name("Final Project")
                         .target_framework("1EdTech University Program and Course Catalog".to_string())
-                        .target_type(AlignmentTargetType::from("CFRubricCriterionLevel"))
+                        .target_type(AlignmentTargetType::from_str("CFRubricCriterionLevel").unwrap())
                         .target_url("https://1edtech.edu/catalog/degree/project/rubric/levels/basic")
                         .try_into()
                         .unwrap();
@@ -584,7 +584,7 @@ fn full_achievement_credential() {
                 .id("urn:uuid:b07c0387-f2d6-4b65-a3f4-f4e4302ea8f7")
                 .type_("ResultDescription")
                 .name("Project Status")
-                .result_type("Status")
+                .result_description_type(ResultDescriptionType::from_str("Status").unwrap())
                 .try_into()
                 .unwrap();
 
@@ -618,7 +618,7 @@ fn full_achievement_credential() {
                 .target_description("Project description".to_string())
                 .target_name("Final Project")
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
-                .target_type(AlignmentTargetType::from("CFItem"))
+                .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://1edtech.edu/catalog/degree/project/result/1")
                 .try_into()
                 .unwrap();
@@ -631,7 +631,7 @@ fn full_achievement_credential() {
             .unwrap();
 
             let result2: Result_ = ResultBuilder::default()
-            .type_("Result")
+            .type_(vec!["Result"])
             .achieved_level("urn:uuid:d05a0867-d0ad-4b03-bdb5-28fb5d2aab7a".to_string())
             .alignment({
                 let alignment: Alignment = AlignmentBuilder::default()
@@ -640,7 +640,7 @@ fn full_achievement_credential() {
                 .target_description("Project description".to_string())
                 .target_name("Final Project")
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
-                .target_type(AlignmentTargetType::from("CFItem"))
+                .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://1edtech.edu/catalog/degree/project/result/1")
                 .try_into()
                 .unwrap();
@@ -652,7 +652,7 @@ fn full_achievement_credential() {
             .unwrap();
 
             let result3: Result_ = ResultBuilder::default()
-            .type_("Result")
+            .type_(vec!["Result"])
             .result_description("urn:uuid:f6ab24cd-86e8-4eaf-b8c6-ded74e8fd41c".to_string())
             .status(ResultStatus::from_str("Completed").unwrap())
             .try_into()
@@ -744,7 +744,7 @@ fn full_achievement_credential() {
             .try_into()
             .unwrap();
 
-            EndorsementCredentialProof::from(proof)
+            EndorsementCredentialProof::from(vec![proof])
         })
         .try_into()
         .unwrap();
@@ -862,7 +862,7 @@ fn full_achievement_credential() {
                 .try_into()
                 .unwrap();
       
-                EndorsementCredentialProof::from(proof)
+                EndorsementCredentialProof::from(vec![proof])
             })
             .try_into()
             .unwrap();
@@ -882,7 +882,7 @@ fn full_achievement_credential() {
         .email("registrar@1edtech.edu".to_string())
         .address({
             let address: Address = AddressBuilder::default()
-            .type_("Address")
+            .type_(vec!["Address"])
             .address_country("USA".to_string())
             .address_country_code("US".to_string())
             .address_region("TX".to_string())
@@ -909,14 +909,14 @@ fn full_achievement_credential() {
             let identifier1: IdentifierEntry = IdentifierEntryBuilder::default()
             .type_("IdentifierEntry")
             .identifier("12345")
-            .identifier_type("sourcedId")
+            .identifier_type(IdentifierType::from_str("sourcedId").unwrap())
             .try_into()
             .unwrap();
 
             let identifier2: IdentifierEntry = IdentifierEntryBuilder::default()
             .type_("IdentifierEntry")
             .identifier("67890")
-            .identifier_type("nationalIdentityNumber")
+            .identifier_type(IdentifierType::from_str("nationalIdentityNumber").unwrap())
             .try_into()
             .unwrap();
 
@@ -947,7 +947,7 @@ fn full_achievement_credential() {
         .try_into()
         .unwrap();
 
-        AchievementCredentialSchema::from(schema)
+        AchievementCredentialSchema::from(vec![schema])
     })
     .credential_status({
         let credential_status: CredentialStatus = CredentialStatusBuilder::default()
@@ -970,12 +970,19 @@ fn full_achievement_credential() {
     .try_into()
     .unwrap();
 
-    ///// (First) Error occurs at AlignmentTargetType. String not automatically recognized as Enum value
+    // Here we test the built struct against the struct deserialized from the example .json file.
+    
+    let file = File::open("tests/obv3_json_examples/full_achievement_credential.json").expect("Failed to open file");
+    let full_achievement_cred_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
+    
+    assert_eq!(full_achievement_credential_builder, full_achievement_cred_from_file);
+    
+    // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/full_achievement_credential.json").expect("Failed to open file");
-    let full_ach_cred_from_file: AchievementCredential = serde_json::from_reader(file).expect("Couldn't read from file");
-    // let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
+    let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(full_achievement_credential, full_ach_cred_from_file)
+    assert_eq!(serde_json::to_value(full_achievement_credential_builder).unwrap(), json_value_from_file);
+
 }
 

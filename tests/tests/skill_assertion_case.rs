@@ -5,7 +5,7 @@ use openbadges::json_schema::{
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
     profile::{Profile, ProfileBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, general::{Image, ImageBuilder}, proof_evidence::{Evidence, EvidenceBuilder},
 };
-use std::fs::File;
+use std::{fs::File, str::FromStr};
 
 #[test]
 fn skill_assertion_case() {
@@ -50,14 +50,14 @@ fn skill_assertion_case() {
                 .target_description("Robot software is a set of commands and procedures robots use to respond to input and perform autonomous tasks.".to_string())
                 .target_name("Robot Programming")
                 .target_framework("Example Robotics Framework".to_string())
-                .target_type(AlignmentTargetType::from("CFItem"))
+                .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://robotics-competencies.example.com/competencies/robot-programming")
                 .try_into()
                 .unwrap();
     
                 vec![alignment]
             })
-            .achievement_type(AchievementType::from("Competency"))
+            .achievement_type(AchievementType::from_str("Competency").unwrap())
             .creator({
                 let creator: Profile = ProfileBuilder::default()
                 .id("https://example.com/issuers/123767")
@@ -148,6 +148,15 @@ fn skill_assertion_case() {
     })
     .try_into()
     .unwrap();
+
+    // Here we test the built struct against the struct deserialized from the example .json file.
+    
+    let file = File::open("tests/obv3_json_examples/skill_assertion_case.json").expect("Failed to open file");
+    let skill_assertion_case_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
+    
+    assert_eq!(skill_assertion_case_builder, skill_assertion_case_from_file);
+    
+    // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/skill_assertion_case.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");

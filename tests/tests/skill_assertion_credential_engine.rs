@@ -5,7 +5,7 @@ use openbadges::json_schema::{
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
     profile::{Profile, ProfileBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, general::{Image, ImageBuilder},
 };
-use std::fs::File;
+use std::{fs::File, str::FromStr};
 
 #[test]
 fn skill_assertion_credential_engine() {
@@ -39,14 +39,14 @@ fn skill_assertion_credential_engine() {
                 .target_code("ce-6369c51f-4d86-4592-a761-8b32ae70a045".to_string())
                 .target_framework("Ivy Tech Community College of Indiana, MATH 135, FINITE MATH".to_string())
                 .target_name("Solve and graph linear equations and inequalities")
-                .target_type(AlignmentTargetType::from("ceasn:Competency"))
+                .target_type(AlignmentTargetType::from_str("ceasn:Competency").unwrap())
                 .target_url("https://credentialfinder.org/competency/ce-6369c51f-4d86-4592-a761-8b32ae70a045")
                 .try_into()
                 .unwrap();
     
                 vec![alignment]
             })
-            .achievement_type(AchievementType::from("Competency"))
+            .achievement_type(AchievementType::from_str("Competency").unwrap())
             .creator({
                 let creator: Profile = ProfileBuilder::default()
                 .id("https://example.com/issuers/123767")
@@ -126,6 +126,15 @@ fn skill_assertion_credential_engine() {
     })
     .try_into()
     .unwrap();
+
+    // Here we test the built struct against the struct deserialized from the example .json file.
+    
+    let file = File::open("tests/obv3_json_examples/skill_assertion_credential_engine.json").expect("Failed to open file");
+    let skill_assertion_cred_engine_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
+    
+    assert_eq!(skill_assertion_credential_engine_builder, skill_assertion_cred_engine_from_file);
+    
+    // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/skill_assertion_credential_engine.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");

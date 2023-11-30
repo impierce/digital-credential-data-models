@@ -59,12 +59,6 @@ impl From<&Achievement> for Achievement {
     }
 }
 
-// impl Achievement {
-//     pub fn builder() -> builder::AchievementBuilder {
-//         builder::AchievementBuilder::default()
-//     }
-// }
-
 #[doc = "The type of achievement. This is an extensible vocabulary."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -87,14 +81,12 @@ impl From<AchievementTypeString> for AchievementType {
         Self::String(value)
     }
 }
-impl From<String> for AchievementType {
-    fn from(value: String) -> Self {
-        Self::String(AchievementTypeString(value))
-    }
-}
-impl From<&str> for AchievementType {
-    fn from(value: &str) -> Self {
-        Self::String(AchievementTypeString(value.to_string()))
+impl std::str::FromStr for AchievementType {
+    type Err = &'static str;
+    fn from_str(value: &str) -> Result<Self, &'static str> {
+        AchievementTypeEnum::from_str(value)
+            .map(Self::Enum)
+            .or_else(|_| AchievementTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
     }
 }
 
@@ -322,12 +314,6 @@ impl From<&Criteria> for Criteria {
     }
 }
 
-// impl Criteria {
-//     pub fn builder() -> builder::CriteriaBuilder {
-//         builder::CriteriaBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Type {
@@ -497,8 +483,6 @@ impl<'de> serde::Deserialize<'de> for AchievementLanguage {
             .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
     }
 }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AchievementBuilder {

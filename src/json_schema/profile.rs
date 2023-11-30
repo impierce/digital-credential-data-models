@@ -69,12 +69,6 @@ impl From<&Profile> for Profile {
     }
 }
 
-// impl Profile {
-//     pub fn builder() -> builder::ProfileBuilder {
-//         builder::ProfileBuilder::default()
-//     }
-// }
-
 #[doc = "Allows endorsers to make specific claims about the individual or organization represented by this profile. These endorsements are signed with the VC-JWT proof format."]
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct ProfileEndorsementJwtItem(String);
@@ -204,12 +198,6 @@ impl From<&Address> for Address {
     }
 }
 
-// impl Address {
-//     pub fn builder() -> builder::AddressBuilder {
-//         builder::AddressBuilder::default()
-//     }
-// }
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum AddressType {
@@ -257,14 +245,6 @@ impl From<&GeoCoordinates> for GeoCoordinates {
         value.clone()
     }
 }
-
-// impl GeoCoordinates {
-//     pub fn builder() -> builder::GeoCoordinatesBuilder {
-//         builder::GeoCoordinatesBuilder::default()
-//     }
-// }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct ProfileBuilder {

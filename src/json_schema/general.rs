@@ -49,12 +49,6 @@ impl From<&Image> for Image {
     }
 }
 
-// impl Image {
-//     pub fn builder() -> builder::ImageBuilder {
-//         builder::ImageBuilder::default()
-//     }
-// }
-
 #[doc = "The information in RefreshService is used to refresh the verifiable credential."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct RefreshService {
@@ -69,12 +63,6 @@ impl From<&RefreshService> for RefreshService {
         value.clone()
     }
 }
-
-// impl RefreshService {
-//     pub fn builder() -> builder::RefreshServiceBuilder {
-//         builder::RefreshServiceBuilder::default()
-//     }
-// }
 
 #[doc = "Terms of use can be utilized by an issuer or a holder to communicate the terms under which a verifiable credential or verifiable presentation was issued"]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -91,14 +79,6 @@ impl From<&TermsOfUse> for TermsOfUse {
         value.clone()
     }
 }
-
-// impl TermsOfUse {
-//     pub fn builder() -> builder::TermsOfUseBuilder {
-//         builder::TermsOfUseBuilder::default()
-//     }
-// }
-
-// pub mod builder
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct ImageBuilder {

@@ -19,12 +19,6 @@ impl From<&IdentifierEntry> for IdentifierEntry {
     }
 }
 
-// impl IdentifierEntry {
-//     pub fn builder() -> builder::IdentifierEntryBuilder {
-//         builder::IdentifierEntryBuilder::default()
-//     }
-// }
-
 #[doc = "The identifier type."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -47,14 +41,13 @@ impl From<IdentifierTypeString> for IdentifierType {
         Self::String(value)
     }
 }
-impl From<String> for IdentifierType {
-    fn from(value: String) -> Self {
-        Self::String(IdentifierTypeString(value))
-    }
-}
-impl From<&str> for IdentifierType {
-    fn from(value: &str) -> Self {
-        Self::String(IdentifierTypeString(value.to_string()))
+
+impl std::str::FromStr for IdentifierType {
+    type Err = &'static str;
+    fn from_str(value: &str) -> Result<Self, &'static str> {
+        IdentifierTypeEnum::from_str(value)
+            .map(Self::Enum)
+            .or_else(|_| IdentifierTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
     }
 }
 
@@ -247,7 +240,7 @@ pub struct IdentityObject {
     pub identity_hash: String,
     #[doc = "The identity type."]
     #[serde(rename = "identityType")]
-    pub identity_type: IdentityObjectType,
+    pub identity_object_type: IdentityObjectType,
     #[doc = "If the `identityHash` is hashed, this should contain the string used to salt the hash. If this value is not provided, it should be assumed that the hash was not salted."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub salt: Option<String>,
@@ -257,12 +250,6 @@ impl From<&IdentityObject> for IdentityObject {
         value.clone()
     }
 }
-
-// impl IdentityObject {
-//     pub fn builder() -> builder::IdentityObjectBuilder {
-//         builder::IdentityObjectBuilder::default()
-//     }
-// }
 
 #[doc = "The identity type."]
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -286,14 +273,13 @@ impl From<IdentityObjectTypeString> for IdentityObjectType {
         Self::String(value)
     }
 }
-impl From<String> for IdentityObjectType {
-    fn from(value: String) -> Self {
-        Self::String(IdentityObjectTypeString(value))
-    }
-}
-impl From<&str> for IdentityObjectType {
-    fn from(value: &str) -> Self {
-        Self::String(IdentityObjectTypeString(value.to_string()))
+
+impl std::str::FromStr for IdentityObjectType {
+    type Err = &'static str;
+    fn from_str(value: &str) -> Result<Self, &'static str> {
+        IdentityObjectTypeEnum::from_str(value)
+            .map(Self::Enum)
+            .or_else(|_| IdentityObjectTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
     }
 }
 
@@ -473,8 +459,6 @@ impl<'de> serde::Deserialize<'de> for IdentityObjectTypeString {
     }
 }
 
-// pub mod builder
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct IdentifierEntryBuilder {
     identifier: Result<String, String>,
@@ -545,7 +529,7 @@ impl From<IdentifierEntry> for IdentifierEntryBuilder {
 pub struct IdentityObjectBuilder {
     hashed: Result<bool, String>,
     identity_hash: Result<String, String>,
-    identity_type: Result<IdentityObjectType, String>,
+    identity_object_type: Result<IdentityObjectType, String>,
     salt: Result<Option<String>, String>,
     type_: Result<String, String>,
 }
@@ -554,7 +538,7 @@ impl Default for IdentityObjectBuilder {
         Self {
             hashed: Err("no value supplied for hashed".to_string()),
             identity_hash: Err("no value supplied for identity_hash".to_string()),
-            identity_type: Err("no value supplied for identity_type".to_string()),
+            identity_object_type: Err("no value supplied for identity_object_type".to_string()),
             salt: Ok(Default::default()),
             type_: Err("no value supplied for type_".to_string()),
         }
@@ -581,14 +565,14 @@ impl IdentityObjectBuilder {
             .map_err(|e| format!("error converting supplied value for identity_hash: {}", e));
         self
     }
-    pub fn identity_type<T>(mut self, value: T) -> Self
+    pub fn identity_object_type<T>(mut self, value: T) -> Self
     where
         T: std::convert::TryInto<IdentityObjectType>,
         T::Error: std::fmt::Display,
     {
-        self.identity_type = value
+        self.identity_object_type = value
             .try_into()
-            .map_err(|e| format!("error converting supplied value for identity_type: {}", e));
+            .map_err(|e| format!("error converting supplied value for identity_object_type: {}", e));
         self
     }
     pub fn salt<T>(mut self, value: T) -> Self
@@ -618,7 +602,7 @@ impl std::convert::TryFrom<IdentityObjectBuilder> for IdentityObject {
         Ok(Self {
             hashed: value.hashed?,
             identity_hash: value.identity_hash?,
-            identity_type: value.identity_type?,
+            identity_object_type: value.identity_object_type?,
             salt: value.salt?,
             type_: value.type_?,
         })
@@ -629,7 +613,7 @@ impl From<IdentityObject> for IdentityObjectBuilder {
         Self {
             hashed: Ok(value.hashed),
             identity_hash: Ok(value.identity_hash),
-            identity_type: Ok(value.identity_type),
+            identity_object_type: Ok(value.identity_object_type),
             salt: Ok(value.salt),
             type_: Ok(value.type_),
         }
