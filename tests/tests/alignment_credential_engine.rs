@@ -16,7 +16,7 @@ fn alignment_credential_engine() {
     
     // Next, the builders are tested against the OBv3 examples
 
-    let alignment_credential_engine_builder: AchievementCredential = AchievementCredentialBuilder::default()
+    let alignment_credential_engine: AchievementCredential = AchievementCredentialBuilder::default()
     .context(vec![
         "https://www.w3.org/2018/credentials/v1".into(),
         "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into()
@@ -84,13 +84,13 @@ fn alignment_credential_engine() {
     let file = File::open("tests/obv3_json_examples/alignment_credential_engine.json").expect("Failed to open file");
     let alignment_credential_engine_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
     
-    assert_eq!(alignment_credential_engine_builder, alignment_credential_engine_from_file);
+    assert_eq!(alignment_credential_engine, alignment_credential_engine_from_file);
     
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/alignment_credential_engine.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(alignment_credential_engine_builder).unwrap(), json_value_from_file);
+    assert_eq!(serde_json::to_value(alignment_credential_engine).unwrap(), json_value_from_file);
 
 }

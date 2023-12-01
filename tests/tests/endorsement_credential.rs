@@ -15,7 +15,7 @@ fn endorsement_credential() {
     
     // Next, the builders are tested against the OBv3 examples
 
-    let endorsement_credential_builder: EndorsementCredential = EndorsementCredentialBuilder::default()
+    let endorsement_credential: EndorsementCredential = EndorsementCredentialBuilder::default()
     .context(vec![
         "https://www.w3.org/2018/credentials/v1".into(),
         "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
@@ -90,13 +90,13 @@ fn endorsement_credential() {
     let file = File::open("tests/obv3_json_examples/endorsement_credential.json").expect("Failed to open file");
     let endorsement_cred_from_file: EndorsementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
     
-    assert_eq!(endorsement_credential_builder, endorsement_cred_from_file);
+    assert_eq!(endorsement_credential, endorsement_cred_from_file);
     
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/endorsement_credential.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(endorsement_credential_builder).unwrap(), json_value_from_file);
+    assert_eq!(serde_json::to_value(endorsement_credential).unwrap(), json_value_from_file);
 
 }

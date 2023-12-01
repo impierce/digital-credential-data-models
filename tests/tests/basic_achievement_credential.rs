@@ -44,7 +44,7 @@ fn basic_achievement_credential() {
         .try_into()
         .unwrap();
 
-    let achievement_credential_builder: AchievementCredential = AchievementCredentialBuilder::default()
+    let basic_achievement_credential: AchievementCredential = AchievementCredentialBuilder::default()
         .context(vec![
             "https://www.w3.org/2018/credentials/v1".into(),
             "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
@@ -70,13 +70,13 @@ fn basic_achievement_credential() {
     let file = File::open("tests/obv3_json_examples/basic_achievement_credential.json").expect("Failed to open file");
     let basic_achievement_cred_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
     
-    assert_eq!(achievement_credential_builder, basic_achievement_cred_from_file);
+    assert_eq!(basic_achievement_credential, basic_achievement_cred_from_file);
     
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/basic_achievement_credential.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(achievement_credential_builder).unwrap(), json_value_from_file);
+    assert_eq!(serde_json::to_value(basic_achievement_credential).unwrap(), json_value_from_file);
 
 }
