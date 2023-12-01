@@ -2,10 +2,6 @@
 Rust library for the Open Badges data model
 https://www.imsglobal.org/spec/ob/v3p0
 
-# Version
-Version:            1.0
-Date issued:        December 1, 2023
-
 Open Badges Specification
 Candidate Final Public
 Spec Version:       3.0
