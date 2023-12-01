@@ -1,5 +1,5 @@
 use crate::tests::assert_eq_json_value;
-use openbadges::json_schema::{
+use openbadges::{
     achievement_credential::{CredentialSchema, CredentialSchemaBuilder, CredentialStatus, CredentialStatusBuilder},
     endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubject, EndorsementSubjectBuilder, EndorsementCredentialSchema},
     profile::{Profile, ProfileBuilder}, general::{RefreshService, RefreshServiceBuilder},
