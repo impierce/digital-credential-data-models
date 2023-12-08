@@ -350,14 +350,19 @@ impl ProfileBuilder {
             .map_err(|e| format!("error converting supplied value for email: {}", e));
         self
     }
-    pub fn endorsement<T>(mut self, value: T) -> Self
+    pub fn endorsement<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<endorsement::EndorsementCredential>>,
+        T: std::convert::TryInto<endorsement::EndorsementCredential>,
         T::Error: std::fmt::Display,
     {
         self.endorsement = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for endorsement: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for endorsement: {}", e))
+            })
+            .collect();
         self
     }
     pub fn endorsement_jwt<T>(mut self, value: T) -> Self
@@ -460,14 +465,19 @@ impl ProfileBuilder {
             .map_err(|e| format!("error converting supplied value for official: {}", e));
         self
     }
-    pub fn other_identifier<T>(mut self, value: T) -> Self
+    pub fn other_identifier<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<identity::IdentifierEntry>>,
+        T: std::convert::TryInto<identity::IdentifierEntry>,
         T::Error: std::fmt::Display,
     {
         self.other_identifier = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for other_identifier: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for alignment: {}", e))
+            })
+            .collect();
         self
     }
     pub fn parent_org<T>(mut self, value: T) -> Self
@@ -548,6 +558,40 @@ impl std::convert::TryFrom<ProfileBuilder> for Profile {
             type_: value.type_?,
             url: value.url?,
         })
+    }
+}
+impl std::convert::TryFrom<ProfileBuilder> for Option<Profile> {
+    type Error = String;
+    fn try_from(value: ProfileBuilder) -> Result<Self, String> {
+        Ok(Some(Profile {
+            additional_name: value.additional_name?,
+            address: value.address?,
+            date_of_birth: value.date_of_birth?,
+            description: value.description?,
+            email: value.email?,
+            endorsement: value.endorsement?,
+            endorsement_jwt: value.endorsement_jwt?,
+            family_name: value.family_name?,
+            family_name_prefix: value.family_name_prefix?,
+            given_name: value.given_name?,
+            honorific_prefix: value.honorific_prefix?,
+            honorific_suffix: value.honorific_suffix?,
+            id: value.id?,
+            image: value.image?,
+            name: value.name?,
+            official: value.official?,
+            other_identifier: value.other_identifier?,
+            parent_org: value.parent_org?,
+            patronymic_name: value.patronymic_name?,
+            phone: value.phone?,
+            type_: value.type_?,
+            url: value.url?,
+        }))
+    }
+}
+impl From<ProfileBuilder> for Box<Option<Profile>> {
+    fn from(value: ProfileBuilder) -> Self {
+        Box::new(Some(value.try_into().unwrap()))
     }
 }
 impl From<Profile> for ProfileBuilder {
@@ -714,6 +758,22 @@ impl std::convert::TryFrom<AddressBuilder> for Address {
         })
     }
 }
+impl std::convert::TryFrom<AddressBuilder> for Option<Address> {
+    type Error = String;
+    fn try_from(value: AddressBuilder) -> Result<Self, String> {
+        Ok(Some(Address {
+            address_country: value.address_country?,
+            address_country_code: value.address_country_code?,
+            address_locality: value.address_locality?,
+            address_region: value.address_region?,
+            geo: value.geo?,
+            post_office_box_number: value.post_office_box_number?,
+            postal_code: value.postal_code?,
+            street_address: value.street_address?,
+            type_: value.type_?,
+        }))
+    }
+}
 impl From<Address> for AddressBuilder {
     fn from(value: Address) -> Self {
         Self {
@@ -785,6 +845,16 @@ impl std::convert::TryFrom<GeoCoordinatesBuilder> for GeoCoordinates {
             longitude: value.longitude?,
             type_: value.type_?,
         })
+    }
+}
+impl std::convert::TryFrom<GeoCoordinatesBuilder> for Option<GeoCoordinates> {
+    type Error = String;
+    fn try_from(value: GeoCoordinatesBuilder) -> Result<Self, String> {
+        Ok(Some(GeoCoordinates {
+            latitude: value.latitude?,
+            longitude: value.longitude?,
+            type_: value.type_?,
+        }))
     }
 }
 impl From<GeoCoordinates> for GeoCoordinatesBuilder {

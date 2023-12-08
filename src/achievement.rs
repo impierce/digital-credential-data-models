@@ -547,14 +547,19 @@ impl AchievementBuilder {
             .map_err(|e| format!("error converting supplied value for achievement_type: {}", e));
         self
     }
-    pub fn alignment<T>(mut self, value: T) -> Self
+    pub fn alignment<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<alignment::Alignment>>,
+        T: std::convert::TryInto<alignment::Alignment>,
         T::Error: std::fmt::Display,
     {
         self.alignment = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for alignment: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for alignment: {}", e))
+            })
+            .collect();
         self
     }
     pub fn creator<T>(mut self, value: T) -> Self
@@ -597,14 +602,19 @@ impl AchievementBuilder {
             .map_err(|e| format!("error converting supplied value for description: {}", e));
         self
     }
-    pub fn endorsement<T>(mut self, value: T) -> Self
+    pub fn endorsement<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<endorsement::EndorsementCredential>>,
+        T: std::convert::TryInto<endorsement::EndorsementCredential>,
         T::Error: std::fmt::Display,
     {
         self.endorsement = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for endorsement: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for endorsement: {}", e))
+            })
+            .collect();
         self
     }
     pub fn endorsement_jwt<T>(mut self, value: T) -> Self
@@ -677,14 +687,19 @@ impl AchievementBuilder {
             .map_err(|e| format!("error converting supplied value for name: {}", e));
         self
     }
-    pub fn other_identifier<T>(mut self, value: T) -> Self
+    pub fn other_identifier<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<identity::IdentifierEntry>>,
+        T: std::convert::TryInto<identity::IdentifierEntry>,
         T::Error: std::fmt::Display,
     {
         self.other_identifier = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for other_identifier: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for alignment: {}", e))
+            })
+            .collect();
         self
     }
     pub fn related<T>(mut self, value: T) -> Self

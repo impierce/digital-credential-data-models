@@ -446,14 +446,19 @@ impl Default for ResultDescriptionBuilder {
     }
 }
 impl ResultDescriptionBuilder {
-    pub fn alignment<T>(mut self, value: T) -> Self
+    pub fn alignment<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<alignment::Alignment>>,
+        T: std::convert::TryInto<alignment::Alignment>,
         T::Error: std::fmt::Display,
     {
         self.alignment = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for alignment: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for alignment: {}", e))
+            })
+            .collect();
         self
     }
     pub fn allowed_value<T>(mut self, value: T) -> Self
@@ -625,14 +630,19 @@ impl ResultBuilder {
             .map_err(|e| format!("error converting supplied value for achieved_level: {}", e));
         self
     }
-    pub fn alignment<T>(mut self, value: T) -> Self
+    pub fn alignment<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<alignment::Alignment>>,
+        T: std::convert::TryInto<alignment::Alignment>,
         T::Error: std::fmt::Display,
     {
         self.alignment = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for alignment: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for alignment: {}", e))
+            })
+            .collect();
         self
     }
     pub fn result_description<T>(mut self, value: T) -> Self
@@ -726,14 +736,19 @@ impl Default for RubricCriterionLevelBuilder {
     }
 }
 impl RubricCriterionLevelBuilder {
-    pub fn alignment<T>(mut self, value: T) -> Self
+    pub fn alignment<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<alignment::Alignment>>,
+        T: std::convert::TryInto<alignment::Alignment>,
         T::Error: std::fmt::Display,
     {
         self.alignment = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for alignment: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for alignment: {}", e))
+            })
+            .collect();
         self
     }
     pub fn description<T>(mut self, value: T) -> Self

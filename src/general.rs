@@ -98,11 +98,12 @@ impl Default for ImageBuilder {
 impl ImageBuilder {
     pub fn caption<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<String>>,
+        T: std::convert::TryInto<String>,
         T::Error: std::fmt::Display,
     {
         self.caption = value
             .try_into()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for caption: {}", e));
         self
     }
@@ -135,6 +136,16 @@ impl std::convert::TryFrom<ImageBuilder> for Image {
             id: value.id?,
             type_: value.type_?,
         })
+    }
+}
+impl std::convert::TryFrom<ImageBuilder> for Option<Image> {
+    type Error = String;
+    fn try_from(value: ImageBuilder) -> Result<Self, String> {
+        Ok(Some(Image {
+            caption: value.caption?,
+            id: value.id?,
+            type_: value.type_?,
+        }))
     }
 }
 impl From<Image> for ImageBuilder {
@@ -189,6 +200,15 @@ impl std::convert::TryFrom<RefreshServiceBuilder> for RefreshService {
             id: value.id?,
             type_: value.type_?,
         })
+    }
+}
+impl std::convert::TryFrom<RefreshServiceBuilder> for Option<RefreshService> {
+    type Error = String;
+    fn try_from(value: RefreshServiceBuilder) -> Result<Self, String> {
+        Ok(Some(RefreshService {
+            id: value.id?,
+            type_: value.type_?,
+        }))
     }
 }
 impl From<RefreshService> for RefreshServiceBuilder {

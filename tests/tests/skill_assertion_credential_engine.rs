@@ -1,14 +1,14 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement::{Achievement, AchievementBuilder, AchievementType, Criteria, CriteriaBuilder},
+    achievement::{AchievementBuilder, AchievementType, CriteriaBuilder},
     achievement_credential::{
         AchievementCredential, AchievementCredentialBuilder, AchievementCredentialSchema, AchievementCredentialType,
         CredentialSchema, CredentialSchemaBuilder,
     },
-    achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
-    general::{Image, ImageBuilder},
-    profile::{Profile, ProfileBuilder},
+    achievement_subject::AchievementSubjectBuilder,
+    alignment::{AlignmentBuilder, AlignmentTargetType},
+    general::ImageBuilder,
+    profile::ProfileBuilder,
 };
 use std::{fs::File, str::FromStr};
 
@@ -29,73 +29,49 @@ fn skill_assertion_credential_engine() {
     .id("http://1edtech.edu/credentials/3732")
     .type_(AchievementCredentialType::from(vec!["VerifiableCredential", "OpenBadgeCredential"]))
     .name("Solve and graph linear equations and inequalities")
-    .credential_subject({
-        let credential_subject: AchievementSubject = AchievementSubjectBuilder::default()
+    .credential_subject(
+        AchievementSubjectBuilder::default()
         .id("did:example:ebfeb1f712ebc6f1c276e12ec21".to_string())
         .type_("AchievementSubject",)
-        .achievement({
-            let achievement: Achievement = AchievementBuilder::default()
+        .achievement(
+            AchievementBuilder::default()
             .id("https://example.com/achievements/math/linear-1")
             .type_("Achievement")
-            .alignment({
-                let alignment: Alignment = AlignmentBuilder::default()
+            .alignment(
+                vec![AlignmentBuilder::default()
                 .type_("Alignment")
                 .target_code("ce-6369c51f-4d86-4592-a761-8b32ae70a045".to_string())
                 .target_framework("Ivy Tech Community College of Indiana, MATH 135, FINITE MATH".to_string())
                 .target_name("Solve and graph linear equations and inequalities")
                 .target_type(AlignmentTargetType::from_str("ceasn:Competency").unwrap())
                 .target_url("https://credentialfinder.org/competency/ce-6369c51f-4d86-4592-a761-8b32ae70a045")
-                .try_into()
-                .unwrap();
-
-                vec![alignment]
-            })
+            ])
             .achievement_type(AchievementType::from_str("Competency").unwrap())
-            .creator({
-                let creator: Profile = ProfileBuilder::default()
+            .creator(
+                ProfileBuilder::default()
                 .id("https://example.com/issuers/123767")
                 .type_("Profile")
                 .name("Example Industry Group".to_string())
                 .url("https://example.com".to_string())
                 .description("Example Industry Group is a consortium of luminaries who publish skills data for common usage.".to_string())
                 .email("info@exammple.com".to_string())
-                .try_into()
-                .unwrap();
-
-                creator
-            })
+            )
             .criteria({
-                let criteria: Criteria = CriteriaBuilder::default()
+                CriteriaBuilder::default()
                 .narrative("Learners must demonstrate understanding of linear algebra and graphic representation of linear equations.".to_string())
-                .try_into()
-                .unwrap();
-
-                criteria
             })
             .description("This achievement represents developing capability to solve and graph linear equations and inequalities")
             .image({
-                let image: Image = ImageBuilder::default()
+                ImageBuilder::default()
                 .id("https://example.com/achievements/math/linear-1/image")
                 .type_("Image")
                 .caption("A line, sloping upward optimistically".to_string())
-                .try_into()
-                .unwrap();
-
-                image
             })
             .name("Linear equations and inequalities")
-            .try_into()
-            .unwrap();
-
-            achievement
-        })
-        .try_into()
-        .unwrap();
-
-        credential_subject
-    })
+        )
+    )
     .issuer({
-        let issuer: Profile = ProfileBuilder::default()
+        ProfileBuilder::default()
         .id("https://1edtech.edu/issuers/565049")
         .type_("Profile")
         .name("1EdTech University".to_string())
@@ -103,24 +79,16 @@ fn skill_assertion_credential_engine() {
         .phone("1-222-333-4444".to_string())
         .description("1EdTech University provides online degree programs.".to_string())
         .image({
-            let image: Image = ImageBuilder::default()
+            ImageBuilder::default()
             .id("https://1edtech.edu/logo.png")
             .type_("Image")
             .caption("1EdTech University logo".to_string())
-            .try_into()
-            .unwrap();
-
-            image
         })
         .email("registrar@1edtech.edu".to_string())
-        .try_into()
-        .unwrap();
-
-        issuer
     })
     .issuance_date("2022-07-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
     .credential_schema({
-        let schema: CredentialSchema = CredentialSchemaBuilder::default()
+        let schema: CredentialSchema =CredentialSchemaBuilder::default()
         .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_achievementcredential_schema.json")
         .type_("1EdTechJsonSchemaValidator2019")
         .try_into()

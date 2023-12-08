@@ -1,12 +1,12 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement_credential::{CredentialSchema, CredentialSchemaBuilder, CredentialStatus, CredentialStatusBuilder},
+    achievement_credential::{CredentialSchema, CredentialSchemaBuilder, CredentialStatusBuilder},
     endorsement::{
-        EndorsementCredential, EndorsementCredentialBuilder, EndorsementCredentialSchema, EndorsementSubject,
+        EndorsementCredential, EndorsementCredentialBuilder, EndorsementCredentialSchema,
         EndorsementSubjectBuilder,
     },
-    general::{RefreshService, RefreshServiceBuilder},
-    profile::{Profile, ProfileBuilder},
+    general::RefreshServiceBuilder,
+    profile::ProfileBuilder,
 };
 use std::fs::File;
 
@@ -27,16 +27,12 @@ fn endorsement_credential() {
         .id("http://1edtech.edu/endorsementcredential/3732")
         .type_(vec!["VerifiableCredential", "EndorsementCredential"])
         .name("SDE endorsement")
-        .issuer({
-            let issuer: Profile = ProfileBuilder::default()
+        .issuer(
+            ProfileBuilder::default()
                 .id("https://state.gov/issuers/565049")
                 .type_("Profile")
                 .name("State Department of Education".to_string())
-                .try_into()
-                .unwrap();
-
-            issuer
-        })
+        )
         .issuance_date(
             "2010-01-01T00:00:00Z"
                 .parse::<chrono::DateTime<chrono::offset::Utc>>()
@@ -47,16 +43,12 @@ fn endorsement_credential() {
                 .parse::<chrono::DateTime<chrono::offset::Utc>>()
                 .unwrap(),
         )
-        .credential_subject({
-            let credential_subject: EndorsementSubject = EndorsementSubjectBuilder::default()
+        .credential_subject(
+            EndorsementSubjectBuilder::default()
                 .id("https://1edtech.edu/issuers/565049")
                 .type_("EndorsementSubject")
                 .endorsement_comment("1EdTech University is in good standing".to_string())
-                .try_into()
-                .unwrap();
-
-            credential_subject
-        })
+        )
         .credential_schema({
             let schema1: CredentialSchema = CredentialSchemaBuilder::default()
                 .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_endorsementcredential_schema.json")
@@ -72,24 +64,16 @@ fn endorsement_credential() {
 
             EndorsementCredentialSchema::from(vec![schema1, schema2])
         })
-        .credential_status({
-            let credential_status: CredentialStatus = CredentialStatusBuilder::default()
+        .credential_status(
+            CredentialStatusBuilder::default()
                 .id("https://state.gov/credentials/3732/revocations")
                 .type_("1EdTechRevocationList")
-                .try_into()
-                .unwrap();
-
-            credential_status
-        })
-        .refresh_service({
-            let refresh_service: RefreshService = RefreshServiceBuilder::default()
+        )
+        .refresh_service(
+            RefreshServiceBuilder::default()
                 .id("http://state.gov/credentials/3732")
                 .type_("1EdTechCredentialRefresh")
-                .try_into()
-                .unwrap();
-
-            refresh_service
-        })
+        )
         .try_into()
         .unwrap();
 

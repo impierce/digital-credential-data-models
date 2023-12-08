@@ -65,13 +65,21 @@ impl From<&AchievementCredentialSchema> for AchievementCredentialSchema {
         value.clone()
     }
 }
-
 impl From<CredentialSchema> for AchievementCredentialSchema {
     fn from(value: CredentialSchema) -> Self {
         Self::Schema(value)
     }
 }
-
+impl From<CredentialSchema> for Option<AchievementCredentialSchema> {
+    fn from(value: CredentialSchema) -> Self {
+        Some(AchievementCredentialSchema::Schema(value))
+    }
+}
+impl From<CredentialSchemaBuilder> for Option<AchievementCredentialSchema> {
+    fn from(value: CredentialSchemaBuilder) -> Self {
+        Some(AchievementCredentialSchema::Schema(value.try_into().unwrap()))
+    }
+}
 impl From<Vec<CredentialSchema>> for AchievementCredentialSchema {
     fn from(value: Vec<CredentialSchema>) -> Self {
         Self::VecSchema(value)
@@ -367,14 +375,19 @@ impl AchievementCredentialBuilder {
             .map_err(|e| format!("error converting supplied value for description: {}", e));
         self
     }
-    pub fn endorsement<T>(mut self, value: T) -> Self
+    pub fn endorsement<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<endorsement::EndorsementCredential>>,
+        T: std::convert::TryInto<endorsement::EndorsementCredential>,
         T::Error: std::fmt::Display,
     {
         self.endorsement = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for endorsement: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for endorsement: {}", e))
+            })
+            .collect();
         self
     }
     pub fn endorsement_jwt<T>(mut self, value: T) -> Self
@@ -387,14 +400,19 @@ impl AchievementCredentialBuilder {
             .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e));
         self
     }
-    pub fn evidence<T>(mut self, value: T) -> Self
+    pub fn evidence<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<proof_evidence::Evidence>>,
+        T: std::convert::TryInto<proof_evidence::Evidence>,
         T::Error: std::fmt::Display,
     {
         self.evidence = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for evidence: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for alignment: {}", e))
+            })
+            .collect();
         self
     }
     pub fn expiration_date<T>(mut self, value: T) -> Self
@@ -643,6 +661,15 @@ impl std::convert::TryFrom<CredentialStatusBuilder> for CredentialStatus {
             id: value.id?,
             type_: value.type_?,
         })
+    }
+}
+impl std::convert::TryFrom<CredentialStatusBuilder> for Option<CredentialStatus> {
+    type Error = String;
+    fn try_from(value: CredentialStatusBuilder) -> Result<Self, String> {
+        Ok(Some(CredentialStatus {
+            id: value.id?,
+            type_: value.type_?,
+        }))
     }
 }
 impl From<CredentialStatus> for CredentialStatusBuilder {

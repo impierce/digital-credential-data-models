@@ -1,15 +1,15 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement::{Achievement, AchievementBuilder, AchievementType, Criteria, CriteriaBuilder},
+    achievement::{AchievementBuilder, AchievementType, CriteriaBuilder},
     achievement_credential::{
         AchievementCredential, AchievementCredentialBuilder, AchievementCredentialSchema, AchievementCredentialType,
         CredentialSchema, CredentialSchemaBuilder,
     },
-    achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
-    general::{Image, ImageBuilder},
-    profile::{Profile, ProfileBuilder},
-    proof_evidence::{Evidence, EvidenceBuilder},
+    achievement_subject::AchievementSubjectBuilder,
+    alignment::{AlignmentBuilder, AlignmentTargetType},
+    general::ImageBuilder,
+    profile::ProfileBuilder,
+    proof_evidence::EvidenceBuilder,
 };
 use std::{fs::File, str::FromStr};
 
@@ -31,116 +31,76 @@ fn skill_assertion_case() {
     .type_(AchievementCredentialType::from(vec!["VerifiableCredential", "OpenBadgeCredential"]))
     .name("Robot Programming Skill Credential")
     .description("A badge recognizing the development of skills in robot implementation, specifically the software".to_string())
-    .credential_subject({
-        let credential_subject: AchievementSubject = AchievementSubjectBuilder::default()
+    .credential_subject(
+        AchievementSubjectBuilder::default()
         .id("did:example:ebfeb1f712ebc6f1c276e12ec21".to_string())
         .type_("AchievementSubject",)
-        .achievement({
-            let achievement: Achievement = AchievementBuilder::default()
+        .achievement(
+            AchievementBuilder::default()
             .id("https://example.com/achievements/robotics/robot-programming")
             .type_("Achievement")
-            .criteria({
-                let criteria: Criteria = CriteriaBuilder::default()
+            .criteria(
+                CriteriaBuilder::default()
                 .narrative("Cite strong and thorough textual evidence to support analysis of what the text says explicitly as well as inferences drawn from the text, including determining where the text leaves matters uncertain".to_string())
-                .try_into()
-                .unwrap();
-
-                criteria
-            })
+            )
             .description("Analyze a sample text")
             .name("Text analysis")
-            .alignment({
-                let alignment: Alignment = AlignmentBuilder::default()
+            .alignment(
+                vec![AlignmentBuilder::default()
                 .type_("Alignment")
                 .target_description("Robot software is a set of commands and procedures robots use to respond to input and perform autonomous tasks.".to_string())
                 .target_name("Robot Programming")
                 .target_framework("Example Robotics Framework".to_string())
                 .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://robotics-competencies.example.com/competencies/robot-programming")
-                .try_into()
-                .unwrap();
-
-                vec![alignment]
-            })
+            ])
             .achievement_type(AchievementType::from_str("Competency").unwrap())
-            .creator({
-                let creator: Profile = ProfileBuilder::default()
+            .creator(
+                ProfileBuilder::default()
                 .id("https://example.com/issuers/123767")
                 .type_("Profile")
                 .name("Example Industry Group".to_string())
                 .url("https://example.com".to_string())
                 .description("Example Industry Group is a consortium of luminaries who publish skills data for common usage.".to_string())
                 .email("info@exammple.com".to_string())
-                .try_into()
-                .unwrap();
-
-                creator
-            })
-            .criteria({
-                let criteria: Criteria = CriteriaBuilder::default()
+            )
+            .criteria(
+                CriteriaBuilder::default()
                 .narrative("Learners must present source code showing the ability for a robot to accept manual or sensor input and perform conditional actions in response.".to_string())
-                .try_into()
-                .unwrap();
-
-                criteria
-            })
+            )
             .description("This achievement represents developing capability to develop software for robotic applications.".to_string())
-            .image({
-                let image: Image = ImageBuilder::default()
+            .image(
+                ImageBuilder::default()
                 .id("https://example.com/achievements/robotics/robot-programming/image")
                 .type_("Image")
                 .caption("A robot filled with ones and zeroes representing its programming".to_string())
-                .try_into()
-                .unwrap();
-
-                image
-            })
+            )
             .name("Robot Programming")
-            .try_into()
-            .unwrap();
-
-            achievement
-        })
-        .try_into()
-        .unwrap();
-
-        credential_subject
-    })
-    .evidence({
-        let evidence: Evidence = EvidenceBuilder::default()
+        )
+    )
+    .evidence(
+        vec![EvidenceBuilder::default()
         .id("https://github.com/somebody/project".to_string())
         .type_("Evidence")
         .name("Final Project Code".to_string())
         .description("The source code for the 'Beeper 1.0' robot project. It responds by saying 'beep' when the 'beep' button is pressed.".to_string())
-        .try_into()
-        .unwrap();
-
-        vec![evidence]
-    })
-    .issuer({
-        let issuer: Profile = ProfileBuilder::default()
+    ])
+    .issuer(
+        ProfileBuilder::default()
         .id("https://1edtech.edu/issuers/565049")
         .type_("Profile")
         .name("1EdTech University".to_string())
         .url("https://1edtech.edu".to_string())
         .phone("1-222-333-4444".to_string())
         .description("1EdTech University provides online degree programs.".to_string())
-        .image({
-            let image: Image = ImageBuilder::default()
+        .image(
+            ImageBuilder::default()
             .id("https://1edtech.edu/logo.png")
             .type_("Image")
             .caption("1EdTech University logo".to_string())
-            .try_into()
-            .unwrap();
-
-            image
-        })
+        )
         .email("registrar@1edtech.edu".to_string())
-        .try_into()
-        .unwrap();
-
-        issuer
-    })
+    )
     .issuance_date("2022-07-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
     .credential_schema({
         let schema: CredentialSchema = CredentialSchemaBuilder::default()

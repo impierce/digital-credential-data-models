@@ -1,22 +1,22 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement::{Achievement, AchievementBuilder, AchievementType, Criteria, CriteriaBuilder},
+    achievement::{AchievementBuilder, AchievementType, CriteriaBuilder},
     achievement_credential::{
         AchievementCredential, AchievementCredentialBuilder, AchievementCredentialSchema, AchievementCredentialType,
-        CredentialSchema, CredentialSchemaBuilder, CredentialStatus, CredentialStatusBuilder,
+        CredentialSchema, CredentialSchemaBuilder, CredentialStatusBuilder,
     },
-    achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
+    achievement_subject::AchievementSubjectBuilder,
+    alignment::{AlignmentBuilder, AlignmentTargetType},
     endorsement::{
         EndorsementCredential, EndorsementCredentialBuilder, EndorsementCredentialProof, EndorsementCredentialSchema,
-        EndorsementCredentialType, EndorsementSubject, EndorsementSubjectBuilder,
+        EndorsementCredentialType, EndorsementSubjectBuilder,
     },
-    general::{Image, ImageBuilder, RefreshService, RefreshServiceBuilder},
+    general::{ImageBuilder, RefreshServiceBuilder},
     identity::{
         IdentifierEntry, IdentifierEntryBuilder, IdentifierType, IdentityObject, IdentityObjectBuilder,
         IdentityObjectType,
     },
-    profile::{Address, AddressBuilder, GeoCoordinates, GeoCoordinatesBuilder, Profile, ProfileBuilder},
+    profile::{AddressBuilder, GeoCoordinatesBuilder, ProfileBuilder},
     proof_evidence::{Evidence, EvidenceBuilder, Proof, ProofBuilder},
     result::{
         ResultBuilder, ResultDescription, ResultDescriptionBuilder, ResultDescriptionType, ResultStatus, Result_,
@@ -46,18 +46,14 @@ fn full_achievement_credential() {
       ]))
     .name("1EdTech University Degree for Example Student")
     .description("1EdTech University Degree Description".to_string())
-    .image({
-        let image: Image = ImageBuilder::default()
+    .image(
+        ImageBuilder::default()
         .id("https://1edtech.edu/credentials/3732/image")
         .type_("Image")
         .caption("1EdTech University Degree for Example Student".to_string())
-        .try_into()
-        .unwrap();
-
-        image
-    })
-    .credential_subject({
-        let credential_subject: AchievementSubject = AchievementSubjectBuilder::default()
+    )
+    .credential_subject(
+        AchievementSubjectBuilder::default()
         .id("did:example:ebfeb1f712ebc6f1c276e12ec21".to_string())
         .type_("AchievementSubject")
         .activity_end_date("2010-01-02T00:00:00Z"
@@ -71,16 +67,12 @@ fn full_achievement_credential() {
         .credits_earned(42.0)
         .license_number("A-9320041".to_string())
         .role("Major Domo".to_string())
-        .source({
-            let source: Profile = ProfileBuilder::default()
+        .source(
+            ProfileBuilder::default()
             .id("https://school.edu/issuers/201234".to_string())
             .type_("Profile")
             .name("1EdTech College of Arts".to_string())
-            .try_into()
-            .unwrap();
-
-            source
-        })
+        )
         .term("Fall".to_string())
         .identifier({
             let identifier_student: IdentityObject = IdentityObjectBuilder::default()
@@ -103,12 +95,12 @@ fn full_achievement_credential() {
 
             vec![identifier_student, identifier_somebody]
         })
-        .achievement({
-            let achievement: Achievement = AchievementBuilder::default()
+        .achievement(
+            AchievementBuilder::default()
             .id("https://1edtech.edu/achievements/degree")
             .type_("Achievement")
-            .alignment({
-                let alignment_cfitem: Alignment = AlignmentBuilder::default()
+            .alignment(vec![
+                AlignmentBuilder::default()
                 .type_("Alignment")
                 .target_code("degree".to_string())
                 .target_description("1EdTech University Degree programs.".to_string())
@@ -116,10 +108,8 @@ fn full_achievement_credential() {
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
                 .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://1edtech.edu/catalog/degree")
-                .try_into()
-                .unwrap();
-
-                let alignment_ctdl: Alignment = AlignmentBuilder::default()
+                ,
+                AlignmentBuilder::default()
                 .type_("Alignment")
                 .target_code("degree".to_string())
                 .target_description("1EdTech University Degree programs.".to_string())
@@ -127,14 +117,11 @@ fn full_achievement_credential() {
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
                 .target_type(AlignmentTargetType::from_str("CTDL").unwrap())
                 .target_url("https://credentialengineregistry.org/resources/ce-98cb027b-95ef-4494-908d-6f7790ec6b6b")
-                .try_into()
-                .unwrap();
-
-                vec![alignment_cfitem, alignment_ctdl]
-            })
+                ]
+            )
             .achievement_type(AchievementType::from_str("Degree").unwrap())
-            .creator({
-                let creator: Profile = ProfileBuilder::default()
+            .creator(
+                ProfileBuilder::default()
                 .id("https://1edtech.edu/issuers/565049")
                 .type_("Profile")
                 .name("1EdTech University".to_string())
@@ -154,28 +141,20 @@ fn full_achievement_credential() {
                         "EndorsementCredential"
                     ])
                     .name("SDE endorsement")
-                    .issuer({
-                        let profile: Profile = ProfileBuilder::default()
+                    .issuer(
+                        ProfileBuilder::default()
                         .id("https://accrediter.edu/issuers/565049")
                         .type_("Profile")
                         .name("Example Accrediting Agency".to_string())
-                        .try_into()
-                        .unwrap();
-
-                        profile
-                    })
+                    )
                     .issuance_date("2010-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
                     .expiration_date("2020-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
-                    .credential_subject({
-                        let endorsement_subject: EndorsementSubject = EndorsementSubjectBuilder::default()
+                    .credential_subject(
+                        EndorsementSubjectBuilder::default()
                         .id("https://1edtech.edu/issuers/565049")
                         .type_("EndorsementSubject")
                         .endorsement_comment("1EdTech University is in good standing".to_string())
-                        .try_into()
-                        .unwrap();
-
-                        endorsement_subject
-                    })
+                    )
                     .credential_schema({
                         let schema1: CredentialSchema = CredentialSchemaBuilder::default()
                         .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_endorsementcredential_schema.json")
@@ -191,24 +170,16 @@ fn full_achievement_credential() {
 
                         EndorsementCredentialSchema::from(vec![schema1, schema2])
                     })
-                    .credential_status({
-                        let credential_status: CredentialStatus = CredentialStatusBuilder::default()
+                    .credential_status(
+                        CredentialStatusBuilder::default()
                         .id("https://1edtech.edu/credentials/3732/revocations")
                         .type_("1EdTechRevocationList")
-                        .try_into()
-                        .unwrap();
-
-                        credential_status
-                    })
-                    .refresh_service({
-                        let refresh_service: RefreshService = RefreshServiceBuilder::default()
+                    )
+                    .refresh_service(
+                        RefreshServiceBuilder::default()
                         .id("http://1edtech.edu/credentials/3732")
                         .type_("1EdTechCredentialRefresh")
-                        .try_into()
-                        .unwrap();
-
-                        refresh_service
-                    })
+                    )
                     .proof({
                         let proof: Proof = ProofBuilder::default()
                         .type_("DataIntegrityProof")
@@ -237,28 +208,20 @@ fn full_achievement_credential() {
                         "EndorsementCredential".to_string()
                     ]))
                     .name("SDE endorsement")
-                    .issuer({
-                        let profile: Profile = ProfileBuilder::default()
+                    .issuer(
+                        ProfileBuilder::default()
                         .id("https://state.gov/issuers/565049")
                         .type_("Profile")
                         .name("State Department of Education".to_string())
-                        .try_into()
-                        .unwrap();
-
-                        profile
-                    })
+                    )
                     .issuance_date("2010-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
                     .expiration_date("2020-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
-                    .credential_subject({
-                        let credential_subject: EndorsementSubject = EndorsementSubjectBuilder::default()
+                    .credential_subject(
+                        EndorsementSubjectBuilder::default()
                         .id("https://1edtech.edu/issuers/565049")
                         .type_("EndorsementSubject")
                         .endorsement_comment("1EdTech University is in good standing".to_string())
-                        .try_into()
-                        .unwrap();
-
-                        credential_subject
-                    })
+                    )
                     .credential_schema({
                         let schema1: CredentialSchema = CredentialSchemaBuilder::default()
                         .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_endorsementcredential_schema.json")
@@ -274,24 +237,16 @@ fn full_achievement_credential() {
 
                         EndorsementCredentialSchema::from(vec![schema1, schema2])
                     })
-                    .credential_status({
-                        let credential_status: CredentialStatus = CredentialStatusBuilder::default()
+                    .credential_status(
+                        CredentialStatusBuilder::default()
                         .id("https://state.gov/credentials/3732/revocations")
                         .type_("1EdTechRevocationList")
-                        .try_into()
-                        .unwrap();
-
-                        credential_status
-                    })
-                    .refresh_service({
-                        let refresh_service: RefreshService = RefreshServiceBuilder::default()
+                    )
+                    .refresh_service(
+                        RefreshServiceBuilder::default()
                         .id("http://state.gov/credentials/3732")
                         .type_("1EdTechCredentialRefresh")
-                        .try_into()
-                        .unwrap();
-
-                        refresh_service
-                    })
+                    )
                     .proof({
                         let proof: Proof = ProofBuilder::default()
                         .type_("DataIntegrityProof")
@@ -310,19 +265,15 @@ fn full_achievement_credential() {
 
                     vec![endorsement1, endorsement2]
                 })
-                .image({
-                    let image: Image = ImageBuilder::default()
+                .image(
+                    ImageBuilder::default()
                     .id("https://1edtech.edu/logo.png")
                     .type_("Image")
                     .caption("1EdTech University logo".to_string())
-                    .try_into()
-                    .unwrap();
-
-                    image
-                })
+                )
                 .email("registrar@1edtech.edu".to_string())
-                .address({
-                    let address: Address = AddressBuilder::default()
+                .address(
+                    AddressBuilder::default()
                     .type_(vec!["Address"])
                     .address_country("USA".to_string())
                     .address_country_code("US".to_string())
@@ -331,21 +282,13 @@ fn full_achievement_credential() {
                     .street_address("123 First St".to_string())
                     .post_office_box_number("1".to_string())
                     .postal_code("12345".to_string())
-                    .geo({
-                        let geo: GeoCoordinates = GeoCoordinatesBuilder::default()
+                    .geo(
+                        GeoCoordinatesBuilder::default()
                         .type_("GeoCoordinates")
                         .latitude(1.0)
                         .longitude(1.0)
-                        .try_into()
-                        .unwrap();
-
-                        geo
-                    })
-                    .try_into()
-                    .unwrap();
-
-                    address
-                })
+                    )
+                )
                 .other_identifier({
                     let identifier1: IdentifierEntry = IdentifierEntryBuilder::default()
                     .type_("IdentifierEntry")
@@ -364,34 +307,23 @@ fn full_achievement_credential() {
                     vec![identifier1, identifier2]
                 })
                 .official("Horace Mann".to_string())
-                .parent_org({
-                    let parent_org: Profile = ProfileBuilder::default()
+                .parent_org(
+                    ProfileBuilder::default()
                     .id("did:example:123456789")
                     .type_("Profile")
                     .name("Universal Universities".to_string())
-                    .try_into()
-                    .unwrap();
-
-                    Some(parent_org)
-                })
-                .try_into()
-                .unwrap();
-
-                creator
-            })
+                )
+            )
             .credits_available(36.0)
-            .criteria({
-                let criteria: Criteria = CriteriaBuilder::default()
+            .criteria(
+                CriteriaBuilder::default()
                 .id("https://1edtech.edu/achievements/degree".to_string())
                 .narrative("# Degree Requirements\nStudents must complete...".to_string())
-                .try_into()
-                .unwrap();
-
-                criteria
-            })
+            )
             .description("1EdTech University Degree Description")
-            .endorsement({
-                let endorsement: EndorsementCredential = EndorsementCredentialBuilder::default()
+            .endorsement(
+                vec![
+                EndorsementCredentialBuilder::default()
                 .context(vec!["https://www.w3.org/2018/credentials/v1".into(),
                 "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
                 "https://w3id.org/security/data-integrity/v1".into()])
@@ -401,28 +333,20 @@ fn full_achievement_credential() {
                     "EndorsementCredential"
                 ]))
                 .name("EAA endorsement")
-                .issuer({
-                    let issuer: Profile = ProfileBuilder::default()
+                .issuer(
+                    ProfileBuilder::default()
                     .id("https://accrediter.edu/issuers/565049")
                     .type_("Profile")
                     .name("Example Accrediting Agency".to_string())
-                    .try_into()
-                    .unwrap();
-
-                    issuer
-                })
+                )
                 .issuance_date("2010-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
                 .expiration_date("2020-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
-                .credential_subject({
-                    let credential_subject: EndorsementSubject = EndorsementSubjectBuilder::default()
+                .credential_subject(
+                    EndorsementSubjectBuilder::default()
                     .id("https://1edtech.edu/issuers/565049")
                     .type_("EndorsementSubject")
                     .endorsement_comment("1EdTech University is in good standing".to_string())
-                    .try_into()
-                    .unwrap();
-
-                    credential_subject
-                })
+                )
                 .credential_schema({
                     let schema1: CredentialSchema = CredentialSchemaBuilder::default()
                     .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_endorsementcredential_schema.json")
@@ -438,24 +362,16 @@ fn full_achievement_credential() {
 
                     EndorsementCredentialSchema::from(vec![schema1, schema2])
                 })
-                .credential_status({
-                    let credential_status: CredentialStatus = CredentialStatusBuilder::default()
+                .credential_status(
+                    CredentialStatusBuilder::default()
                     .id("https://1edtech.edu/credentials/3732/revocations")
                     .type_("1EdTechRevocationList")
-                    .try_into()
-                    .unwrap();
-
-                    credential_status
-                })
-                .refresh_service({
-                    let refresh_service: RefreshService = RefreshServiceBuilder::default()
+                )
+                .refresh_service(
+                    RefreshServiceBuilder::default()
                     .id("http://1edtech.edu/credentials/3732")
                     .type_("1EdTechCredentialRefresh")
-                    .try_into()
-                    .unwrap();
-
-                    refresh_service
-                })
+                )
                 .proof({
                     let proof: Proof = ProofBuilder::default()
                     .type_("DataIntegrityProof")
@@ -468,41 +384,31 @@ fn full_achievement_credential() {
                     .unwrap();
 
                     EndorsementCredentialProof::from(vec![proof])
-                })
-                .try_into()
-                .unwrap();
-
-                vec![endorsement]
-            })
+                    })
+            ])
             .field_of_study("Research".to_string())
             .human_code("R1".to_string())
-            .image({
-                let image: Image = ImageBuilder::default()
+            .image(
+                ImageBuilder::default()
                 .id("https://1edtech.edu/achievements/degree/image")
                 .type_("Image")
                 .caption("1EdTech University Degree".to_string())
-                .try_into()
-                .unwrap();
-
-                image
-            })
+            )
             .name("1EdTech University Degree")
-            .other_identifier({
-                let other_identifier: IdentifierEntry = IdentifierEntryBuilder::default()
+            .other_identifier(
+                vec![
+                IdentifierEntryBuilder::default()
                 .type_("IdentifierEntry")
                 .identifier("abde")
                 .identifier_type(IdentifierType::from_str("identifier").unwrap())
-                .try_into()
-                .unwrap();
-
-                vec![other_identifier]
-            })
+            ])
             .result_description({
                 let result_description1: ResultDescription = ResultDescriptionBuilder::default()
                 .id("urn:uuid:f6ab24cd-86e8-4eaf-b8c6-ded74e8fd41c")
                 .type_("ResultDescription")
-                .alignment({
-                    let alignment: Alignment = AlignmentBuilder::default()
+                .alignment(
+                    vec![
+                    AlignmentBuilder::default()
                     .type_("Alignment")
                     .target_code("project".to_string())
                     .target_description("Project description".to_string())
@@ -510,11 +416,7 @@ fn full_achievement_credential() {
                     .target_framework("1EdTech University Program and Course Catalog".to_string())
                     .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                     .target_url("https://1edtech.edu/catalog/degree/project")
-                    .try_into()
-                    .unwrap();
-
-                    vec![alignment]
-                })
+                ])
                 .allowed_value(vec!["D".to_string(), "C".to_string(), "B".to_string(), "A".to_string()])
                 .name("Final Project Grade")
                 .required_value("C".to_string())
@@ -525,8 +427,9 @@ fn full_achievement_credential() {
                 let result_description2: ResultDescription = ResultDescriptionBuilder::default()
                 .id("urn:uuid:a70ddc6a-4c4a-4bd8-8277-cb97c79f40c5")
                 .type_("ResultDescription")
-                .alignment({
-                    let alignment: Alignment = AlignmentBuilder::default()
+                .alignment(
+                    vec![
+                    AlignmentBuilder::default()
                     .type_("Alignment")
                     .target_code("project".to_string())
                     .target_description("Project description".to_string())
@@ -534,11 +437,7 @@ fn full_achievement_credential() {
                     .target_framework("1EdTech University Program and Course Catalog".to_string())
                     .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                     .target_url("https://1edtech.edu/catalog/degree/project")
-                    .try_into()
-                    .unwrap();
-
-                    vec![alignment]
-                })
+                ])
                 .allowed_value(vec!["D".to_string(), "C".to_string(), "B".to_string(), "A".to_string()])
                 .name("Final Project Grade")
                 .required_level("urn:uuid:d05a0867-d0ad-4b03-bdb5-28fb5d2aab7a".to_string())
@@ -547,8 +446,9 @@ fn full_achievement_credential() {
                     let rubric1: RubricCriterionLevel = RubricCriterionLevelBuilder::default()
                     .id("urn:uuid:d05a0867-d0ad-4b03-bdb5-28fb5d2aab7a")
                     .type_("RubricCriterionLevel")
-                    .alignment({
-                        let alignment: Alignment = AlignmentBuilder::default()
+                    .alignment(
+                        vec![
+                        AlignmentBuilder::default()
                         .type_("Alignment")
                         .target_code("project".to_string())
                         .target_description("Project description".to_string())
@@ -556,11 +456,7 @@ fn full_achievement_credential() {
                         .target_framework("1EdTech University Program and Course Catalog".to_string())
                         .target_type(AlignmentTargetType::from_str("CFRubricCriterionLevel").unwrap())
                         .target_url("https://1edtech.edu/catalog/degree/project/rubric/levels/mastered")
-                        .try_into()
-                        .unwrap();
-
-                        vec![alignment]
-                    })
+                    ])
                     .description("The author demonstrated...".to_string())
                     .level("Mastered".to_string())
                     .name("Mastery")
@@ -571,8 +467,9 @@ fn full_achievement_credential() {
                     let rubric2: RubricCriterionLevel = RubricCriterionLevelBuilder::default()
                     .id("urn:uuid:6b84b429-31ee-4dac-9d20-e5c55881f80e")
                     .type_("RubricCriterionLevel")
-                    .alignment({
-                        let alignment: Alignment = AlignmentBuilder::default()
+                    .alignment(
+                        vec![
+                        AlignmentBuilder::default()
                         .type_("Alignment")
                         .target_code("project".to_string())
                         .target_description("Project description".to_string())
@@ -580,11 +477,7 @@ fn full_achievement_credential() {
                         .target_framework("1EdTech University Program and Course Catalog".to_string())
                         .target_type(AlignmentTargetType::from_str("CFRubricCriterionLevel").unwrap())
                         .target_url("https://1edtech.edu/catalog/degree/project/rubric/levels/basic")
-                        .try_into()
-                        .unwrap();
-
-                        vec![alignment]
-                    })
+                    ])
                     .description("The author demonstrated...".to_string())
                     .level("Basic".to_string())
                     .name("Basic")
@@ -609,27 +502,20 @@ fn full_achievement_credential() {
             })
             .specialization("Computer Science Research".to_string())
             .tag(vec!["research".to_string(), "computer science".to_string()])
-            .try_into()
-            .unwrap();
-
-            achievement
-        })
+        )
         .image({
-            let image: Image = ImageBuilder::default()
+            ImageBuilder::default()
             .id("https://1edtech.edu/credentials/3732/image")
             .type_("Image")
             .caption("1EdTech University Degree for Example Student".to_string())
-            .try_into()
-            .unwrap();
-
-            image
         })
         .narrative("There is a final project report and source code evidence.".to_string())
         .result({
             let result1: Result_ = ResultBuilder::default()
             .type_(vec!["Result"])
-            .alignment({
-                let alignment: Alignment = AlignmentBuilder::default()
+            .alignment(
+                vec![
+                AlignmentBuilder::default()
                 .type_("Alignment")
                 .target_code("project".to_string())
                 .target_description("Project description".to_string())
@@ -637,11 +523,7 @@ fn full_achievement_credential() {
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
                 .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://1edtech.edu/catalog/degree/project/result/1")
-                .try_into()
-                .unwrap();
-
-                vec![alignment]
-            })
+            ])
             .result_description("urn:uuid:f6ab24cd-86e8-4eaf-b8c6-ded74e8fd41c".to_string())
             .value("A".to_string())
             .try_into()
@@ -650,8 +532,9 @@ fn full_achievement_credential() {
             let result2: Result_ = ResultBuilder::default()
             .type_(vec!["Result"])
             .achieved_level("urn:uuid:d05a0867-d0ad-4b03-bdb5-28fb5d2aab7a".to_string())
-            .alignment({
-                let alignment: Alignment = AlignmentBuilder::default()
+            .alignment(
+                vec![
+                AlignmentBuilder::default()
                 .type_("Alignment")
                 .target_code("project".to_string())
                 .target_description("Project description".to_string())
@@ -659,11 +542,7 @@ fn full_achievement_credential() {
                 .target_framework("1EdTech University Program and Course Catalog".to_string())
                 .target_type(AlignmentTargetType::from_str("CFItem").unwrap())
                 .target_url("https://1edtech.edu/catalog/degree/project/result/1")
-                .try_into()
-                .unwrap();
-
-                vec![alignment]
-            })
+            ])
             .result_description("urn:uuid:f6ab24cd-86e8-4eaf-b8c6-ded74e8fd41c".to_string())
             .try_into()
             .unwrap();
@@ -677,13 +556,10 @@ fn full_achievement_credential() {
 
             vec![result1, result2, result3]
         })
-        .try_into()
-        .unwrap();
-
-        credential_subject
-    })
-    .endorsement({
-        let endorsement: EndorsementCredential = EndorsementCredentialBuilder::default()
+    )
+    .endorsement(
+        vec![
+        EndorsementCredentialBuilder::default()
         .context(vec![
             "https://www.w3.org/2018/credentials/v1".into(),
             "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
@@ -695,28 +571,20 @@ fn full_achievement_credential() {
             "EndorsementCredential"
         ])
         .name("EAA endorsement")
-        .issuer({
-            let issuer: Profile = ProfileBuilder::default()
+        .issuer(
+            ProfileBuilder::default()
             .id("https://accrediter.edu/issuers/565049")
             .type_("Profile")
             .name("Example Accrediting Agency".to_string())
-            .try_into()
-            .unwrap();
-
-            issuer
-        })
+        )
         .issuance_date("2010-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
         .expiration_date("2020-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
-        .credential_subject({
-            let credential_subject: EndorsementSubject = EndorsementSubjectBuilder::default()
+        .credential_subject(
+            EndorsementSubjectBuilder::default()
             .id("https://1edtech.edu/issuers/565049")
             .type_("EndorsementSubject")
             .endorsement_comment("1EdTech University is in good standing".to_string())
-            .try_into()
-            .unwrap();
-
-            credential_subject
-        })
+        )
         .credential_schema({
             let schema1: CredentialSchema = CredentialSchemaBuilder::default()
             .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_endorsementcredential_schema.json")
@@ -732,24 +600,16 @@ fn full_achievement_credential() {
 
             EndorsementCredentialSchema::from(vec![schema1, schema2])
         })
-        .credential_status({
-            let credential_status: CredentialStatus = CredentialStatusBuilder::default()
+        .credential_status(
+            CredentialStatusBuilder::default()
             .id("https://1edtech.edu/credentials/3732/revocations")
             .type_("1EdTechRevocationList")
-            .try_into()
-            .unwrap();
-
-            credential_status
-        })
-        .refresh_service({
-            let refresh_service: RefreshService = RefreshServiceBuilder::default()
+        )
+        .refresh_service(
+            RefreshServiceBuilder::default()
             .id("http://1edtech.edu/credentials/3732")
             .type_("1EdTechCredentialRefresh")
-            .try_into()
-            .unwrap();
-
-            refresh_service
-        })
+        )
         .proof({
             let proof: Proof = ProofBuilder::default()
             .type_("DataIntegrityProof")
@@ -763,11 +623,7 @@ fn full_achievement_credential() {
 
             EndorsementCredentialProof::from(vec![proof])
         })
-        .try_into()
-        .unwrap();
-
-        vec![endorsement]
-    })
+    ])
     .evidence({
         let evidence: Evidence = EvidenceBuilder::default()
         .id("https://1edtech.edu/credentials/3732/evidence/1".to_string())
@@ -792,16 +648,17 @@ fn full_achievement_credential() {
 
         vec![evidence, evidence2]
     })
-    .issuer({
-        let issuer: Profile = ProfileBuilder::default()
+    .issuer(
+        ProfileBuilder::default()
         .id("https://1edtech.edu/issuers/565049")
         .type_("Profile")
         .name("1EdTech University".to_string())
         .url("https://1edtech.edu".to_string())
         .phone("1-222-333-4444".to_string())
         .description("1EdTech University provides online degree programs.".to_string())
-        .endorsement({
-            let endorsement: EndorsementCredential = EndorsementCredentialBuilder::default()
+        .endorsement(
+            vec![
+            EndorsementCredentialBuilder::default()
             .context(vec![
                 "https://www.w3.org/2018/credentials/v1".into(),
                 "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
@@ -813,28 +670,20 @@ fn full_achievement_credential() {
                 "EndorsementCredential"
               ])
             .name("EAA endorsement")
-            .issuer({
-                let issuer: Profile = ProfileBuilder::default()
+            .issuer(
+                ProfileBuilder::default()
                 .id("https://accrediter.edu/issuers/565049")
                 .type_("Profile")
                 .name("Example Accrediting Agency".to_string())
-                .try_into()
-                .unwrap();
-
-                issuer
-            })
+            )
             .issuance_date("2010-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
             .expiration_date("2020-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
-            .credential_subject({
-                let credential_subject: EndorsementSubject = EndorsementSubjectBuilder::default()
+            .credential_subject(
+                EndorsementSubjectBuilder::default()
                 .id("https://1edtech.edu/issuers/565049")
                 .type_("EndorsementSubject")
                 .endorsement_comment("1EdTech University is in good standing".to_string())
-                .try_into()
-                .unwrap();
-
-                credential_subject
-            })
+            )
             .credential_schema({
                 let schema1: CredentialSchema = CredentialSchemaBuilder::default()
                 .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_endorsementcredential_schema.json")
@@ -850,24 +699,16 @@ fn full_achievement_credential() {
 
                 EndorsementCredentialSchema::from(vec![schema1, schema2])
             })
-            .credential_status({
-                let credential_status: CredentialStatus = CredentialStatusBuilder::default()
+            .credential_status(
+                CredentialStatusBuilder::default()
                 .id("https://1edtech.edu/credentials/3732/revocations")
                 .type_("1EdTechRevocationList")
-                .try_into()
-                .unwrap();
-
-                credential_status
-            })
-            .refresh_service({
-                let refresh_service: RefreshService = RefreshServiceBuilder::default()
+            )
+            .refresh_service(
+                RefreshServiceBuilder::default()
                 .id("http://1edtech.edu/credentials/3732")
                 .type_("1EdTechCredentialRefresh")
-                .try_into()
-                .unwrap();
-
-                refresh_service
-            })
+            )
             .proof({
                 let proof: Proof = ProofBuilder::default()
                 .type_("DataIntegrityProof")
@@ -881,24 +722,16 @@ fn full_achievement_credential() {
 
                 EndorsementCredentialProof::from(vec![proof])
             })
-            .try_into()
-            .unwrap();
-
-            vec![endorsement]
-        })
+        ])
         .image({
-            let image: Image = ImageBuilder::default()
+            ImageBuilder::default()
             .id("https://1edtech.edu/logo.png")
             .type_("Image")
             .caption("1EdTech University logo".to_string())
-            .try_into()
-            .unwrap();
-
-            image
         })
         .email("registrar@1edtech.edu".to_string())
-        .address({
-            let address: Address = AddressBuilder::default()
+        .address(
+            AddressBuilder::default()
             .type_(vec!["Address"])
             .address_country("USA".to_string())
             .address_country_code("US".to_string())
@@ -907,21 +740,13 @@ fn full_achievement_credential() {
             .street_address("123 First St".to_string())
             .post_office_box_number("1".to_string())
             .postal_code("12345".to_string())
-            .geo({
-                let geo: GeoCoordinates = GeoCoordinatesBuilder::default()
+            .geo(
+                GeoCoordinatesBuilder::default()
                 .type_("GeoCoordinates")
                 .latitude(1.0)
                 .longitude(1.0)
-                .try_into()
-                .unwrap();
-
-                geo
-            })
-            .try_into()
-            .unwrap();
-
-            address
-        })
+            )
+        )
         .other_identifier({
             let identifier1: IdentifierEntry = IdentifierEntryBuilder::default()
             .type_("IdentifierEntry")
@@ -940,21 +765,13 @@ fn full_achievement_credential() {
             vec![identifier1, identifier2]
         })
         .official("Horace Mann".to_string())
-        .parent_org({
-            let parent_org: Profile = ProfileBuilder::default()
+        .parent_org(
+            ProfileBuilder::default()
             .id("did:example:123456789")
             .type_("Profile")
             .name("Universal Universities".to_string())
-            .try_into()
-            .unwrap();
-
-            Some(parent_org)
-        })
-        .try_into()
-        .unwrap();
-
-        issuer
-    })
+        )
+    )
     .issuance_date("2010-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
     .expiration_date("2030-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
     .credential_schema({
@@ -966,24 +783,16 @@ fn full_achievement_credential() {
 
         AchievementCredentialSchema::from(vec![schema])
     })
-    .credential_status({
-        let credential_status: CredentialStatus = CredentialStatusBuilder::default()
+    .credential_status(
+        CredentialStatusBuilder::default()
         .id("https://1edtech.edu/credentials/3732/revocations")
         .type_("1EdTechRevocationList")
-        .try_into()
-        .unwrap();
-
-        credential_status
-    })
-    .refresh_service({
-        let refresh_service: RefreshService = RefreshServiceBuilder::default()
+    )
+    .refresh_service(
+        RefreshServiceBuilder::default()
         .id("http://1edtech.edu/credentials/3732")
         .type_("1EdTechCredentialRefresh")
-        .try_into()
-        .unwrap();
-
-        refresh_service
-    })
+    )
     .try_into()
     .unwrap();
 
