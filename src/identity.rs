@@ -95,7 +95,7 @@ pub enum IdentifierTypeEnum {
 }
 impl From<&IdentifierTypeEnum> for IdentifierTypeEnum {
     fn from(value: &IdentifierTypeEnum) -> Self {
-        value.clone()
+        *value
     }
 }
 impl ToString for IdentifierTypeEnum {
@@ -328,7 +328,7 @@ pub enum IdentityObjectTypeEnum {
 }
 impl From<&IdentityObjectTypeEnum> for IdentityObjectTypeEnum {
     fn from(value: &IdentityObjectTypeEnum) -> Self {
-        value.clone()
+        *value
     }
 }
 impl ToString for IdentityObjectTypeEnum {

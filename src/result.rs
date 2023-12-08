@@ -40,7 +40,7 @@ pub enum ResultStatus {
 }
 impl From<&ResultStatus> for ResultStatus {
     fn from(value: &ResultStatus) -> Self {
-        value.clone()
+        *value
     }
 }
 impl ToString for ResultStatus {
@@ -236,7 +236,7 @@ pub enum ResultDescriptionTypeEnum {
 }
 impl From<&ResultDescriptionTypeEnum> for ResultDescriptionTypeEnum {
     fn from(value: &ResultDescriptionTypeEnum) -> Self {
-        value.clone()
+        *value
     }
 }
 impl ToString for ResultDescriptionTypeEnum {

@@ -82,7 +82,7 @@ pub enum AlignmentTargetTypeEnum {
 }
 impl From<&AlignmentTargetTypeEnum> for AlignmentTargetTypeEnum {
     fn from(value: &AlignmentTargetTypeEnum) -> Self {
-        value.clone()
+        *value
     }
 }
 impl ToString for AlignmentTargetTypeEnum {
