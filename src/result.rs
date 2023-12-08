@@ -214,7 +214,8 @@ impl std::str::FromStr for ResultDescriptionType {
     fn from_str(value: &str) -> Result<Self, &'static str> {
         ResultDescriptionTypeEnum::from_str(value)
             .map(Self::Enum)
-            .or_else(|_| ResultDescriptionTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
+            .or_else(|_| ResultDescriptionTypeString::from_str(value).map(Self::String))
+            .map_err(|_| "invalid value")
     }
 }
 

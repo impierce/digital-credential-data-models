@@ -1,20 +1,24 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement::{Achievement, AchievementBuilder, Criteria, CriteriaBuilder, AchievementType},
-    achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType, CredentialSchema, CredentialSchemaBuilder, AchievementCredentialSchema},
+    achievement::{Achievement, AchievementBuilder, AchievementType, Criteria, CriteriaBuilder},
+    achievement_credential::{
+        AchievementCredential, AchievementCredentialBuilder, AchievementCredentialSchema, AchievementCredentialType,
+        CredentialSchema, CredentialSchemaBuilder,
+    },
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    profile::{Profile, ProfileBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, general::{Image, ImageBuilder},
+    alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
+    general::{Image, ImageBuilder},
+    profile::{Profile, ProfileBuilder},
 };
 use std::{fs::File, str::FromStr};
 
 #[test]
 fn skill_assertion_credential_engine() {
-
     // Testing if serialization and deserialization between the OBv3 examples and our rust code works as needed.
 
     assert_eq_json_value::<AchievementCredential>("tests/obv3_json_examples/skill_assertion_credential_engine.json");
 
-    // Next, the builders are tested against the OBv3 examples 
+    // Next, the builders are tested against the OBv3 examples
 
     let skill_assertion_credential_engine: AchievementCredential = AchievementCredentialBuilder::default()
     .context(vec![
@@ -43,7 +47,7 @@ fn skill_assertion_credential_engine() {
                 .target_url("https://credentialfinder.org/competency/ce-6369c51f-4d86-4592-a761-8b32ae70a045")
                 .try_into()
                 .unwrap();
-    
+
                 vec![alignment]
             })
             .achievement_type(AchievementType::from_str("Competency").unwrap())
@@ -65,7 +69,7 @@ fn skill_assertion_credential_engine() {
                 .narrative("Learners must demonstrate understanding of linear algebra and graphic representation of linear equations.".to_string())
                 .try_into()
                 .unwrap();
-                
+
                 criteria
             })
             .description("This achievement represents developing capability to solve and graph linear equations and inequalities")
@@ -82,12 +86,12 @@ fn skill_assertion_credential_engine() {
             .name("Linear equations and inequalities")
             .try_into()
             .unwrap();
-    
+
             achievement
         })
         .try_into()
         .unwrap();
-    
+
         credential_subject
     })
     .issuer({
@@ -128,17 +132,22 @@ fn skill_assertion_credential_engine() {
     .unwrap();
 
     // Here we test the built struct against the struct deserialized from the example .json file.
-    
-    let file = File::open("tests/obv3_json_examples/skill_assertion_credential_engine.json").expect("Failed to open file");
-    let skill_assertion_cred_engine_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
-    
+
+    let file =
+        File::open("tests/obv3_json_examples/skill_assertion_credential_engine.json").expect("Failed to open file");
+    let skill_assertion_cred_engine_from_file: AchievementCredential =
+        serde_json::from_reader(&file).expect("Couldn't read from file");
+
     assert_eq!(skill_assertion_credential_engine, skill_assertion_cred_engine_from_file);
-    
+
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
-    let file = File::open("tests/obv3_json_examples/skill_assertion_credential_engine.json").expect("Failed to open file");
+    let file =
+        File::open("tests/obv3_json_examples/skill_assertion_credential_engine.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(skill_assertion_credential_engine).unwrap(), json_value_from_file);
-
+    assert_eq!(
+        serde_json::to_value(skill_assertion_credential_engine).unwrap(),
+        json_value_from_file
+    );
 }

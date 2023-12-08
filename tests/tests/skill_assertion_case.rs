@@ -1,20 +1,25 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement::{Achievement, AchievementBuilder, Criteria, CriteriaBuilder, AchievementType},
-    achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType, CredentialSchema, CredentialSchemaBuilder, AchievementCredentialSchema},
+    achievement::{Achievement, AchievementBuilder, AchievementType, Criteria, CriteriaBuilder},
+    achievement_credential::{
+        AchievementCredential, AchievementCredentialBuilder, AchievementCredentialSchema, AchievementCredentialType,
+        CredentialSchema, CredentialSchemaBuilder,
+    },
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    profile::{Profile, ProfileBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, general::{Image, ImageBuilder}, proof_evidence::{Evidence, EvidenceBuilder},
+    alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
+    general::{Image, ImageBuilder},
+    profile::{Profile, ProfileBuilder},
+    proof_evidence::{Evidence, EvidenceBuilder},
 };
 use std::{fs::File, str::FromStr};
 
 #[test]
 fn skill_assertion_case() {
-
     // Testing if serialization and deserialization between the OBv3 examples and our rust code works as needed.
 
     assert_eq_json_value::<AchievementCredential>("tests/obv3_json_examples/skill_assertion_case.json");
 
-    // Next, the builders are tested against the OBv3 examples 
+    // Next, the builders are tested against the OBv3 examples
 
     let skill_assertion_case: AchievementCredential = AchievementCredentialBuilder::default()
     .context(vec![
@@ -39,7 +44,7 @@ fn skill_assertion_case() {
                 .narrative("Cite strong and thorough textual evidence to support analysis of what the text says explicitly as well as inferences drawn from the text, including determining where the text leaves matters uncertain".to_string())
                 .try_into()
                 .unwrap();
-                
+
                 criteria
             })
             .description("Analyze a sample text")
@@ -54,7 +59,7 @@ fn skill_assertion_case() {
                 .target_url("https://robotics-competencies.example.com/competencies/robot-programming")
                 .try_into()
                 .unwrap();
-    
+
                 vec![alignment]
             })
             .achievement_type(AchievementType::from_str("Competency").unwrap())
@@ -76,7 +81,7 @@ fn skill_assertion_case() {
                 .narrative("Learners must present source code showing the ability for a robot to accept manual or sensor input and perform conditional actions in response.".to_string())
                 .try_into()
                 .unwrap();
-                
+
                 criteria
             })
             .description("This achievement represents developing capability to develop software for robotic applications.".to_string())
@@ -93,12 +98,12 @@ fn skill_assertion_case() {
             .name("Robot Programming")
             .try_into()
             .unwrap();
-    
+
             achievement
         })
         .try_into()
         .unwrap();
-    
+
         credential_subject
     })
     .evidence({
@@ -150,17 +155,20 @@ fn skill_assertion_case() {
     .unwrap();
 
     // Here we test the built struct against the struct deserialized from the example .json file.
-    
+
     let file = File::open("tests/obv3_json_examples/skill_assertion_case.json").expect("Failed to open file");
-    let skill_assertion_case_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
-    
+    let skill_assertion_case_from_file: AchievementCredential =
+        serde_json::from_reader(&file).expect("Couldn't read from file");
+
     assert_eq!(skill_assertion_case, skill_assertion_case_from_file);
-    
+
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/skill_assertion_case.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(skill_assertion_case).unwrap(), json_value_from_file);
-
+    assert_eq!(
+        serde_json::to_value(skill_assertion_case).unwrap(),
+        json_value_from_file
+    );
 }

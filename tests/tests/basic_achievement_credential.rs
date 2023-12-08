@@ -9,12 +9,11 @@ use std::fs::File;
 
 #[test]
 fn basic_achievement_credential() {
-
     // Testing if serialization and deserialization between the OBv3 examples and our rust code works as needed.
 
     assert_eq_json_value::<AchievementCredential>("tests/obv3_json_examples/basic_achievement_credential.json");
 
-    // Next, the builders are tested against the OBv3 examples 
+    // Next, the builders are tested against the OBv3 examples
 
     let criteria_builder: Criteria = CriteriaBuilder::default()
         .narrative("Team members are nominated for this badge by their peers and recognized upon review by Example Corp management.".to_string())
@@ -66,17 +65,20 @@ fn basic_achievement_credential() {
         .unwrap();
 
     // Here we test the built struct against the struct deserialized from the example .json file.
-    
+
     let file = File::open("tests/obv3_json_examples/basic_achievement_credential.json").expect("Failed to open file");
-    let basic_achievement_cred_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
-    
+    let basic_achievement_cred_from_file: AchievementCredential =
+        serde_json::from_reader(&file).expect("Couldn't read from file");
+
     assert_eq!(basic_achievement_credential, basic_achievement_cred_from_file);
-    
+
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/basic_achievement_credential.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(basic_achievement_credential).unwrap(), json_value_from_file);
-
+    assert_eq!(
+        serde_json::to_value(basic_achievement_credential).unwrap(),
+        json_value_from_file
+    );
 }

@@ -47,7 +47,8 @@ impl std::str::FromStr for IdentifierType {
     fn from_str(value: &str) -> Result<Self, &'static str> {
         IdentifierTypeEnum::from_str(value)
             .map(Self::Enum)
-            .or_else(|_| IdentifierTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
+            .or_else(|_| IdentifierTypeString::from_str(value).map(Self::String))
+            .map_err(|_| "invalid value")
     }
 }
 
@@ -279,7 +280,8 @@ impl std::str::FromStr for IdentityObjectType {
     fn from_str(value: &str) -> Result<Self, &'static str> {
         IdentityObjectTypeEnum::from_str(value)
             .map(Self::Enum)
-            .or_else(|_| IdentityObjectTypeString::from_str(value).map(Self::String)).map_err(|_| "invalid value")
+            .or_else(|_| IdentityObjectTypeString::from_str(value).map(Self::String))
+            .map_err(|_| "invalid value")
     }
 }
 

@@ -1,6 +1,6 @@
+pub mod achievement;
 pub mod achievement_credential;
 pub mod achievement_subject;
-pub mod achievement;
 pub mod alignment;
 pub mod endorsement;
 pub mod general;

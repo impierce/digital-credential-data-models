@@ -3,17 +3,17 @@ use openbadges::{
     achievement::{Achievement, AchievementBuilder, Criteria, CriteriaBuilder},
     achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType},
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    profile::{Profile, ProfileBuilder}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
+    alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
+    profile::{Profile, ProfileBuilder},
 };
 use std::{fs::File, str::FromStr};
 
 #[test]
 fn alignment_credential_engine() {
-    
     // Testing if serialization and deserialization between the OBv3 examples and our rust code works as needed.
 
     assert_eq_json_value::<AchievementCredential>("tests/obv3_json_examples/alignment_credential_engine.json");
-    
+
     // Next, the builders are tested against the OBv3 examples
 
     let alignment_credential_engine: AchievementCredential = AchievementCredentialBuilder::default()
@@ -48,7 +48,7 @@ fn alignment_credential_engine() {
                 .narrative("Cite strong and thorough textual evidence to support analysis of what the text says explicitly as well as inferences drawn from the text, including determining where the text leaves matters uncertain".to_string())
                 .try_into()
                 .unwrap();
-                
+
                 criteria
             })
             .description("Analyze a sample text")
@@ -82,15 +82,18 @@ fn alignment_credential_engine() {
     // Here we test the built struct against the struct deserialized from the example .json file.
 
     let file = File::open("tests/obv3_json_examples/alignment_credential_engine.json").expect("Failed to open file");
-    let alignment_credential_engine_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
-    
+    let alignment_credential_engine_from_file: AchievementCredential =
+        serde_json::from_reader(&file).expect("Couldn't read from file");
+
     assert_eq!(alignment_credential_engine, alignment_credential_engine_from_file);
-    
+
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/alignment_credential_engine.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(alignment_credential_engine).unwrap(), json_value_from_file);
-
+    assert_eq!(
+        serde_json::to_value(alignment_credential_engine).unwrap(),
+        json_value_from_file
+    );
 }

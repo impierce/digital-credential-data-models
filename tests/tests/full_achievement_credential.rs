@@ -1,20 +1,37 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement::{Achievement, AchievementBuilder, Criteria, CriteriaBuilder, AchievementType},
-    achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType, CredentialSchema, CredentialSchemaBuilder, CredentialStatus, CredentialStatusBuilder, AchievementCredentialSchema},
+    achievement::{Achievement, AchievementBuilder, AchievementType, Criteria, CriteriaBuilder},
+    achievement_credential::{
+        AchievementCredential, AchievementCredentialBuilder, AchievementCredentialSchema, AchievementCredentialType,
+        CredentialSchema, CredentialSchemaBuilder, CredentialStatus, CredentialStatusBuilder,
+    },
     achievement_subject::{AchievementSubject, AchievementSubjectBuilder},
-    profile::{Profile, ProfileBuilder, Address, AddressBuilder, GeoCoordinates, GeoCoordinatesBuilder}, general::{ImageBuilder, Image, RefreshService, RefreshServiceBuilder}, identity::{IdentityObject, IdentityObjectBuilder, IdentifierEntry, IdentifierEntryBuilder, IdentifierType, IdentityObjectType}, alignment::{Alignment, AlignmentBuilder, AlignmentTargetType}, endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubjectBuilder, EndorsementSubject, EndorsementCredentialType, EndorsementCredentialSchema, EndorsementCredentialProof}, proof_evidence::{Proof, ProofBuilder, Evidence, EvidenceBuilder}, result::{ResultDescription, ResultDescriptionBuilder, RubricCriterionLevel, RubricCriterionLevelBuilder, Result_, ResultBuilder, ResultStatus, ResultDescriptionType},
+    alignment::{Alignment, AlignmentBuilder, AlignmentTargetType},
+    endorsement::{
+        EndorsementCredential, EndorsementCredentialBuilder, EndorsementCredentialProof, EndorsementCredentialSchema,
+        EndorsementCredentialType, EndorsementSubject, EndorsementSubjectBuilder,
+    },
+    general::{Image, ImageBuilder, RefreshService, RefreshServiceBuilder},
+    identity::{
+        IdentifierEntry, IdentifierEntryBuilder, IdentifierType, IdentityObject, IdentityObjectBuilder,
+        IdentityObjectType,
+    },
+    profile::{Address, AddressBuilder, GeoCoordinates, GeoCoordinatesBuilder, Profile, ProfileBuilder},
+    proof_evidence::{Evidence, EvidenceBuilder, Proof, ProofBuilder},
+    result::{
+        ResultBuilder, ResultDescription, ResultDescriptionBuilder, ResultDescriptionType, ResultStatus, Result_,
+        RubricCriterionLevel, RubricCriterionLevelBuilder,
+    },
 };
 use std::{fs::File, str::FromStr};
 
 #[test]
 fn full_achievement_credential() {
-
     // Testing if serialization and deserialization between the OBv3 examples and our rust code works as needed.
 
     assert_eq_json_value::<AchievementCredential>("tests/obv3_json_examples/full_achievement_credential.json");
-    
-    // Next, the builders are tested against the OBv3 examples 
+
+    // Next, the builders are tested against the OBv3 examples
 
     let full_achievement_credential: AchievementCredential = AchievementCredentialBuilder::default()
     .context([
@@ -49,7 +66,7 @@ fn full_achievement_credential() {
         )
         .activity_start_date("2010-01-01T00:00:00Z"
             .parse::<chrono::DateTime<chrono::offset::Utc>>()
-            .unwrap()        
+            .unwrap()
         )
         .credits_earned(42.0)
         .license_number("A-9320041".to_string())
@@ -255,7 +272,7 @@ fn full_achievement_credential() {
                         .try_into()
                         .unwrap();
 
-                        EndorsementCredentialSchema::from(vec![schema1, schema2])                        
+                        EndorsementCredentialSchema::from(vec![schema1, schema2])
                     })
                     .credential_status({
                         let credential_status: CredentialStatus = CredentialStatusBuilder::default()
@@ -356,7 +373,7 @@ fn full_achievement_credential() {
                     .unwrap();
 
                     Some(parent_org)
-                })     
+                })
                 .try_into()
                 .unwrap();
 
@@ -418,7 +435,7 @@ fn full_achievement_credential() {
                     .type_("1EdTechJsonSchemaValidator2019")
                     .try_into()
                     .unwrap();
-                    
+
                     EndorsementCredentialSchema::from(vec![schema1, schema2])
                 })
                 .credential_status({
@@ -579,7 +596,7 @@ fn full_achievement_credential() {
                 })
                 .try_into()
                 .unwrap();
-                
+
                 let result_description3: ResultDescription = ResultDescriptionBuilder::default()
                 .id("urn:uuid:b07c0387-f2d6-4b65-a3f4-f4e4302ea8f7")
                 .type_("ResultDescription")
@@ -594,7 +611,7 @@ fn full_achievement_credential() {
             .tag(vec!["research".to_string(), "computer science".to_string()])
             .try_into()
             .unwrap();
-      
+
             achievement
         })
         .image({
@@ -659,10 +676,10 @@ fn full_achievement_credential() {
             .unwrap();
 
             vec![result1, result2, result3]
-        })    
+        })
         .try_into()
         .unwrap();
-    
+
         credential_subject
     })
     .endorsement({
@@ -861,7 +878,7 @@ fn full_achievement_credential() {
                 .proof_value("zvPkQiUFfJrgnCRhyPkTSkgrGXbnLR15pHH5HZVYNdM4TCAwQHqG7fMeMPLtYNRnEgoV1aJdR5E61eWu5sWRYgtA".to_string())
                 .try_into()
                 .unwrap();
-      
+
                 EndorsementCredentialProof::from(vec![proof])
             })
             .try_into()
@@ -966,23 +983,25 @@ fn full_achievement_credential() {
         .unwrap();
 
         refresh_service
-    }) 
+    })
     .try_into()
     .unwrap();
 
     // Here we test the built struct against the struct deserialized from the example .json file.
-    
+
     let file = File::open("tests/obv3_json_examples/full_achievement_credential.json").expect("Failed to open file");
-    let full_achievement_cred_from_file: AchievementCredential = serde_json::from_reader(&file).expect("Couldn't read from file");
-    
+    let full_achievement_cred_from_file: AchievementCredential =
+        serde_json::from_reader(&file).expect("Couldn't read from file");
+
     assert_eq!(full_achievement_credential, full_achievement_cred_from_file);
-    
+
     // Here we test the built struct converted to a json_value against the json_value deserialized from the example .json file
 
     let file = File::open("tests/obv3_json_examples/full_achievement_credential.json").expect("Failed to open file");
     let json_value_from_file: serde_json::Value = serde_json::from_reader(file).expect("Couldn't read from file");
 
-    assert_eq!(serde_json::to_value(full_achievement_credential).unwrap(), json_value_from_file);
-
+    assert_eq!(
+        serde_json::to_value(full_achievement_credential).unwrap(),
+        json_value_from_file
+    );
 }
-
