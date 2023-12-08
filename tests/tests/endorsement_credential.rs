@@ -2,8 +2,7 @@ use crate::tests::assert_eq_json_value;
 use openbadges::{
     achievement_credential::{CredentialSchema, CredentialSchemaBuilder, CredentialStatusBuilder},
     endorsement::{
-        EndorsementCredential, EndorsementCredentialBuilder, EndorsementCredentialSchema,
-        EndorsementSubjectBuilder,
+        EndorsementCredential, EndorsementCredentialBuilder, EndorsementCredentialSchema, EndorsementSubjectBuilder,
     },
     general::RefreshServiceBuilder,
     profile::ProfileBuilder,
@@ -31,7 +30,7 @@ fn endorsement_credential() {
             ProfileBuilder::default()
                 .id("https://state.gov/issuers/565049")
                 .type_("Profile")
-                .name("State Department of Education".to_string())
+                .name("State Department of Education".to_string()),
         )
         .issuance_date(
             "2010-01-01T00:00:00Z"
@@ -47,7 +46,7 @@ fn endorsement_credential() {
             EndorsementSubjectBuilder::default()
                 .id("https://1edtech.edu/issuers/565049")
                 .type_("EndorsementSubject")
-                .endorsement_comment("1EdTech University is in good standing".to_string())
+                .endorsement_comment("1EdTech University is in good standing".to_string()),
         )
         .credential_schema({
             let schema1: CredentialSchema = CredentialSchemaBuilder::default()
@@ -67,12 +66,12 @@ fn endorsement_credential() {
         .credential_status(
             CredentialStatusBuilder::default()
                 .id("https://state.gov/credentials/3732/revocations")
-                .type_("1EdTechRevocationList")
+                .type_("1EdTechRevocationList"),
         )
         .refresh_service(
             RefreshServiceBuilder::default()
                 .id("http://state.gov/credentials/3732")
-                .type_("1EdTechCredentialRefresh")
+                .type_("1EdTechCredentialRefresh"),
         )
         .try_into()
         .unwrap();
