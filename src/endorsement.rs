@@ -291,11 +291,12 @@ impl EndorsementCredentialBuilder {
     }
     pub fn expiration_date<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<chrono::DateTime<chrono::offset::Utc>>>,
-        T::Error: std::fmt::Display,
+        T: AsRef<str>,
     {
         self.expiration_date = value
-            .try_into()
+            .as_ref()
+            .parse::<chrono::DateTime<chrono::offset::Utc>>()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for expiration_date: {}", e));
         self
     }
@@ -311,12 +312,12 @@ impl EndorsementCredentialBuilder {
     }
     pub fn issuance_date<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-        T::Error: std::fmt::Display,
+        T: AsRef<str>,
     {
         self.issuance_date = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for issuance_date: {}", e));
+            .as_ref()
+            .parse::<chrono::DateTime<chrono::offset::Utc>>()
+            .map_err(|e| format!("error converting supplied value for awarded_date: {}", e));
         self
     }
     pub fn issuer<T>(mut self, value: T) -> Self

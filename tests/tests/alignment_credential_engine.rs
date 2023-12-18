@@ -29,7 +29,7 @@ fn alignment_credential_engine() {
         .type_("Profile")
         .name("Example University".to_string())
     )
-    .issuance_date("2010-01-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
+    .issuance_date("2010-01-01T00:00:00Z")
     .name("Example University Degree")
     .credential_subject(
         AchievementSubjectBuilder::default()

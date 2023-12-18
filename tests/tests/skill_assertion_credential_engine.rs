@@ -86,7 +86,7 @@ fn skill_assertion_credential_engine() {
         })
         .email("registrar@1edtech.edu".to_string())
     })
-    .issuance_date("2022-07-01T00:00:00Z".parse::<chrono::DateTime<chrono::offset::Utc>>().unwrap())
+    .issuance_date("2022-07-01T00:00:00Z")
     .credential_schema({
         let schema: CredentialSchema =CredentialSchemaBuilder::default()
         .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_achievementcredential_schema.json")

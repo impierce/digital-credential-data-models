@@ -32,16 +32,8 @@ fn endorsement_credential() {
                 .type_("Profile")
                 .name("State Department of Education".to_string()),
         )
-        .issuance_date(
-            "2010-01-01T00:00:00Z"
-                .parse::<chrono::DateTime<chrono::offset::Utc>>()
-                .unwrap(),
-        )
-        .expiration_date(
-            "2030-01-01T00:00:00Z"
-                .parse::<chrono::DateTime<chrono::offset::Utc>>()
-                .unwrap(),
-        )
+        .issuance_date("2010-01-01T00:00:00Z")
+        .expiration_date("2030-01-01T00:00:00Z")
         .credential_subject(
             EndorsementSubjectBuilder::default()
                 .id("https://1edtech.edu/issuers/565049")

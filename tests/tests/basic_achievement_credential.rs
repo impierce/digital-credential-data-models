@@ -55,11 +55,7 @@ fn basic_achievement_credential() {
             "VerifiableCredential",
             "OpenBadgeCredential",
         ]))
-        .issuance_date(
-            "2010-01-01T00:00:00Z"
-                .parse::<chrono::DateTime<chrono::offset::Utc>>()
-                .unwrap(),
-        )
+        .issuance_date("2010-01-01T00:00:00Z")
         .issuer(issuer_builder)
         .try_into()
         .unwrap();
