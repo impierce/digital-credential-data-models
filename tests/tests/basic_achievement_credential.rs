@@ -45,8 +45,8 @@ fn basic_achievement_credential() {
 
     let basic_achievement_credential: AchievementCredential = AchievementCredentialBuilder::default()
         .context(vec![
-            "https://www.w3.org/2018/credentials/v1".into(),
-            "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
+            "https://www.w3.org/2018/credentials/v1",
+            "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json",
         ])
         .credential_subject(&achievement_subject_builder)
         .id("http://example.com/credentials/3527")

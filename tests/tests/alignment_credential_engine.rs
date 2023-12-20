@@ -18,8 +18,8 @@ fn alignment_credential_engine() {
 
     let alignment_credential_engine: AchievementCredential = AchievementCredentialBuilder::default()
     .context(vec![
-        "https://www.w3.org/2018/credentials/v1".into(),
-        "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into()
+        "https://www.w3.org/2018/credentials/v1",
+        "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json"
     ])
     .id("http://example.edu/credentials/3732")
     .type_(AchievementCredentialType::from(vec!["VerifiableCredential", "OpenBadgeCredential"]))

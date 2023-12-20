@@ -166,14 +166,18 @@ impl AchievementSubjectBuilder {
             .map_err(|e| format!("error converting supplied value for id: {}", e));
         self
     }
-    pub fn identifier<T>(mut self, value: T) -> Self
+    pub fn identifier<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<identity::IdentityObject>>,
+        T: std::convert::TryInto<identity::IdentityObject>,
         T::Error: std::fmt::Display,
     {
         self.identifier = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for identifier: {}", e));
+            .into_iter()
+            .map(|v| {
+                v.try_into()
+                    .map_err(|e| format!("error converting supplied value for identifier: {}", e))
+            })
+            .collect::<Result<Vec<identity::IdentityObject>, String>>();
         self
     }
     pub fn image<T>(mut self, value: T) -> Self
@@ -206,14 +210,18 @@ impl AchievementSubjectBuilder {
             .map_err(|e| format!("error converting supplied value for narrative: {}", e));
         self
     }
-    pub fn result<T>(mut self, value: T) -> Self
+    pub fn result<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<result::Result_>>,
+        T: std::convert::TryInto<result::Result_>,
         T::Error: std::fmt::Display,
     {
         self.result = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for result: {}", e));
+            .into_iter()
+            .map(|v| {
+                v.try_into()
+                    .map_err(|e| format!("error converting supplied value for result: {}", e))
+            })
+            .collect::<Result<Vec<result::Result_>, String>>();
         self
     }
     pub fn role<T>(mut self, value: T) -> Self

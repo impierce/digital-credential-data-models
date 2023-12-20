@@ -2,8 +2,7 @@ use crate::tests::assert_eq_json_value;
 use openbadges::{
     achievement::{AchievementBuilder, AchievementType, CriteriaBuilder},
     achievement_credential::{
-        AchievementCredential, AchievementCredentialBuilder, AchievementCredentialSchema, AchievementCredentialType,
-        CredentialSchema, CredentialSchemaBuilder,
+        AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType, CredentialSchemaBuilder,
     },
     achievement_subject::AchievementSubjectBuilder,
     alignment::{AlignmentBuilder, AlignmentTargetType},
@@ -22,9 +21,9 @@ fn skill_assertion_credential_engine() {
 
     let skill_assertion_credential_engine: AchievementCredential = AchievementCredentialBuilder::default()
     .context(vec![
-        "https://www.w3.org/2018/credentials/v1".into(),
-		"https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
-		"https://purl.imsglobal.org/spec/ob/v3p0/extensions.json".into()
+        "https://www.w3.org/2018/credentials/v1",
+		"https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json",
+		"https://purl.imsglobal.org/spec/ob/v3p0/extensions.json"
     ])
     .id("http://1edtech.edu/credentials/3732")
     .type_(AchievementCredentialType::from(vec!["VerifiableCredential", "OpenBadgeCredential"]))
@@ -87,15 +86,12 @@ fn skill_assertion_credential_engine() {
         .email("registrar@1edtech.edu".to_string())
     })
     .issuance_date("2022-07-01T00:00:00Z")
-    .credential_schema({
-        let schema: CredentialSchema =CredentialSchemaBuilder::default()
+    .credential_schema(
+        vec![CredentialSchemaBuilder::default()
         .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_achievementcredential_schema.json")
         .type_("1EdTechJsonSchemaValidator2019")
         .try_into()
-        .unwrap();
-
-        AchievementCredentialSchema::from(vec![schema])
-    })
+        .unwrap()])
     .try_into()
     .unwrap();
 

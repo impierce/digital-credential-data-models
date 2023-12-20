@@ -239,23 +239,29 @@ impl EndorsementCredentialBuilder {
             .map_err(|e| format!("error converting supplied value for awarded_date: {}", e));
         self
     }
-    pub fn context<T>(mut self, value: T) -> Self
+    pub fn context<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<general::Context>>,
+        T: std::convert::TryInto<general::Context>,
         T::Error: std::fmt::Display,
     {
         self.context = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for context: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for context: {}", e))
+            })
+            .collect();
         self
     }
     pub fn credential_schema<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<EndorsementCredentialSchema>>,
+        T: std::convert::TryInto<EndorsementCredentialSchema>,
         T::Error: std::fmt::Display,
     {
         self.credential_schema = value
             .try_into()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for credential_schema: {}", e));
         self
     }
@@ -342,11 +348,12 @@ impl EndorsementCredentialBuilder {
     }
     pub fn proof<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<EndorsementCredentialProof>>,
+        T: std::convert::TryInto<EndorsementCredentialProof>,
         T::Error: std::fmt::Display,
     {
         self.proof = value
             .try_into()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for proof: {}", e));
         self
     }
