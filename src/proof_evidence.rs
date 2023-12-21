@@ -265,11 +265,12 @@ impl ProofBuilder {
     }
     pub fn created<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<chrono::DateTime<chrono::offset::Utc>>>,
-        T::Error: std::fmt::Display,
+        T: AsRef<str>,
     {
         self.created = value
-            .try_into()
+            .as_ref()
+            .parse::<chrono::DateTime<chrono::offset::Utc>>()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for created: {}", e));
         self
     }

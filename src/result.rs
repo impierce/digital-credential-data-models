@@ -461,14 +461,19 @@ impl ResultDescriptionBuilder {
             .collect();
         self
     }
-    pub fn allowed_value<T>(mut self, value: T) -> Self
+    pub fn allowed_value<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<String>>,
+        T: std::convert::TryInto<String>,
         T::Error: std::fmt::Display,
     {
         self.allowed_value = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for allowed_value: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for allowed_value: {}", e))
+            })
+            .collect();
         self
     }
     pub fn id<T>(mut self, value: T) -> Self
@@ -521,14 +526,19 @@ impl ResultDescriptionBuilder {
             .map_err(|e| format!("error converting supplied value for result_description_type: {}", e));
         self
     }
-    pub fn rubric_criterion_level<T>(mut self, value: T) -> Self
+    pub fn rubric_criterion_level<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<RubricCriterionLevel>>,
+        T: std::convert::TryInto<RubricCriterionLevel>,
         T::Error: std::fmt::Display,
     {
         self.rubric_criterion_level = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for rubric_criterion_level: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for rubric_criterion_level: {}", e))
+            })
+            .collect();
         self
     }
     pub fn type_<T>(mut self, value: T) -> Self

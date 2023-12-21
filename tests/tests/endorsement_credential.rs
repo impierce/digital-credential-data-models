@@ -1,9 +1,7 @@
 use crate::tests::assert_eq_json_value;
 use openbadges::{
-    achievement_credential::{CredentialSchema, CredentialSchemaBuilder, CredentialStatusBuilder},
-    endorsement::{
-        EndorsementCredential, EndorsementCredentialBuilder, EndorsementCredentialSchema, EndorsementSubjectBuilder,
-    },
+    achievement_credential::{CredentialSchemaBuilder, CredentialStatusBuilder},
+    endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubjectBuilder},
     general::RefreshServiceBuilder,
     profile::ProfileBuilder,
 };
@@ -19,9 +17,9 @@ fn endorsement_credential() {
 
     let endorsement_credential: EndorsementCredential = EndorsementCredentialBuilder::default()
         .context(vec![
-            "https://www.w3.org/2018/credentials/v1".into(),
-            "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json".into(),
-            "https://purl.imsglobal.org/spec/ob/v3p0/extensions.json".into(),
+            "https://www.w3.org/2018/credentials/v1",
+            "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json",
+            "https://purl.imsglobal.org/spec/ob/v3p0/extensions.json",
         ])
         .id("http://1edtech.edu/endorsementcredential/3732")
         .type_(vec!["VerifiableCredential", "EndorsementCredential"])
@@ -32,37 +30,26 @@ fn endorsement_credential() {
                 .type_("Profile")
                 .name("State Department of Education".to_string()),
         )
-        .issuance_date(
-            "2010-01-01T00:00:00Z"
-                .parse::<chrono::DateTime<chrono::offset::Utc>>()
-                .unwrap(),
-        )
-        .expiration_date(
-            "2030-01-01T00:00:00Z"
-                .parse::<chrono::DateTime<chrono::offset::Utc>>()
-                .unwrap(),
-        )
+        .issuance_date("2010-01-01T00:00:00Z")
+        .expiration_date("2030-01-01T00:00:00Z")
         .credential_subject(
             EndorsementSubjectBuilder::default()
                 .id("https://1edtech.edu/issuers/565049")
                 .type_("EndorsementSubject")
                 .endorsement_comment("1EdTech University is in good standing".to_string()),
         )
-        .credential_schema({
-            let schema1: CredentialSchema = CredentialSchemaBuilder::default()
+        .credential_schema(vec![
+            CredentialSchemaBuilder::default()
                 .id("https://purl.imsglobal.org/spec/ob/v3p0/schema/json/ob_v3p0_endorsementcredential_schema.json")
                 .type_("1EdTechJsonSchemaValidator2019")
                 .try_into()
-                .unwrap();
-
-            let schema2: CredentialSchema = CredentialSchemaBuilder::default()
+                .unwrap(),
+            CredentialSchemaBuilder::default()
                 .id("https://state.gov/schema/endorsementcredential.json")
                 .type_("1EdTechJsonSchemaValidator2019")
                 .try_into()
-                .unwrap();
-
-            EndorsementCredentialSchema::from(vec![schema1, schema2])
-        })
+                .unwrap(),
+        ])
         .credential_status(
             CredentialStatusBuilder::default()
                 .id("https://state.gov/credentials/3732/revocations")

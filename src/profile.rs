@@ -365,14 +365,19 @@ impl ProfileBuilder {
             .collect();
         self
     }
-    pub fn endorsement_jwt<T>(mut self, value: T) -> Self
+    pub fn endorsement_jwt<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<ProfileEndorsementJwtItem>>,
+        T: std::convert::TryInto<ProfileEndorsementJwtItem>,
         T::Error: std::fmt::Display,
     {
         self.endorsement_jwt = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e))
+            })
+            .collect();
         self
     }
     pub fn family_name<T>(mut self, value: T) -> Self
@@ -447,11 +452,12 @@ impl ProfileBuilder {
     }
     pub fn name<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<String>>,
+        T: std::convert::TryInto<String>,
         T::Error: std::fmt::Display,
     {
         self.name = value
             .try_into()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for name: {}", e));
         self
     }

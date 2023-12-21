@@ -617,14 +617,19 @@ impl AchievementBuilder {
             .collect();
         self
     }
-    pub fn endorsement_jwt<T>(mut self, value: T) -> Self
+    pub fn endorsement_jwt<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<AchievementEndorsementJwtItem>>,
+        T: std::convert::TryInto<AchievementEndorsementJwtItem>,
         T::Error: std::fmt::Display,
     {
         self.endorsement_jwt = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e))
+            })
+            .collect();
         self
     }
     pub fn field_of_study<T>(mut self, value: T) -> Self
@@ -702,24 +707,34 @@ impl AchievementBuilder {
             .collect();
         self
     }
-    pub fn related<T>(mut self, value: T) -> Self
+    pub fn related<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<related::Related>>,
+        T: std::convert::TryInto<related::Related>,
         T::Error: std::fmt::Display,
     {
         self.related = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for related: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for related: {}", e))
+            })
+            .collect();
         self
     }
-    pub fn result_description<T>(mut self, value: T) -> Self
+    pub fn result_description<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<ResultDescription>>,
+        T: std::convert::TryInto<ResultDescription>,
         T::Error: std::fmt::Display,
     {
         self.result_description = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for result_description: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for result_description: {}", e))
+            })
+            .collect();
         self
     }
     pub fn specialization<T>(mut self, value: T) -> Self
@@ -732,14 +747,19 @@ impl AchievementBuilder {
             .map_err(|e| format!("error converting supplied value for specialization: {}", e));
         self
     }
-    pub fn tag<T>(mut self, value: T) -> Self
+    pub fn tag<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<String>>,
+        T: std::convert::TryInto<String>,
         T::Error: std::fmt::Display,
     {
         self.tag = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for tag: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for tag: {}", e))
+            })
+            .collect();
         self
     }
     pub fn type_<T>(mut self, value: T) -> Self

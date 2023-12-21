@@ -317,31 +317,38 @@ impl Default for AchievementCredentialBuilder {
 impl AchievementCredentialBuilder {
     pub fn awarded_date<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<chrono::DateTime<chrono::offset::Utc>>>,
-        T::Error: std::fmt::Display,
+        T: AsRef<str>,
     {
         self.awarded_date = value
-            .try_into()
+            .as_ref()
+            .parse::<chrono::DateTime<chrono::offset::Utc>>()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for awarded_date: {}", e));
         self
     }
-    pub fn context<T>(mut self, value: T) -> Self
+    pub fn context<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<general::Context>>,
+        T: std::convert::TryInto<general::Context>,
         T::Error: std::fmt::Display,
     {
         self.context = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for context: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for context: {}", e))
+            })
+            .collect();
         self
     }
     pub fn credential_schema<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<AchievementCredentialSchema>>,
+        T: std::convert::TryInto<AchievementCredentialSchema>,
         T::Error: std::fmt::Display,
     {
         self.credential_schema = value
             .try_into()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for credential_schema: {}", e));
         self
     }
@@ -390,14 +397,19 @@ impl AchievementCredentialBuilder {
             .collect();
         self
     }
-    pub fn endorsement_jwt<T>(mut self, value: T) -> Self
+    pub fn endorsement_jwt<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<Vec<AchievementCredentialEndorsementJwtItem>>,
+        T: std::convert::TryInto<AchievementCredentialEndorsementJwtItem>,
         T::Error: std::fmt::Display,
     {
         self.endorsement_jwt = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e));
+            .into_iter()
+            .map(|value| {
+                value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for endorsement_jwt: {}", e))
+            })
+            .collect();
         self
     }
     pub fn evidence<T>(mut self, value: Vec<T>) -> Self
@@ -417,11 +429,12 @@ impl AchievementCredentialBuilder {
     }
     pub fn expiration_date<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<Option<chrono::DateTime<chrono::offset::Utc>>>,
-        T::Error: std::fmt::Display,
+        T: AsRef<str>,
     {
         self.expiration_date = value
-            .try_into()
+            .as_ref()
+            .parse::<chrono::DateTime<chrono::offset::Utc>>()
+            .map(Some)
             .map_err(|e| format!("error converting supplied value for expiration_date: {}", e));
         self
     }
@@ -447,12 +460,13 @@ impl AchievementCredentialBuilder {
     }
     pub fn issuance_date<T>(mut self, value: T) -> Self
     where
-        T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-        T::Error: std::fmt::Display,
+        T: AsRef<str>,
     {
         self.issuance_date = value
-            .try_into()
-            .map_err(|e| format!("error converting supplied value for issuance_date: {}", e));
+            .as_ref()
+            .parse::<chrono::DateTime<chrono::offset::Utc>>()
+            .map_err(|e| format!("error converting supplied value for awarded_date: {}", e));
+
         self
     }
     pub fn issuer<T>(mut self, value: T) -> Self
