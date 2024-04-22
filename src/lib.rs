@@ -1,11 +1,3 @@
-pub mod achievement;
-pub mod achievement_credential;
-pub mod achievement_subject;
-pub mod alignment;
-pub mod endorsement;
-pub mod general;
-pub mod identity;
-pub mod profile;
-pub mod proof_evidence;
-pub mod related;
-pub mod result;
+pub mod obv3 {
+    pub use types_ob_v3::prelude::*;
+}

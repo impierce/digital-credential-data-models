@@ -1,3 +1,8 @@
+# Credential data models
+This repository will contain the following data models:
+- Open Badges (v3)
+- Elm (v3.2)
+
 # OpenBadges
 Rust library for the Open Badges data model
 https://www.imsglobal.org/spec/ob/v3p0
