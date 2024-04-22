@@ -1,24 +1,6 @@
 use crate::tests::assert_eq_json_value;
-use openbadges::{
-    achievement::{AchievementBuilder, AchievementType, CriteriaBuilder},
-    achievement_credential::{
-        AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType, CredentialSchemaBuilder,
-        CredentialStatusBuilder,
-    },
-    achievement_subject::AchievementSubjectBuilder,
-    alignment::{AlignmentBuilder, AlignmentTargetType},
-    endorsement::{
-        EndorsementCredentialBuilder, EndorsementCredentialProof, EndorsementCredentialType, EndorsementSubjectBuilder,
-    },
-    general::{ImageBuilder, RefreshServiceBuilder},
-    identity::{IdentifierEntryBuilder, IdentifierType, IdentityObjectBuilder, IdentityObjectType},
-    profile::{AddressBuilder, GeoCoordinatesBuilder, ProfileBuilder},
-    proof_evidence::{EvidenceBuilder, Proof, ProofBuilder},
-    result::{
-        ResultBuilder, ResultDescriptionBuilder, ResultDescriptionType, ResultStatus, RubricCriterionLevelBuilder,
-    },
-};
 use std::{fs::File, str::FromStr};
+use types_ob_v3::prelude::*; 
 
 #[test]
 fn full_achievement_credential() {

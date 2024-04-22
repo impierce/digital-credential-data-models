@@ -1,10 +1,5 @@
 use crate::tests::assert_eq_json_value;
-use openbadges::{
-    achievement_credential::{CredentialSchemaBuilder, CredentialStatusBuilder},
-    endorsement::{EndorsementCredential, EndorsementCredentialBuilder, EndorsementSubjectBuilder},
-    general::RefreshServiceBuilder,
-    profile::ProfileBuilder,
-};
+use types_ob_v3::prelude::*; 
 use std::fs::File;
 
 #[test]

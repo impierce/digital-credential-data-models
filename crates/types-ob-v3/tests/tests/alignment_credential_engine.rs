@@ -1,11 +1,5 @@
 use crate::tests::assert_eq_json_value;
-use openbadges::{
-    achievement::{AchievementBuilder, CriteriaBuilder},
-    achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType},
-    achievement_subject::AchievementSubjectBuilder,
-    alignment::{AlignmentBuilder, AlignmentTargetType},
-    profile::ProfileBuilder,
-};
+use types_ob_v3::prelude::*; 
 use std::{fs::File, str::FromStr};
 
 #[test]
