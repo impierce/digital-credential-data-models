@@ -16,3 +16,4 @@ chrono = { version = "0.4", features = ["serde"] }
 [dependencies]
 types-elm-v3 = { path = "crates/types-elm-v3" }
 types-ob-v3 = { path = "crates/types-ob-v3" }
+types-common = { path = "crates/types-common" }

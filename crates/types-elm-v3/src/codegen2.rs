@@ -1,4 +1,6 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use types_common::{ObjectOrVector, BoxObjectOrVector};
 /// Error types.
 pub mod error {
     /// Error from a TryFrom or FromStr implementation.
@@ -147,17 +149,17 @@ pub struct AccreditationType {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub limit_credential_type: Option<ManyConceptType>,
+    pub limit_credential_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "limitEQFLevel", default, skip_serializing_if = "Option::is_none")]
-    pub limit_eqf_level: Option<ManyConceptType>,
+    pub limit_eqf_level: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "limitField", default, skip_serializing_if = "Option::is_none")]
-    pub limit_field: Option<ManyConceptType>,
+    pub limit_field: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "limitJurisdiction",
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub limit_jurisdiction: Option<ManyConceptType>,
+    pub limit_jurisdiction: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "limitQualification",
         default,
@@ -341,7 +343,7 @@ pub struct AgentType {
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(rename = "groupMemberOf", default, skip_serializing_if = "Option::is_none")]
-    pub group_member_of: Option<ManyGroupType>,
+    pub group_member_of: Option<ObjectOrVector<Group>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1419,7 +1421,7 @@ pub struct DisplayParameterType {
     pub id: Option<GenericIdType>,
     #[serde(rename = "individualDisplay")]
     pub individual_display: ManyIndividualDisplayType,
-    pub language: ManyConceptType,
+    pub language: ObjectOrVector<ConceptType>,
     #[serde(rename = "primaryLanguage")]
     pub primary_language: ConceptType,
     #[serde(rename = "summaryDisplay", default, skip_serializing_if = "Option::is_none")]
@@ -1711,10 +1713,10 @@ pub struct EuropassEdcCredential {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub credential_profiles: Option<ManyConceptType>,
+    pub credential_profiles: Option<ObjectOrVector<ConceptType>>,
     ///One or more schemas that validate the Verifiable Credential.
     #[serde(rename = "credentialSchema")]
-    pub credential_schema: EuropassEdcCredentialCredentialSchema,
+    pub credential_schema: ObjectOrVector<CredentialSchema>,
     #[serde(
         rename = "credentialStatus",
         default,
@@ -1730,28 +1732,29 @@ pub struct EuropassEdcCredential {
     )]
     pub display_parameter: Option<DisplayParameterType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub evidence: Option<EuropassEdcCredentialEvidence>,
+    pub evidence: Option<ObjectOrVector<Evidence>>,
     ///Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
     pub id: String,
     ///DID of the credential issuer
     pub issuer: EuropassEdcCredentialIssuer,
     #[serde(rename = "termsOfUse", default, skip_serializing_if = "Option::is_none")]
-    pub terms_of_use: Option<EuropassEdcCredentialTermsOfUse>,
+    pub terms_of_use: Option<ObjectOrVector<TermsOfUse>>,
     ///Full type chain, used to identify the credential base types
     #[serde(rename = "type")]
     pub type_: Vec<String>,
     ///Defines the earliest point when the credential becomes valid.
     #[serde(rename = "validFrom")]
-    pub valid_from: chrono::DateTime<chrono::offset::Utc>,
+    pub valid_from: DateTime<Utc>,
     ///Defines the latest point when the credential ceases to be valid.
     #[serde(rename = "validUntil", default, skip_serializing_if = "Option::is_none")]
-    pub valid_until: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub valid_until: Option<DateTime<Utc>>,
 }
 impl From<&EuropassEdcCredential> for EuropassEdcCredential {
     fn from(value: &EuropassEdcCredential) -> Self {
         value.clone()
     }
 }
+
 impl EuropassEdcCredential {
     pub fn builder() -> builder::EuropassEdcCredential {
         Default::default()
@@ -1784,67 +1787,28 @@ impl EuropassEdcCredential {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EuropassEdcCredentialContext {
-    Variant0(serde_json::Value),
-    Variant1(Vec<String>),
+    Object(serde_json::Value),
+    Vector(Vec<String>),
 }
+
 impl From<&EuropassEdcCredentialContext> for EuropassEdcCredentialContext {
     fn from(value: &EuropassEdcCredentialContext) -> Self {
         value.clone()
     }
 }
+
 impl From<serde_json::Value> for EuropassEdcCredentialContext {
     fn from(value: serde_json::Value) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
+
 impl From<Vec<String>> for EuropassEdcCredentialContext {
     fn from(value: Vec<String>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
-///One or more schemas that validate the Verifiable Credential.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "One or more schemas that validate the Verifiable Credential.",
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/credentialSchema"
-///    },
-///    {
-///      "type": "array",
-///      "items": {
-///        "$ref": "#/$defs/credentialSchema"
-///      }
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum EuropassEdcCredentialCredentialSchema {
-    Variant0(CredentialSchema),
-    Variant1(Vec<CredentialSchema>),
-}
-impl From<&EuropassEdcCredentialCredentialSchema>
-for EuropassEdcCredentialCredentialSchema {
-    fn from(value: &EuropassEdcCredentialCredentialSchema) -> Self {
-        value.clone()
-    }
-}
-impl From<CredentialSchema> for EuropassEdcCredentialCredentialSchema {
-    fn from(value: CredentialSchema) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl From<Vec<CredentialSchema>> for EuropassEdcCredentialCredentialSchema {
-    fn from(value: Vec<CredentialSchema>) -> Self {
-        Self::Variant1(value)
-    }
-}
+
 ///Defines suspension and/or revocation details for the issued credential. Further redefined by the type extension
 ///
 /// <details><summary>JSON schema</summary>
@@ -1972,7 +1936,7 @@ pub enum EuropassEdcCredentialCredentialSubject {
             default,
             skip_serializing_if = "Option::is_none"
         )]
-        citizenship_country: Option<ManyConceptType>,
+        citizenship_country: Option<ObjectOrVector<ConceptType>>,
         #[serde(
             rename = "contactPoint",
             default,
@@ -2060,7 +2024,7 @@ pub enum EuropassEdcCredentialCredentialSubject {
         )]
         date_modified: Option<DateTimeType>,
         #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-        dc_type: Option<ManyConceptType>,
+        dc_type: Option<ObjectOrVector<ConceptType>>,
         #[serde(
             rename = "eIDASIdentifier",
             default,
@@ -2122,47 +2086,7 @@ for EuropassEdcCredentialCredentialSubject {
         value.clone()
     }
 }
-///EuropassEdcCredentialEvidence
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/evidence"
-///    },
-///    {
-///      "type": "array",
-///      "items": {
-///        "$ref": "#/$defs/evidence"
-///      }
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum EuropassEdcCredentialEvidence {
-    Variant0(Evidence),
-    Variant1(Vec<Evidence>),
-}
-impl From<&EuropassEdcCredentialEvidence> for EuropassEdcCredentialEvidence {
-    fn from(value: &EuropassEdcCredentialEvidence) -> Self {
-        value.clone()
-    }
-}
-impl From<Evidence> for EuropassEdcCredentialEvidence {
-    fn from(value: Evidence) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl From<Vec<Evidence>> for EuropassEdcCredentialEvidence {
-    fn from(value: Vec<Evidence>) -> Self {
-        Self::Variant1(value)
-    }
-}
+
 ///DID of the credential issuer
 ///
 /// <details><summary>JSON schema</summary>
@@ -2195,8 +2119,8 @@ impl From<Vec<Evidence>> for EuropassEdcCredentialEvidence {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EuropassEdcCredentialIssuer {
-    Variant0(String),
-    Variant1 {
+    String(String),
+    Object {
         ///DID of the credential issuer
         id: String,
     },
@@ -2206,47 +2130,7 @@ impl From<&EuropassEdcCredentialIssuer> for EuropassEdcCredentialIssuer {
         value.clone()
     }
 }
-///EuropassEdcCredentialTermsOfUse
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/termsOfUse"
-///    },
-///    {
-///      "type": "array",
-///      "items": {
-///        "$ref": "#/$defs/termsOfUse"
-///      }
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum EuropassEdcCredentialTermsOfUse {
-    Variant0(TermsOfUse),
-    Variant1(Vec<TermsOfUse>),
-}
-impl From<&EuropassEdcCredentialTermsOfUse> for EuropassEdcCredentialTermsOfUse {
-    fn from(value: &EuropassEdcCredentialTermsOfUse) -> Self {
-        value.clone()
-    }
-}
-impl From<TermsOfUse> for EuropassEdcCredentialTermsOfUse {
-    fn from(value: TermsOfUse) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl From<Vec<TermsOfUse>> for EuropassEdcCredentialTermsOfUse {
-    fn from(value: Vec<TermsOfUse>) -> Self {
-        Self::Variant1(value)
-    }
-}
+
 ///EuropeanDigitalCredentialType
 ///
 /// <details><summary>JSON schema</summary>
@@ -2333,7 +2217,7 @@ pub struct EuropeanDigitalCredentialType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attachment: Option<ManyMediaObjectType>,
     #[serde(rename = "credentialProfiles")]
-    pub credential_profiles: ManyConceptType,
+    pub credential_profiles: ObjectOrVector<ConceptType>,
     #[serde(rename = "credentialSchema")]
     pub credential_schema: ManyShaclValidator2017Type,
     #[serde(
@@ -2486,7 +2370,7 @@ pub struct Evidence {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[serde(rename = "type")]
-    pub type_: EvidenceType,
+    pub ev_type: EvidenceType,
 }
 impl From<&Evidence> for Evidence {
     fn from(value: &Evidence) -> Self {
@@ -2835,7 +2719,7 @@ impl GrantType {
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct GroupType {
+pub struct Group {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
     pub additional_note: Option<ManyNoteType>,
     #[serde(rename = "altLabel", default, skip_serializing_if = "Option::is_none")]
@@ -2853,12 +2737,12 @@ pub struct GroupType {
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
 }
-impl From<&GroupType> for GroupType {
-    fn from(value: &GroupType) -> Self {
+impl From<&Group> for Group {
+    fn from(value: &Group) -> Self {
         value.clone()
     }
 }
-impl GroupType {
+impl Group {
     pub fn builder() -> builder::GroupType {
         Default::default()
     }
@@ -2999,7 +2883,7 @@ pub struct IdentifierType {
     #[serde(rename = "dateIssued", default, skip_serializing_if = "Option::is_none")]
     pub date_issued: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub notation: LiteralType,
@@ -3474,17 +3358,17 @@ pub struct LearningAchievementSpecificationType {
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(rename = "educationLevel", default, skip_serializing_if = "Option::is_none")]
-    pub education_level: Option<ManyConceptType>,
+    pub education_level: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "educationSubject",
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub education_subject: Option<ManyConceptType>,
+    pub education_subject: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "entitlesTo", default, skip_serializing_if = "Option::is_none")]
     pub entitles_to: Option<ManyLearningEntitlementSpecificationType>,
     #[serde(
@@ -3494,11 +3378,10 @@ pub struct LearningAchievementSpecificationType {
     )]
     pub entry_requirement: Option<NoteType>,
     #[serde(rename = "generalisationOf", default)]
-    pub generalisation_of: Box<
-        Option<ManyLearningAchievementSpecificationOrQualificationType>,
-    >,
+    pub generalisation_of: 
+        Option<Box<ManyLearningAchievementSpecificationOrQualificationType>>,
     #[serde(rename = "hasPart", default)]
-    pub has_part: Box<Option<ManyLearningAchievementSpecificationOrQualificationType>>,
+    pub has_part: Option<Box<ManyLearningAchievementSpecificationOrQualificationType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub homepage: Option<ManyWebResourceType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3506,11 +3389,11 @@ pub struct LearningAchievementSpecificationType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<IdentifierOrLegalIdentifierType>,
     #[serde(rename = "influencedBy", default)]
-    pub influenced_by: Box<Option<ManyLearningActivitySpecificationType>>,
+    pub influenced_by: Option<Box<ManyLearningActivitySpecificationType>>,
     #[serde(rename = "isPartOf", default)]
-    pub is_part_of: Box<Option<ManyLearningAchievementSpecificationOrQualificationType>>,
+    pub is_part_of: Option<Box<ManyLearningAchievementSpecificationOrQualificationType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub language: Option<ManyConceptType>,
+    pub language: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "learningOutcome",
         default,
@@ -3536,7 +3419,7 @@ pub struct LearningAchievementSpecificationType {
     )]
     pub maximum_duration: Option<DurationType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mode: Option<ManyConceptType>,
+    pub mode: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "provenBy", default)]
     pub proven_by: Box<Option<ManyLearningAssessmentSpecificationType>>,
     #[serde(rename = "specialisationOf", default)]
@@ -3552,9 +3435,9 @@ pub struct LearningAchievementSpecificationType {
     )]
     pub supplementary_document: Option<ManyWebResourceType>,
     #[serde(rename = "targetGroup", default, skip_serializing_if = "Option::is_none")]
-    pub target_group: Option<ManyConceptType>,
+    pub target_group: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "thematicArea", default, skip_serializing_if = "Option::is_none")]
-    pub thematic_area: Option<ManyConceptType>,
+    pub thematic_area: Option<ObjectOrVector<ConceptType>>,
     pub title: ManyLangStringType,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
@@ -3654,7 +3537,7 @@ pub struct LearningAchievementType {
     #[serde(rename = "creditReceived", default, skip_serializing_if = "Option::is_none")]
     pub credit_received: Option<ManyCreditPointType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(rename = "entitlesTo", default, skip_serializing_if = "Option::is_none")]
@@ -3795,7 +3678,7 @@ pub struct LearningActivitySpecificationType {
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(
@@ -3817,9 +3700,9 @@ pub struct LearningActivitySpecificationType {
     #[serde(rename = "isPartOf", default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<ManyLearningAchievementSpecificationType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub language: Option<ManyConceptType>,
+    pub language: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mode: Option<ManyConceptType>,
+    pub mode: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "specialisationOf",
         default,
@@ -3936,7 +3819,7 @@ pub struct LearningActivityType {
     #[serde(rename = "awardedBy")]
     pub awarded_by: Box<AwardingProcessType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(rename = "directedBy", default, skip_serializing_if = "Option::is_none")]
@@ -4100,9 +3983,9 @@ pub struct LearningAssessmentSpecificationType {
     #[serde(rename = "isPartOf", default)]
     pub is_part_of: Box<Option<ManyLearningAssessmentSpecificationType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub language: Option<ManyConceptType>,
+    pub language: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mode: Option<ManyConceptType>,
+    pub mode: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proves: Option<ManyLearningAchievementSpecificationOrQualificationType>,
     #[serde(rename = "specialisationOf", default)]
@@ -4222,7 +4105,7 @@ pub struct LearningAssessmentType {
     #[serde(rename = "dateIssued", default, skip_serializing_if = "Option::is_none")]
     pub date_issued: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     pub grade: NoteType,
@@ -4401,19 +4284,19 @@ pub struct LearningEntitlementSpecificationType {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub limit_jurisdiction: Option<ManyConceptType>,
+    pub limit_jurisdiction: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "limitNationalOccupation",
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub limit_national_occupation: Option<ManyConceptType>,
+    pub limit_national_occupation: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "limitOccupation",
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub limit_occupation: Option<ManyConceptType>,
+    pub limit_occupation: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "limitOrganisation", default)]
     pub limit_organisation: Box<Option<ManyOrganisationType>>,
     #[serde(rename = "specialisationOf", default)]
@@ -4513,7 +4396,7 @@ pub struct LearningEntitlementType {
     #[serde(rename = "dateIssued", default, skip_serializing_if = "Option::is_none")]
     pub date_issued: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(rename = "entitledBy", default)]
@@ -4675,7 +4558,7 @@ pub struct LearningOpportunityType {
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "defaultLanguage",
         default,
@@ -4727,7 +4610,7 @@ pub struct LearningOpportunityType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub location: Option<ManyLocationType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mode: Option<ManyConceptType>,
+    pub mode: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "priceDetail", default, skip_serializing_if = "Option::is_none")]
     pub price_detail: Option<ManyPriceDetailType>,
     #[serde(rename = "providedBy", default, skip_serializing_if = "Option::is_none")]
@@ -4821,9 +4704,9 @@ pub struct LearningOutcomeType {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub related_esco_skill: Option<ManyConceptType>,
+    pub related_esco_skill: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "relatedSkill", default, skip_serializing_if = "Option::is_none")]
-    pub related_skill: Option<ManyConceptType>,
+    pub related_skill: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "reusabilityLevel",
         default,
@@ -4902,7 +4785,7 @@ pub struct LegalIdentifierType {
     #[serde(rename = "dateIssued", default, skip_serializing_if = "Option::is_none")]
     pub date_issued: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub notation: LiteralType,
@@ -5045,7 +4928,7 @@ pub struct LocationType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<IdentifierOrLegalIdentifierType>,
     #[serde(rename = "spatialCode", default, skip_serializing_if = "Option::is_none")]
-    pub spatial_code: Option<ManyConceptType>,
+    pub spatial_code: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
 }
@@ -5480,8 +5363,8 @@ impl From<Vec<ClaimTypeNodeType>> for ManyClaimTypeNodeType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyConceptType {
-    Variant0(ConceptType),
-    Variant1(Vec<ConceptType>),
+    Object(ConceptType),
+    Vector(Vec<ConceptType>),
 }
 impl From<&ManyConceptType> for ManyConceptType {
     fn from(value: &ManyConceptType) -> Self {
@@ -5490,12 +5373,12 @@ impl From<&ManyConceptType> for ManyConceptType {
 }
 impl From<ConceptType> for ManyConceptType {
     fn from(value: ConceptType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<ConceptType>> for ManyConceptType {
     fn from(value: Vec<ConceptType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyContactPointType
@@ -5521,8 +5404,8 @@ impl From<Vec<ConceptType>> for ManyConceptType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyContactPointType {
-    Variant0(ContactPointType),
-    Variant1(Vec<ContactPointType>),
+    Object(ContactPointType),
+    Vector(Vec<ContactPointType>),
 }
 impl From<&ManyContactPointType> for ManyContactPointType {
     fn from(value: &ManyContactPointType) -> Self {
@@ -5531,12 +5414,12 @@ impl From<&ManyContactPointType> for ManyContactPointType {
 }
 impl From<ContactPointType> for ManyContactPointType {
     fn from(value: ContactPointType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<ContactPointType>> for ManyContactPointType {
     fn from(value: Vec<ContactPointType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyCredentialStatusType
@@ -5562,8 +5445,8 @@ impl From<Vec<ContactPointType>> for ManyContactPointType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyCredentialStatusType {
-    Variant0(CredentialStatusType),
-    Variant1(Vec<CredentialStatusType>),
+    Object(CredentialStatusType),
+    Vector(Vec<CredentialStatusType>),
 }
 impl From<&ManyCredentialStatusType> for ManyCredentialStatusType {
     fn from(value: &ManyCredentialStatusType) -> Self {
@@ -5572,12 +5455,12 @@ impl From<&ManyCredentialStatusType> for ManyCredentialStatusType {
 }
 impl From<CredentialStatusType> for ManyCredentialStatusType {
     fn from(value: CredentialStatusType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<CredentialStatusType>> for ManyCredentialStatusType {
     fn from(value: Vec<CredentialStatusType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyCreditPointType
@@ -5603,8 +5486,8 @@ impl From<Vec<CredentialStatusType>> for ManyCredentialStatusType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyCreditPointType {
-    Variant0(CreditPointType),
-    Variant1(Vec<CreditPointType>),
+    Object(CreditPointType),
+    Vector(Vec<CreditPointType>),
 }
 impl From<&ManyCreditPointType> for ManyCreditPointType {
     fn from(value: &ManyCreditPointType) -> Self {
@@ -5613,12 +5496,12 @@ impl From<&ManyCreditPointType> for ManyCreditPointType {
 }
 impl From<CreditPointType> for ManyCreditPointType {
     fn from(value: CreditPointType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<CreditPointType>> for ManyCreditPointType {
     fn from(value: Vec<CreditPointType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyDateTimeType
@@ -5644,8 +5527,8 @@ impl From<Vec<CreditPointType>> for ManyCreditPointType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyDateTimeType {
-    Variant0(DateTimeType),
-    Variant1(Vec<DateTimeType>),
+    Object(DateTimeType),
+    Vector(Vec<DateTimeType>),
 }
 impl From<&ManyDateTimeType> for ManyDateTimeType {
     fn from(value: &ManyDateTimeType) -> Self {
@@ -5654,12 +5537,12 @@ impl From<&ManyDateTimeType> for ManyDateTimeType {
 }
 impl From<DateTimeType> for ManyDateTimeType {
     fn from(value: DateTimeType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<DateTimeType>> for ManyDateTimeType {
     fn from(value: Vec<DateTimeType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyDisplayDetailType
@@ -5685,8 +5568,8 @@ impl From<Vec<DateTimeType>> for ManyDateTimeType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyDisplayDetailType {
-    Variant0(DisplayDetailType),
-    Variant1(Vec<DisplayDetailType>),
+    Object(DisplayDetailType),
+    Vector(Vec<DisplayDetailType>),
 }
 impl From<&ManyDisplayDetailType> for ManyDisplayDetailType {
     fn from(value: &ManyDisplayDetailType) -> Self {
@@ -5695,12 +5578,12 @@ impl From<&ManyDisplayDetailType> for ManyDisplayDetailType {
 }
 impl From<DisplayDetailType> for ManyDisplayDetailType {
     fn from(value: DisplayDetailType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<DisplayDetailType>> for ManyDisplayDetailType {
     fn from(value: Vec<DisplayDetailType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyDisplayParameterType
@@ -5726,8 +5609,8 @@ impl From<Vec<DisplayDetailType>> for ManyDisplayDetailType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyDisplayParameterType {
-    Variant0(DisplayParameterType),
-    Variant1(Vec<DisplayParameterType>),
+    Object(DisplayParameterType),
+    Vector(Vec<DisplayParameterType>),
 }
 impl From<&ManyDisplayParameterType> for ManyDisplayParameterType {
     fn from(value: &ManyDisplayParameterType) -> Self {
@@ -5736,12 +5619,12 @@ impl From<&ManyDisplayParameterType> for ManyDisplayParameterType {
 }
 impl From<DisplayParameterType> for ManyDisplayParameterType {
     fn from(value: DisplayParameterType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<DisplayParameterType>> for ManyDisplayParameterType {
     fn from(value: Vec<DisplayParameterType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyEuropeanDigitalCredentialType
@@ -5767,8 +5650,8 @@ impl From<Vec<DisplayParameterType>> for ManyDisplayParameterType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyEuropeanDigitalCredentialType {
-    Variant0(EuropeanDigitalCredentialType),
-    Variant1(Vec<EuropeanDigitalCredentialType>),
+    Object(EuropeanDigitalCredentialType),
+    Vector(Vec<EuropeanDigitalCredentialType>),
 }
 impl From<&ManyEuropeanDigitalCredentialType> for ManyEuropeanDigitalCredentialType {
     fn from(value: &ManyEuropeanDigitalCredentialType) -> Self {
@@ -5777,12 +5660,12 @@ impl From<&ManyEuropeanDigitalCredentialType> for ManyEuropeanDigitalCredentialT
 }
 impl From<EuropeanDigitalCredentialType> for ManyEuropeanDigitalCredentialType {
     fn from(value: EuropeanDigitalCredentialType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<EuropeanDigitalCredentialType>> for ManyEuropeanDigitalCredentialType {
     fn from(value: Vec<EuropeanDigitalCredentialType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyEuropeanDigitalPresentationType
@@ -5808,8 +5691,8 @@ impl From<Vec<EuropeanDigitalCredentialType>> for ManyEuropeanDigitalCredentialT
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyEuropeanDigitalPresentationType {
-    Variant0(EuropeanDigitalPresentationType),
-    Variant1(Vec<EuropeanDigitalPresentationType>),
+    Object(EuropeanDigitalPresentationType),
+    Vector(Vec<EuropeanDigitalPresentationType>),
 }
 impl From<&ManyEuropeanDigitalPresentationType> for ManyEuropeanDigitalPresentationType {
     fn from(value: &ManyEuropeanDigitalPresentationType) -> Self {
@@ -5818,12 +5701,12 @@ impl From<&ManyEuropeanDigitalPresentationType> for ManyEuropeanDigitalPresentat
 }
 impl From<EuropeanDigitalPresentationType> for ManyEuropeanDigitalPresentationType {
     fn from(value: EuropeanDigitalPresentationType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<EuropeanDigitalPresentationType>> for ManyEuropeanDigitalPresentationType {
     fn from(value: Vec<EuropeanDigitalPresentationType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyEvidenceType
@@ -5849,8 +5732,8 @@ impl From<Vec<EuropeanDigitalPresentationType>> for ManyEuropeanDigitalPresentat
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyEvidenceType {
-    Variant0(EvidenceType),
-    Variant1(Vec<EvidenceType>),
+    Object(EvidenceType),
+    Vector(Vec<EvidenceType>),
 }
 impl From<&ManyEvidenceType> for ManyEvidenceType {
     fn from(value: &ManyEvidenceType) -> Self {
@@ -5859,12 +5742,12 @@ impl From<&ManyEvidenceType> for ManyEvidenceType {
 }
 impl From<EvidenceType> for ManyEvidenceType {
     fn from(value: EvidenceType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<EvidenceType>> for ManyEvidenceType {
     fn from(value: Vec<EvidenceType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyGeometryType
@@ -5890,8 +5773,8 @@ impl From<Vec<EvidenceType>> for ManyEvidenceType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyGeometryType {
-    Variant0(GeometryType),
-    Variant1(Vec<GeometryType>),
+    Object(GeometryType),
+    Vector(Vec<GeometryType>),
 }
 impl From<&ManyGeometryType> for ManyGeometryType {
     fn from(value: &ManyGeometryType) -> Self {
@@ -5900,12 +5783,12 @@ impl From<&ManyGeometryType> for ManyGeometryType {
 }
 impl From<GeometryType> for ManyGeometryType {
     fn from(value: GeometryType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<GeometryType>> for ManyGeometryType {
     fn from(value: Vec<GeometryType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyGradingSchemeType
@@ -5931,8 +5814,8 @@ impl From<Vec<GeometryType>> for ManyGeometryType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyGradingSchemeType {
-    Variant0(GradingSchemeType),
-    Variant1(Vec<GradingSchemeType>),
+    Object(GradingSchemeType),
+    Vector(Vec<GradingSchemeType>),
 }
 impl From<&ManyGradingSchemeType> for ManyGradingSchemeType {
     fn from(value: &ManyGradingSchemeType) -> Self {
@@ -5941,12 +5824,12 @@ impl From<&ManyGradingSchemeType> for ManyGradingSchemeType {
 }
 impl From<GradingSchemeType> for ManyGradingSchemeType {
     fn from(value: GradingSchemeType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<GradingSchemeType>> for ManyGradingSchemeType {
     fn from(value: Vec<GradingSchemeType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyGrantType
@@ -5972,8 +5855,8 @@ impl From<Vec<GradingSchemeType>> for ManyGradingSchemeType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyGrantType {
-    Variant0(GrantType),
-    Variant1(Vec<GrantType>),
+    Object(GrantType),
+    Vector(Vec<GrantType>),
 }
 impl From<&ManyGrantType> for ManyGrantType {
     fn from(value: &ManyGrantType) -> Self {
@@ -5982,12 +5865,12 @@ impl From<&ManyGrantType> for ManyGrantType {
 }
 impl From<GrantType> for ManyGrantType {
     fn from(value: GrantType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<GrantType>> for ManyGrantType {
     fn from(value: Vec<GrantType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyGroupType
@@ -6013,22 +5896,22 @@ impl From<Vec<GrantType>> for ManyGrantType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyGroupType {
-    Variant0(GroupType),
-    Variant1(Vec<GroupType>),
+    Object(Group),
+    Vector(Vec<Group>),
 }
 impl From<&ManyGroupType> for ManyGroupType {
     fn from(value: &ManyGroupType) -> Self {
         value.clone()
     }
 }
-impl From<GroupType> for ManyGroupType {
-    fn from(value: GroupType) -> Self {
-        Self::Variant0(value)
+impl From<Group> for ManyGroupType {
+    fn from(value: Group) -> Self {
+        Self::Object(value)
     }
 }
-impl From<Vec<GroupType>> for ManyGroupType {
-    fn from(value: Vec<GroupType>) -> Self {
-        Self::Variant1(value)
+impl From<Vec<Group>> for ManyGroupType {
+    fn from(value: Vec<Group>) -> Self {
+        Self::Vector(value)
     }
 }
 ///ManyHtmlType
@@ -6054,8 +5937,8 @@ impl From<Vec<GroupType>> for ManyGroupType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyHtmlType {
-    Variant0(HtmlType),
-    Variant1(Vec<HtmlType>),
+    Object(HtmlType),
+    Vector(Vec<HtmlType>),
 }
 impl From<&ManyHtmlType> for ManyHtmlType {
     fn from(value: &ManyHtmlType) -> Self {
@@ -6064,12 +5947,12 @@ impl From<&ManyHtmlType> for ManyHtmlType {
 }
 impl From<HtmlType> for ManyHtmlType {
     fn from(value: HtmlType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<HtmlType>> for ManyHtmlType {
     fn from(value: Vec<HtmlType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyIdentifierOrLegalIdentifierType
@@ -6132,8 +6015,8 @@ impl ManyIdentifierOrLegalIdentifierType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyIdentifierType {
-    Variant0(IdentifierType),
-    Variant1(Vec<IdentifierType>),
+    Object(IdentifierType),
+    Vector(Vec<IdentifierType>),
 }
 impl From<&ManyIdentifierType> for ManyIdentifierType {
     fn from(value: &ManyIdentifierType) -> Self {
@@ -6142,12 +6025,12 @@ impl From<&ManyIdentifierType> for ManyIdentifierType {
 }
 impl From<IdentifierType> for ManyIdentifierType {
     fn from(value: IdentifierType) -> Self {
-        Self::Variant0(value)
+        Self::Object(value)
     }
 }
 impl From<Vec<IdentifierType>> for ManyIdentifierType {
     fn from(value: Vec<IdentifierType>) -> Self {
-        Self::Variant1(value)
+        Self::Vector(value)
     }
 }
 ///ManyIndividualDisplayType
@@ -7863,7 +7746,7 @@ pub struct OrganisationType {
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "eIDASIdentifier",
         default,
@@ -8111,7 +7994,7 @@ pub struct PersonType {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub citizenship_country: Option<ManyConceptType>,
+    pub citizenship_country: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "contactPoint", default, skip_serializing_if = "Option::is_none")]
     pub contact_point: Option<ManyContactPointType>,
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
@@ -8533,17 +8416,17 @@ pub struct QualificationType {
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
-    pub dc_type: Option<ManyConceptType>,
+    pub dc_type: Option<ObjectOrVector<ConceptType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(rename = "educationLevel", default, skip_serializing_if = "Option::is_none")]
-    pub education_level: Option<ManyConceptType>,
+    pub education_level: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "educationSubject",
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub education_subject: Option<ManyConceptType>,
+    pub education_subject: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "entitlesTo", default, skip_serializing_if = "Option::is_none")]
     pub entitles_to: Option<ManyLearningEntitlementSpecificationType>,
     #[serde(
@@ -8579,7 +8462,7 @@ pub struct QualificationType {
     )]
     pub is_partial_qualification: Option<BooleanType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub language: Option<ManyConceptType>,
+    pub language: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "learningOutcome",
         default,
@@ -8605,9 +8488,9 @@ pub struct QualificationType {
     )]
     pub maximum_duration: Option<DurationType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mode: Option<ManyConceptType>,
+    pub mode: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "nqfLevel", default, skip_serializing_if = "Option::is_none")]
-    pub nqf_level: Option<ManyConceptType>,
+    pub nqf_level: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "provenBy", default)]
     pub proven_by: Box<Option<ManyLearningAssessmentSpecificationType>>,
     #[serde(
@@ -8615,7 +8498,7 @@ pub struct QualificationType {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub qualification_code: Option<ManyConceptType>,
+    pub qualification_code: Option<ObjectOrVector<ConceptType>>,
     #[serde(
         rename = "specialisationOf",
         default,
@@ -8631,9 +8514,9 @@ pub struct QualificationType {
     )]
     pub supplementary_document: Option<ManyWebResourceType>,
     #[serde(rename = "targetGroup", default, skip_serializing_if = "Option::is_none")]
-    pub target_group: Option<ManyConceptType>,
+    pub target_group: Option<ObjectOrVector<ConceptType>>,
     #[serde(rename = "thematicArea", default, skip_serializing_if = "Option::is_none")]
-    pub thematic_area: Option<ManyConceptType>,
+    pub thematic_area: Option<ObjectOrVector<ConceptType>>,
     pub title: ManyLangStringType,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
@@ -9149,6 +9032,8 @@ impl WebResourceType {
 }
 /// Types for composing complex structures.
 pub mod builder {
+    use types_common::ObjectOrVector;
+
     #[derive(Clone, Debug)]
     pub struct AccreditationType {
         accrediting_agent: Result<super::OrganisationType, String>,
@@ -9163,10 +9048,10 @@ pub mod builder {
         id: Result<Option<super::GenericIdType>, String>,
         identifier: Result<Option<super::IdentifierOrLegalIdentifierType>, String>,
         landing_page: Result<Option<super::ManyWebResourceType>, String>,
-        limit_credential_type: Result<Option<super::ManyConceptType>, String>,
-        limit_eqf_level: Result<Option<super::ManyConceptType>, String>,
-        limit_field: Result<Option<super::ManyConceptType>, String>,
-        limit_jurisdiction: Result<Option<super::ManyConceptType>, String>,
+        limit_credential_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        limit_eqf_level: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        limit_field: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        limit_jurisdiction: Result<Option<ObjectOrVector<ConceptType>>, String>,
         limit_qualification: Result<Option<super::QualificationType>, String>,
         organisation: Result<Option<super::ManyOrganisationType>, String>,
         report: Result<Option<super::WebResourceType>, String>,
@@ -9355,7 +9240,7 @@ pub mod builder {
         }
         pub fn limit_credential_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.limit_credential_type = value
@@ -9370,7 +9255,7 @@ pub mod builder {
         }
         pub fn limit_eqf_level<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.limit_eqf_level = value
@@ -9382,7 +9267,7 @@ pub mod builder {
         }
         pub fn limit_field<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.limit_field = value
@@ -9394,7 +9279,7 @@ pub mod builder {
         }
         pub fn limit_jurisdiction<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.limit_jurisdiction = value
@@ -11276,7 +11161,7 @@ pub mod builder {
         description: Result<Option<super::ManyLangStringType>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         individual_display: Result<super::ManyIndividualDisplayType, String>,
-        language: Result<super::ManyConceptType, String>,
+        language: Result<ObjectOrVector<ConceptType>, String>,
         primary_language: Result<super::ConceptType, String>,
         summary_display: Result<Option<super::StringType>, String>,
         title: Result<super::ManyLangStringType, String>,
@@ -11339,7 +11224,7 @@ pub mod builder {
         }
         pub fn language<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::ManyConceptType>,
+            T: std::convert::TryInto<ObjectOrVector<ConceptType>>,
             T::Error: std::fmt::Display,
         {
             self.language = value
@@ -11490,8 +11375,8 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct EuropassEdcCredential {
         context: Result<super::EuropassEdcCredentialContext, String>,
-        credential_profiles: Result<Option<super::ManyConceptType>, String>,
-        credential_schema: Result<super::EuropassEdcCredentialCredentialSchema, String>,
+        credential_profiles: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        credential_schema: Result<ObjectOrVector<CredentialSchema>, String>,
         credential_status: Result<
             Option<super::EuropassEdcCredentialCredentialStatus>,
             String,
@@ -11501,10 +11386,10 @@ pub mod builder {
             String,
         >,
         display_parameter: Result<Option<super::DisplayParameterType>, String>,
-        evidence: Result<Option<super::EuropassEdcCredentialEvidence>, String>,
+        evidence: Result<Option<ObjectOrVector<Evidence>>, String>,
         id: Result<String, String>,
         issuer: Result<super::EuropassEdcCredentialIssuer, String>,
-        terms_of_use: Result<Option<super::EuropassEdcCredentialTermsOfUse>, String>,
+        terms_of_use: Result<Option<ObjectOrVector<TermsOfUse>>, String>,
         type_: Result<Vec<String>, String>,
         valid_from: Result<chrono::DateTime<chrono::offset::Utc>, String>,
         valid_until: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
@@ -11547,7 +11432,7 @@ pub mod builder {
         }
         pub fn credential_profiles<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.credential_profiles = value
@@ -11561,7 +11446,7 @@ pub mod builder {
         }
         pub fn credential_schema<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::EuropassEdcCredentialCredentialSchema>,
+            T: std::convert::TryInto<ObjectOrVector<CredentialSchema>>,
             T::Error: std::fmt::Display,
         {
             self.credential_schema = value
@@ -11619,7 +11504,7 @@ pub mod builder {
         }
         pub fn evidence<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::EuropassEdcCredentialEvidence>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<Evidence>>>,
             T::Error: std::fmt::Display,
         {
             self.evidence = value
@@ -11653,7 +11538,7 @@ pub mod builder {
         }
         pub fn terms_of_use<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::EuropassEdcCredentialTermsOfUse>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<TermsOfUse>>>,
             T::Error: std::fmt::Display,
         {
             self.terms_of_use = value
@@ -11802,7 +11687,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct EuropeanDigitalCredentialType {
         attachment: Result<Option<super::ManyMediaObjectType>, String>,
-        credential_profiles: Result<super::ManyConceptType, String>,
+        credential_profiles: Result<ObjectOrVector<ConceptType>, String>,
         credential_schema: Result<super::ManyShaclValidator2017Type, String>,
         credential_status: Result<Option<super::CredentialStatusType>, String>,
         credential_subject: Result<super::AgentOrPersonOrOrganisationType, String>,
@@ -11871,7 +11756,7 @@ pub mod builder {
         }
         pub fn credential_profiles<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<super::ManyConceptType>,
+            T: std::convert::TryInto<ObjectOrVector<ConceptType>>,
             T::Error: std::fmt::Display,
         {
             self.credential_profiles = value
@@ -12320,7 +12205,7 @@ pub mod builder {
         fn try_from(value: Evidence) -> Result<Self, super::error::ConversionError> {
             Ok(Self {
                 id: value.id?,
-                type_: value.type_?,
+                ev_type: value.type_?,
             })
         }
     }
@@ -12328,7 +12213,7 @@ pub mod builder {
         fn from(value: super::Evidence) -> Self {
             Self {
                 id: Ok(value.id),
-                type_: Ok(value.type_),
+                type_: Ok(value.ev_type),
             }
         }
     }
@@ -12926,7 +12811,7 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<GroupType> for super::GroupType {
+    impl std::convert::TryFrom<GroupType> for super::Group {
         type Error = super::error::ConversionError;
         fn try_from(value: GroupType) -> Result<Self, super::error::ConversionError> {
             Ok(Self {
@@ -12941,8 +12826,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::GroupType> for GroupType {
-        fn from(value: super::GroupType) -> Self {
+    impl From<super::Group> for GroupType {
+        fn from(value: super::Group) -> Self {
             Self {
                 additional_note: Ok(value.additional_note),
                 alt_label: Ok(value.alt_label),
@@ -12959,7 +12844,7 @@ pub mod builder {
     pub struct IdentifierType {
         creator: Result<Option<super::IriType>, String>,
         date_issued: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         notation: Result<super::LiteralType, String>,
         scheme_agency: Result<Option<super::LangStringType>, String>,
@@ -13011,7 +12896,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -13440,10 +13325,10 @@ pub mod builder {
         category: Result<Option<super::ManyLangStringType>, String>,
         credit_point: Result<Option<super::ManyCreditPointType>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
-        education_level: Result<Option<super::ManyConceptType>, String>,
-        education_subject: Result<Option<super::ManyConceptType>, String>,
+        education_level: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        education_subject: Result<Option<ObjectOrVector<ConceptType>>, String>,
         entitles_to: Result<
             Option<super::ManyLearningEntitlementSpecificationType>,
             String,
@@ -13468,12 +13353,12 @@ pub mod builder {
             Box<Option<super::ManyLearningAchievementSpecificationOrQualificationType>>,
             String,
         >,
-        language: Result<Option<super::ManyConceptType>, String>,
+        language: Result<Option<ObjectOrVector<ConceptType>>, String>,
         learning_outcome: Result<Option<super::ManyLearningOutcomeType>, String>,
         learning_outcome_summary: Result<Option<super::NoteType>, String>,
         learning_setting: Result<Option<super::ConceptType>, String>,
         maximum_duration: Result<Option<super::DurationType>, String>,
-        mode: Result<Option<super::ManyConceptType>, String>,
+        mode: Result<Option<ObjectOrVector<ConceptType>>, String>,
         proven_by: Result<
             Box<Option<super::ManyLearningAssessmentSpecificationType>>,
             String,
@@ -13484,8 +13369,8 @@ pub mod builder {
         >,
         status: Result<Option<super::StringType>, String>,
         supplementary_document: Result<Option<super::ManyWebResourceType>, String>,
-        target_group: Result<Option<super::ManyConceptType>, String>,
-        thematic_area: Result<Option<super::ManyConceptType>, String>,
+        target_group: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        thematic_area: Result<Option<ObjectOrVector<ConceptType>>, String>,
         title: Result<super::ManyLangStringType, String>,
         type_: Result<Option<serde_json::Value>, String>,
         volume_of_learning: Result<Option<super::DurationType>, String>,
@@ -13607,7 +13492,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -13631,7 +13516,7 @@ pub mod builder {
         }
         pub fn education_level<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.education_level = value
@@ -13643,7 +13528,7 @@ pub mod builder {
         }
         pub fn education_subject<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.education_subject = value
@@ -13789,7 +13674,7 @@ pub mod builder {
         }
         pub fn language<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.language = value
@@ -13858,7 +13743,7 @@ pub mod builder {
         }
         pub fn mode<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.mode = value
@@ -13929,7 +13814,7 @@ pub mod builder {
         }
         pub fn target_group<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.target_group = value
@@ -13941,7 +13826,7 @@ pub mod builder {
         }
         pub fn thematic_area<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.thematic_area = value
@@ -14080,7 +13965,7 @@ pub mod builder {
         additional_note: Result<Option<super::ManyNoteType>, String>,
         awarded_by: Result<Box<super::AwardingProcessType>, String>,
         credit_received: Result<Option<super::ManyCreditPointType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
         entitles_to: Result<Option<super::ManyLearningEntitlementType>, String>,
         has_part: Result<Box<Option<super::ManyLearningAchievementType>>, String>,
@@ -14160,7 +14045,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -14389,7 +14274,7 @@ pub mod builder {
         category: Result<Option<super::ManyLangStringType>, String>,
         contact_hour: Result<Option<super::ManyStringType>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
         generalisation_of: Result<
             Option<super::ManyLearningAchievementSpecificationType>,
@@ -14410,8 +14295,8 @@ pub mod builder {
             Option<super::ManyLearningAchievementSpecificationType>,
             String,
         >,
-        language: Result<Option<super::ManyConceptType>, String>,
-        mode: Result<Option<super::ManyConceptType>, String>,
+        language: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        mode: Result<Option<ObjectOrVector<ConceptType>>, String>,
         specialisation_of: Result<
             Option<super::ManyLearningAchievementSpecificationType>,
             String,
@@ -14513,7 +14398,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -14633,7 +14518,7 @@ pub mod builder {
         }
         pub fn language<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.language = value
@@ -14645,7 +14530,7 @@ pub mod builder {
         }
         pub fn mode<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.mode = value
@@ -14800,7 +14685,7 @@ pub mod builder {
     pub struct LearningActivityType {
         additional_note: Result<Option<super::ManyNoteType>, String>,
         awarded_by: Result<Box<super::AwardingProcessType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
         directed_by: Result<Option<super::ManyAgentOrPersonOrOrganisationType>, String>,
         has_part: Result<Box<Option<super::ManyLearningActivityType>>, String>,
@@ -14870,7 +14755,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -15155,8 +15040,8 @@ pub mod builder {
             Box<Option<super::ManyLearningAssessmentSpecificationType>>,
             String,
         >,
-        language: Result<Option<super::ManyConceptType>, String>,
-        mode: Result<Option<super::ManyConceptType>, String>,
+        language: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        mode: Result<Option<ObjectOrVector<ConceptType>>, String>,
         proves: Result<
             Option<super::ManyLearningAchievementSpecificationOrQualificationType>,
             String,
@@ -15362,7 +15247,7 @@ pub mod builder {
         }
         pub fn language<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.language = value
@@ -15374,7 +15259,7 @@ pub mod builder {
         }
         pub fn mode<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.mode = value
@@ -15529,7 +15414,7 @@ pub mod builder {
         assessed_by: Result<Option<super::ManyAgentOrPersonOrOrganisationType>, String>,
         awarded_by: Result<Box<super::AwardingProcessType>, String>,
         date_issued: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
         grade: Result<super::NoteType, String>,
         grade_status: Result<Option<super::ConceptType>, String>,
@@ -15628,7 +15513,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -15924,9 +15809,9 @@ pub mod builder {
             Box<Option<super::ManyLearningEntitlementSpecificationType>>,
             String,
         >,
-        limit_jurisdiction: Result<Option<super::ManyConceptType>, String>,
-        limit_national_occupation: Result<Option<super::ManyConceptType>, String>,
-        limit_occupation: Result<Option<super::ManyConceptType>, String>,
+        limit_jurisdiction: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        limit_national_occupation: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        limit_occupation: Result<Option<ObjectOrVector<ConceptType>>, String>,
         limit_organisation: Result<Box<Option<super::ManyOrganisationType>>, String>,
         specialisation_of: Result<
             Box<Option<super::ManyLearningEntitlementSpecificationType>>,
@@ -16153,7 +16038,7 @@ pub mod builder {
         }
         pub fn limit_jurisdiction<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.limit_jurisdiction = value
@@ -16167,7 +16052,7 @@ pub mod builder {
         }
         pub fn limit_national_occupation<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.limit_national_occupation = value
@@ -16182,7 +16067,7 @@ pub mod builder {
         }
         pub fn limit_occupation<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.limit_occupation = value
@@ -16344,7 +16229,7 @@ pub mod builder {
         additional_note: Result<Option<super::ManyNoteType>, String>,
         awarded_by: Result<Box<super::AwardingProcessType>, String>,
         date_issued: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
         entitled_by: Result<Box<Option<super::ManyLearningAchievementType>>, String>,
         expiry_date: Result<Option<super::DateTimeType>, String>,
@@ -16420,7 +16305,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -16619,7 +16504,7 @@ pub mod builder {
         application_deadline: Result<Option<super::ManyDateTimeType>, String>,
         banner_image: Result<Option<super::MediaObjectType>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         default_language: Result<Option<super::ConceptType>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
         description_html: Result<Option<super::ManyHtmlType>, String>,
@@ -16640,7 +16525,7 @@ pub mod builder {
         >,
         learning_schedule: Result<Option<super::ConceptType>, String>,
         location: Result<Option<super::ManyLocationType>, String>,
-        mode: Result<Option<super::ManyConceptType>, String>,
+        mode: Result<Option<ObjectOrVector<ConceptType>>, String>,
         price_detail: Result<Option<super::ManyPriceDetailType>, String>,
         provided_by: Result<Option<Box<super::OrganisationType>>, String>,
         schedule_information: Result<Option<super::NoteType>, String>,
@@ -16752,7 +16637,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -16944,7 +16829,7 @@ pub mod builder {
         }
         pub fn mode<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.mode = value
@@ -17139,8 +17024,8 @@ pub mod builder {
         dc_type: Result<Option<super::ConceptType>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         identifier: Result<Option<super::IdentifierOrLegalIdentifierType>, String>,
-        related_esco_skill: Result<Option<super::ManyConceptType>, String>,
-        related_skill: Result<Option<super::ManyConceptType>, String>,
+        related_esco_skill: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        related_skill: Result<Option<ObjectOrVector<ConceptType>>, String>,
         reusability_level: Result<Option<super::ConceptType>, String>,
         title: Result<super::ManyLangStringType, String>,
         type_: Result<Option<serde_json::Value>, String>,
@@ -17209,7 +17094,7 @@ pub mod builder {
         }
         pub fn related_esco_skill<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.related_esco_skill = value
@@ -17223,7 +17108,7 @@ pub mod builder {
         }
         pub fn related_skill<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.related_skill = value
@@ -17309,7 +17194,7 @@ pub mod builder {
     pub struct LegalIdentifierType {
         creator: Result<Option<super::IriType>, String>,
         date_issued: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         notation: Result<super::LiteralType, String>,
         scheme_agency: Result<Option<super::LangStringType>, String>,
@@ -17363,7 +17248,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -17513,7 +17398,7 @@ pub mod builder {
         geometry: Result<Option<super::ManyGeometryType>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         identifier: Result<Option<super::IdentifierOrLegalIdentifierType>, String>,
-        spatial_code: Result<Option<super::ManyConceptType>, String>,
+        spatial_code: Result<Option<ObjectOrVector<ConceptType>>, String>,
         type_: Result<Option<serde_json::Value>, String>,
     }
     impl Default for LocationType {
@@ -17603,7 +17488,7 @@ pub mod builder {
         }
         pub fn spatial_code<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.spatial_code = value
@@ -18262,7 +18147,7 @@ pub mod builder {
         alt_label: Result<Option<super::ManyLangStringType>, String>,
         contact_point: Result<Option<super::ManyContactPointType>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         e_idas_identifier: Result<Option<super::LegalIdentifierType>, String>,
         group_member_of: Result<Option<super::ManyGroupType>, String>,
         has_member: Result<Option<super::ManyPersonType>, String>,
@@ -18369,7 +18254,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -18726,7 +18611,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct PersonType {
         birth_name: Result<Option<super::ManyLangStringType>, String>,
-        citizenship_country: Result<Option<super::ManyConceptType>, String>,
+        citizenship_country: Result<Option<ObjectOrVector<ConceptType>>, String>,
         contact_point: Result<Option<super::ManyContactPointType>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
         date_of_birth: Result<Option<super::DateTimeType>, String>,
@@ -18787,7 +18672,7 @@ pub mod builder {
         }
         pub fn citizenship_country<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.citizenship_country = value
@@ -18801,7 +18686,7 @@ pub mod builder {
         }
         pub fn contact_point<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyContactPointType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.contact_point = value
@@ -19384,10 +19269,10 @@ pub mod builder {
         category: Result<Option<super::ManyLangStringType>, String>,
         credit_point: Result<Option<super::ManyCreditPointType>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
-        dc_type: Result<Option<super::ManyConceptType>, String>,
+        dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         description: Result<Option<super::ManyLangStringType>, String>,
-        education_level: Result<Option<super::ManyConceptType>, String>,
-        education_subject: Result<Option<super::ManyConceptType>, String>,
+        education_level: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        education_subject: Result<Option<ObjectOrVector<ConceptType>>, String>,
         entitles_to: Result<
             Option<super::ManyLearningEntitlementSpecificationType>,
             String,
@@ -19405,23 +19290,23 @@ pub mod builder {
         >,
         is_part_of: Result<Option<super::ManyQualificationType>, String>,
         is_partial_qualification: Result<Option<super::BooleanType>, String>,
-        language: Result<Option<super::ManyConceptType>, String>,
+        language: Result<Option<ObjectOrVector<ConceptType>>, String>,
         learning_outcome: Result<Option<super::ManyLearningOutcomeType>, String>,
         learning_outcome_summary: Result<Option<super::NoteType>, String>,
         learning_setting: Result<Option<super::ConceptType>, String>,
         maximum_duration: Result<Option<super::DurationType>, String>,
-        mode: Result<Option<super::ManyConceptType>, String>,
-        nqf_level: Result<Option<super::ManyConceptType>, String>,
+        mode: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        nqf_level: Result<Option<ObjectOrVector<ConceptType>>, String>,
         proven_by: Result<
             Box<Option<super::ManyLearningAssessmentSpecificationType>>,
             String,
         >,
-        qualification_code: Result<Option<super::ManyConceptType>, String>,
+        qualification_code: Result<Option<ObjectOrVector<ConceptType>>, String>,
         specialisation_of: Result<Option<super::ManyQualificationType>, String>,
         status: Result<Option<super::StringType>, String>,
         supplementary_document: Result<Option<super::ManyWebResourceType>, String>,
-        target_group: Result<Option<super::ManyConceptType>, String>,
-        thematic_area: Result<Option<super::ManyConceptType>, String>,
+        target_group: Result<Option<ObjectOrVector<ConceptType>>, String>,
+        thematic_area: Result<Option<ObjectOrVector<ConceptType>>, String>,
         title: Result<super::ManyLangStringType, String>,
         type_: Result<Option<serde_json::Value>, String>,
         volume_of_learning: Result<Option<super::DurationType>, String>,
@@ -19560,7 +19445,7 @@ pub mod builder {
         }
         pub fn dc_type<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.dc_type = value
@@ -19584,7 +19469,7 @@ pub mod builder {
         }
         pub fn education_level<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.education_level = value
@@ -19596,7 +19481,7 @@ pub mod builder {
         }
         pub fn education_subject<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.education_subject = value
@@ -19751,7 +19636,7 @@ pub mod builder {
         }
         pub fn language<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.language = value
@@ -19820,7 +19705,7 @@ pub mod builder {
         }
         pub fn mode<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.mode = value
@@ -19830,7 +19715,7 @@ pub mod builder {
         }
         pub fn nqf_level<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.nqf_level = value
@@ -19856,7 +19741,7 @@ pub mod builder {
         }
         pub fn qualification_code<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.qualification_code = value
@@ -19911,7 +19796,7 @@ pub mod builder {
         }
         pub fn target_group<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.target_group = value
@@ -19923,7 +19808,7 @@ pub mod builder {
         }
         pub fn thematic_area<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyConceptType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<ConceptType>>>,
             T::Error: std::fmt::Display,
         {
             self.thematic_area = value
