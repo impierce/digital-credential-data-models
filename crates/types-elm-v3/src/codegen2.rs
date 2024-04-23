@@ -339,7 +339,7 @@ pub struct AgentType {
     #[serde(rename = "altLabel", default, skip_serializing_if = "Option::is_none")]
     pub alt_label: Option<ManyLangStringType>,
     #[serde(rename = "contactPoint", default, skip_serializing_if = "Option::is_none")]
-    pub contact_point: Option<ManyContactPointType>,
+    pub contact_point: Option<ObjectOrVector<ContactPoint>>,
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(rename = "groupMemberOf", default, skip_serializing_if = "Option::is_none")]
@@ -349,7 +349,7 @@ pub struct AgentType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<ManyIdentifierOrLegalIdentifierType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub location: Option<ManyLocationType>,
+    pub location: Option<ObjectOrVector<Location>>,
     #[serde(rename = "prefLabel", default, skip_serializing_if = "Option::is_none")]
     pub pref_label: Option<ManyLangStringType>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
@@ -465,7 +465,7 @@ pub struct AwardingOpportunityType {
         Option<LearningAchievementSpecificationOrQualificationType>,
     >,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub location: Option<LocationType>,
+    pub location: Option<Location>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub temporal: Option<PeriodOfTimeType>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
@@ -554,7 +554,7 @@ pub struct AwardingProcessType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<ManyIdentifierOrLegalIdentifierType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub location: Option<LocationType>,
+    pub location: Option<Location>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -894,7 +894,7 @@ impl ConceptType {
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct ContactPointType {
+pub struct ContactPoint {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
     pub additional_note: Option<ManyNoteType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -912,13 +912,13 @@ pub struct ContactPointType {
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
 }
-impl From<&ContactPointType> for ContactPointType {
-    fn from(value: &ContactPointType) -> Self {
+impl From<&ContactPoint> for ContactPoint {
+    fn from(value: &ContactPoint) -> Self {
         value.clone()
     }
 }
-impl ContactPointType {
-    pub fn builder() -> builder::ContactPointType {
+impl ContactPoint {
+    pub fn builder() -> builder::ContactPoint {
         Default::default()
     }
 }
@@ -1918,7 +1918,7 @@ pub enum EuropassEdcCredentialCredentialSubject {
             default,
             skip_serializing_if = "Option::is_none"
         )]
-        group_member_of: Option<ManyGroupType>,
+        group_member_of: Option<ObjectOrVector<Group>>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         id: Option<String>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1968,7 +1968,7 @@ pub enum EuropassEdcCredentialCredentialSubject {
             default,
             skip_serializing_if = "Option::is_none"
         )]
-        group_member_of: Option<ManyGroupType>,
+        group_member_of: Option<ObjectOrVector<Group>>,
         #[serde(rename = "hasClaim", default, skip_serializing_if = "Option::is_none")]
         has_claim: Option<ManyClaimNodeType>,
         #[serde(
@@ -1996,7 +1996,7 @@ pub enum EuropassEdcCredentialCredentialSubject {
             default,
             skip_serializing_if = "Option::is_none"
         )]
-        place_of_birth: Option<LocationType>,
+        place_of_birth: Option<Location>,
         #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
         type_: Option<serde_json::Value>,
     },
@@ -2036,7 +2036,7 @@ pub enum EuropassEdcCredentialCredentialSubject {
             default,
             skip_serializing_if = "Option::is_none"
         )]
-        group_member_of: Option<ManyGroupType>,
+        group_member_of: Option<ObjectOrVector<Group>>,
         #[serde(rename = "hasMember", default, skip_serializing_if = "Option::is_none")]
         has_member: Option<ManyPersonType>,
         #[serde(
@@ -2261,7 +2261,7 @@ impl From<&EuropeanDigitalCredentialType> for EuropeanDigitalCredentialType {
     }
 }
 impl EuropeanDigitalCredentialType {
-    pub fn builder() -> builder::EuropeanDigitalCredentialType {
+    pub fn builder() -> builder::EuropeanDigitalCredential {
         Default::default()
     }
 }
@@ -2743,7 +2743,7 @@ impl From<&Group> for Group {
     }
 }
 impl Group {
-    pub fn builder() -> builder::GroupType {
+    pub fn builder() -> builder::Group {
         Default::default()
     }
 }
@@ -4122,7 +4122,7 @@ pub struct LearningAssessmentType {
     #[serde(rename = "isPartOf", default)]
     pub is_part_of: Box<Option<ManyLearningAssessmentType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub location: Option<LocationType>,
+    pub location: Option<Location>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proves: Option<ManyLearningAchievementType>,
     #[serde(
@@ -4915,7 +4915,7 @@ impl ToString for LiteralType {
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct LocationType {
+pub struct Location {
     pub address: ManyAddressType,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
@@ -4932,12 +4932,12 @@ pub struct LocationType {
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
 }
-impl From<&LocationType> for LocationType {
-    fn from(value: &LocationType) -> Self {
+impl From<&Location> for Location {
+    fn from(value: &Location) -> Self {
         value.clone()
     }
 }
-impl LocationType {
+impl Location {
     pub fn builder() -> builder::LocationType {
         Default::default()
     }
@@ -5340,47 +5340,7 @@ impl From<Vec<ClaimTypeNodeType>> for ManyClaimTypeNodeType {
         Self::Variant1(value)
     }
 }
-///ManyConceptType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    {
-///      "type": "array",
-///      "items": {
-///        "$ref": "#/$defs/ConceptType"
-///      }
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum ManyConceptType {
-    Object(ConceptType),
-    Vector(Vec<ConceptType>),
-}
-impl From<&ManyConceptType> for ManyConceptType {
-    fn from(value: &ManyConceptType) -> Self {
-        value.clone()
-    }
-}
-impl From<ConceptType> for ManyConceptType {
-    fn from(value: ConceptType) -> Self {
-        Self::Object(value)
-    }
-}
-impl From<Vec<ConceptType>> for ManyConceptType {
-    fn from(value: Vec<ConceptType>) -> Self {
-        Self::Vector(value)
-    }
-}
+
 ///ManyContactPointType
 ///
 /// <details><summary>JSON schema</summary>
@@ -5404,21 +5364,21 @@ impl From<Vec<ConceptType>> for ManyConceptType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyContactPointType {
-    Object(ContactPointType),
-    Vector(Vec<ContactPointType>),
+    Object(ContactPoint),
+    Vector(Vec<ContactPoint>),
 }
 impl From<&ManyContactPointType> for ManyContactPointType {
     fn from(value: &ManyContactPointType) -> Self {
         value.clone()
     }
 }
-impl From<ContactPointType> for ManyContactPointType {
-    fn from(value: ContactPointType) -> Self {
+impl From<ContactPoint> for ManyContactPointType {
+    fn from(value: ContactPoint) -> Self {
         Self::Object(value)
     }
 }
-impl From<Vec<ContactPointType>> for ManyContactPointType {
-    fn from(value: Vec<ContactPointType>) -> Self {
+impl From<Vec<ContactPoint>> for ManyContactPointType {
+    fn from(value: Vec<ContactPoint>) -> Self {
         Self::Vector(value)
     }
 }
@@ -5873,47 +5833,7 @@ impl From<Vec<GrantType>> for ManyGrantType {
         Self::Vector(value)
     }
 }
-///ManyGroupType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/GroupType"
-///    },
-///    {
-///      "type": "array",
-///      "items": {
-///        "$ref": "#/$defs/GroupType"
-///      }
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum ManyGroupType {
-    Object(Group),
-    Vector(Vec<Group>),
-}
-impl From<&ManyGroupType> for ManyGroupType {
-    fn from(value: &ManyGroupType) -> Self {
-        value.clone()
-    }
-}
-impl From<Group> for ManyGroupType {
-    fn from(value: Group) -> Self {
-        Self::Object(value)
-    }
-}
-impl From<Vec<Group>> for ManyGroupType {
-    fn from(value: Vec<Group>) -> Self {
-        Self::Vector(value)
-    }
-}
+
 ///ManyHtmlType
 ///
 /// <details><summary>JSON schema</summary>
@@ -6131,18 +6051,18 @@ impl From<Vec<IssuerNodeType>> for ManyIssuerNodeType {
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ManyLangStringType(
-    pub std::collections::HashMap<ManyLangStringTypeKey, serde_json::Value>,
+    pub std::collections::HashMap<ManyLangStringKey, serde_json::Value>,
 );
 impl std::ops::Deref for ManyLangStringType {
-    type Target = std::collections::HashMap<ManyLangStringTypeKey, serde_json::Value>;
+    type Target = std::collections::HashMap<ManyLangStringKey, serde_json::Value>;
     fn deref(
         &self,
-    ) -> &std::collections::HashMap<ManyLangStringTypeKey, serde_json::Value> {
+    ) -> &std::collections::HashMap<ManyLangStringKey, serde_json::Value> {
         &self.0
     }
 }
 impl From<ManyLangStringType>
-for std::collections::HashMap<ManyLangStringTypeKey, serde_json::Value> {
+for std::collections::HashMap<ManyLangStringKey, serde_json::Value> {
     fn from(value: ManyLangStringType) -> Self {
         value.0
     }
@@ -6152,10 +6072,10 @@ impl From<&ManyLangStringType> for ManyLangStringType {
         value.clone()
     }
 }
-impl From<std::collections::HashMap<ManyLangStringTypeKey, serde_json::Value>>
+impl From<std::collections::HashMap<ManyLangStringKey, serde_json::Value>>
 for ManyLangStringType {
     fn from(
-        value: std::collections::HashMap<ManyLangStringTypeKey, serde_json::Value>,
+        value: std::collections::HashMap<ManyLangStringKey, serde_json::Value>,
     ) -> Self {
         Self(value)
     }
@@ -6172,24 +6092,24 @@ for ManyLangStringType {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct ManyLangStringTypeKey(String);
-impl std::ops::Deref for ManyLangStringTypeKey {
+pub struct ManyLangStringKey(String);
+impl std::ops::Deref for ManyLangStringKey {
     type Target = String;
     fn deref(&self) -> &String {
         &self.0
     }
 }
-impl From<ManyLangStringTypeKey> for String {
-    fn from(value: ManyLangStringTypeKey) -> Self {
+impl From<ManyLangStringKey> for String {
+    fn from(value: ManyLangStringKey) -> Self {
         value.0
     }
 }
-impl From<&ManyLangStringTypeKey> for ManyLangStringTypeKey {
-    fn from(value: &ManyLangStringTypeKey) -> Self {
+impl From<&ManyLangStringKey> for ManyLangStringKey {
+    fn from(value: &ManyLangStringKey) -> Self {
         value.clone()
     }
 }
-impl std::str::FromStr for ManyLangStringTypeKey {
+impl std::str::FromStr for ManyLangStringKey {
     type Err = self::error::ConversionError;
     fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
         if regress::Regex::new(
@@ -6207,25 +6127,25 @@ impl std::str::FromStr for ManyLangStringTypeKey {
         Ok(Self(value.to_string()))
     }
 }
-impl std::convert::TryFrom<&str> for ManyLangStringTypeKey {
+impl std::convert::TryFrom<&str> for ManyLangStringKey {
     type Error = self::error::ConversionError;
     fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<&String> for ManyLangStringTypeKey {
+impl std::convert::TryFrom<&String> for ManyLangStringKey {
     type Error = self::error::ConversionError;
     fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
         value.parse()
     }
 }
-impl std::convert::TryFrom<String> for ManyLangStringTypeKey {
+impl std::convert::TryFrom<String> for ManyLangStringKey {
     type Error = self::error::ConversionError;
     fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
         value.parse()
     }
 }
-impl<'de> serde::Deserialize<'de> for ManyLangStringTypeKey {
+impl<'de> serde::Deserialize<'de> for ManyLangStringKey {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -6760,21 +6680,21 @@ impl From<Vec<LegalIdentifierType>> for ManyLegalIdentifierType {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ManyLocationType {
-    Variant0(LocationType),
-    Variant1(Vec<LocationType>),
+    Variant0(Location),
+    Variant1(Vec<Location>),
 }
 impl From<&ManyLocationType> for ManyLocationType {
     fn from(value: &ManyLocationType) -> Self {
         value.clone()
     }
 }
-impl From<LocationType> for ManyLocationType {
-    fn from(value: LocationType) -> Self {
+impl From<Location> for ManyLocationType {
+    fn from(value: Location) -> Self {
         Self::Variant0(value)
     }
 }
-impl From<Vec<LocationType>> for ManyLocationType {
-    fn from(value: Vec<LocationType>) -> Self {
+impl From<Vec<Location>> for ManyLocationType {
+    fn from(value: Vec<Location>) -> Self {
         Self::Variant1(value)
     }
 }
@@ -7754,7 +7674,7 @@ pub struct OrganisationType {
     )]
     pub e_idas_identifier: Option<LegalIdentifierType>,
     #[serde(rename = "groupMemberOf", default, skip_serializing_if = "Option::is_none")]
-    pub group_member_of: Option<ManyGroupType>,
+    pub group_member_of: Option<ObjectOrVector<Group>>,
     #[serde(rename = "hasMember", default, skip_serializing_if = "Option::is_none")]
     pub has_member: Option<ManyPersonType>,
     #[serde(rename = "hasSubOrganization", default)]
@@ -8010,7 +7930,7 @@ pub struct PersonType {
     #[serde(rename = "givenName", default, skip_serializing_if = "Option::is_none")]
     pub given_name: Option<LangStringType>,
     #[serde(rename = "groupMemberOf", default, skip_serializing_if = "Option::is_none")]
-    pub group_member_of: Option<ManyGroupType>,
+    pub group_member_of: Option<ObjectOrVector<Group>>,
     #[serde(rename = "hasClaim", default, skip_serializing_if = "Option::is_none")]
     pub has_claim: Option<ManyClaimNodeType>,
     #[serde(rename = "hasCredential", default, skip_serializing_if = "Option::is_none")]
@@ -8020,7 +7940,7 @@ pub struct PersonType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<IdentifierOrLegalIdentifierType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub location: Option<LocationType>,
+    pub location: Option<Location>,
     #[serde(rename = "memberOf", default)]
     pub member_of: Box<Option<ManyOrganisationType>>,
     #[serde(rename = "nationalID", default, skip_serializing_if = "Option::is_none")]
@@ -8028,7 +7948,7 @@ pub struct PersonType {
     #[serde(rename = "patronymicName", default, skip_serializing_if = "Option::is_none")]
     pub patronymic_name: Option<ManyLangStringType>,
     #[serde(rename = "placeOfBirth", default, skip_serializing_if = "Option::is_none")]
-    pub place_of_birth: Option<LocationType>,
+    pub place_of_birth: Option<Location>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<serde_json::Value>,
 }
@@ -9640,7 +9560,7 @@ pub mod builder {
         alt_label: Result<Option<super::ManyLangStringType>, String>,
         contact_point: Result<Option<super::ManyContactPointType>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
-        group_member_of: Result<Option<super::ManyGroupType>, String>,
+        group_member_of: Result<Option<ObjectOrVector<Group>>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         identifier: Result<Option<super::ManyIdentifierOrLegalIdentifierType>, String>,
         location: Result<Option<super::ManyLocationType>, String>,
@@ -9714,7 +9634,7 @@ pub mod builder {
         }
         pub fn group_member_of<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyGroupType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<Group>>>,
             T::Error: std::fmt::Display,
         {
             self.group_member_of = value
@@ -9909,7 +9829,7 @@ pub mod builder {
             Box<Option<super::LearningAchievementSpecificationOrQualificationType>>,
             String,
         >,
-        location: Result<Option<super::LocationType>, String>,
+        location: Result<Option<super::Location>, String>,
         temporal: Result<Option<super::PeriodOfTimeType>, String>,
         type_: Result<Option<serde_json::Value>, String>,
     }
@@ -9980,7 +9900,7 @@ pub mod builder {
         }
         pub fn location<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::LocationType>>,
+            T: std::convert::TryInto<Option<super::Location>>,
             T::Error: std::fmt::Display,
         {
             self.location = value
@@ -10058,7 +9978,7 @@ pub mod builder {
         educational_system_note: Result<Option<super::ConceptType>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         identifier: Result<Option<super::ManyIdentifierOrLegalIdentifierType>, String>,
-        location: Result<Option<super::LocationType>, String>,
+        location: Result<Option<super::Location>, String>,
         type_: Result<Option<serde_json::Value>, String>,
         used: Result<Option<super::ManyLearningAssessmentType>, String>,
     }
@@ -10179,7 +10099,7 @@ pub mod builder {
         }
         pub fn location<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::LocationType>>,
+            T: std::convert::TryInto<Option<super::Location>>,
             T::Error: std::fmt::Display,
         {
             self.location = value
@@ -10685,7 +10605,7 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct ContactPointType {
+    pub struct ContactPoint {
         additional_note: Result<Option<super::ManyNoteType>, String>,
         address: Result<Option<super::ManyAddressType>, String>,
         contact_form: Result<Option<super::ManyWebResourceType>, String>,
@@ -10695,7 +10615,7 @@ pub mod builder {
         phone: Result<Option<super::ManyPhoneType>, String>,
         type_: Result<Option<serde_json::Value>, String>,
     }
-    impl Default for ContactPointType {
+    impl Default for ContactPoint {
         fn default() -> Self {
             Self {
                 additional_note: Ok(Default::default()),
@@ -10709,7 +10629,7 @@ pub mod builder {
             }
         }
     }
-    impl ContactPointType {
+    impl ContactPoint {
         pub fn additional_note<T>(mut self, value: T) -> Self
         where
             T: std::convert::TryInto<Option<super::ManyNoteType>>,
@@ -10805,10 +10725,10 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<ContactPointType> for super::ContactPointType {
+    impl std::convert::TryFrom<ContactPoint> for super::ContactPoint {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: ContactPointType,
+            value: ContactPoint,
         ) -> Result<Self, super::error::ConversionError> {
             Ok(Self {
                 additional_note: value.additional_note?,
@@ -10822,8 +10742,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::ContactPointType> for ContactPointType {
-        fn from(value: super::ContactPointType) -> Self {
+    impl From<super::ContactPoint> for ContactPoint {
+        fn from(value: super::ContactPoint) -> Self {
             Self {
                 additional_note: Ok(value.additional_note),
                 address: Ok(value.address),
@@ -11685,7 +11605,7 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct EuropeanDigitalCredentialType {
+    pub struct EuropeanDigitalCredential {
         attachment: Result<Option<super::ManyMediaObjectType>, String>,
         credential_profiles: Result<ObjectOrVector<ConceptType>, String>,
         credential_schema: Result<super::ManyShaclValidator2017Type, String>,
@@ -11706,7 +11626,7 @@ pub mod builder {
         valid_from: Result<super::DateTimeType, String>,
         valid_until: Result<Option<super::DateTimeType>, String>,
     }
-    impl Default for EuropeanDigitalCredentialType {
+    impl Default for EuropeanDigitalCredential {
         fn default() -> Self {
             Self {
                 attachment: Ok(Default::default()),
@@ -11741,7 +11661,7 @@ pub mod builder {
             }
         }
     }
-    impl EuropeanDigitalCredentialType {
+    impl EuropeanDigitalCredential {
         pub fn attachment<T>(mut self, value: T) -> Self
         where
             T: std::convert::TryInto<Option<super::ManyMediaObjectType>>,
@@ -11979,11 +11899,11 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<EuropeanDigitalCredentialType>
+    impl std::convert::TryFrom<EuropeanDigitalCredential>
     for super::EuropeanDigitalCredentialType {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: EuropeanDigitalCredentialType,
+            value: EuropeanDigitalCredential,
         ) -> Result<Self, super::error::ConversionError> {
             Ok(Self {
                 attachment: value.attachment?,
@@ -12008,7 +11928,7 @@ pub mod builder {
             })
         }
     }
-    impl From<super::EuropeanDigitalCredentialType> for EuropeanDigitalCredentialType {
+    impl From<super::EuropeanDigitalCredentialType> for EuropeanDigitalCredential {
         fn from(value: super::EuropeanDigitalCredentialType) -> Self {
             Self {
                 attachment: Ok(value.attachment),
@@ -12691,7 +12611,7 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct GroupType {
+    pub struct Group {
         additional_note: Result<Option<super::ManyNoteType>, String>,
         alt_label: Result<Option<super::ManyLangStringType>, String>,
         contact_point: Result<Option<super::ManyContactPointType>, String>,
@@ -12701,7 +12621,7 @@ pub mod builder {
         pref_label: Result<super::ManyLangStringType, String>,
         type_: Result<Option<serde_json::Value>, String>,
     }
-    impl Default for GroupType {
+    impl Default for Group {
         fn default() -> Self {
             Self {
                 additional_note: Ok(Default::default()),
@@ -12715,7 +12635,7 @@ pub mod builder {
             }
         }
     }
-    impl GroupType {
+    impl Group {
         pub fn additional_note<T>(mut self, value: T) -> Self
         where
             T: std::convert::TryInto<Option<super::ManyNoteType>>,
@@ -12811,9 +12731,9 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<GroupType> for super::Group {
+    impl std::convert::TryFrom<Group> for super::Group {
         type Error = super::error::ConversionError;
-        fn try_from(value: GroupType) -> Result<Self, super::error::ConversionError> {
+        fn try_from(value: Group) -> Result<Self, super::error::ConversionError> {
             Ok(Self {
                 additional_note: value.additional_note?,
                 alt_label: value.alt_label?,
@@ -12826,7 +12746,7 @@ pub mod builder {
             })
         }
     }
-    impl From<super::Group> for GroupType {
+    impl From<super::Group> for Group {
         fn from(value: super::Group) -> Self {
             Self {
                 additional_note: Ok(value.additional_note),
@@ -15423,7 +15343,7 @@ pub mod builder {
         id_verification: Result<Option<super::ConceptType>, String>,
         identifier: Result<Option<super::ManyIdentifierOrLegalIdentifierType>, String>,
         is_part_of: Result<Box<Option<super::ManyLearningAssessmentType>>, String>,
-        location: Result<Option<super::LocationType>, String>,
+        location: Result<Option<super::Location>, String>,
         proves: Result<Option<super::ManyLearningAchievementType>, String>,
         result_distribution: Result<Option<super::ResultDistributionType>, String>,
         shortened_grading: Result<Option<super::ShortenedGradingType>, String>,
@@ -15619,7 +15539,7 @@ pub mod builder {
         }
         pub fn location<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::LocationType>>,
+            T: std::convert::TryInto<Option<super::Location>>,
             T::Error: std::fmt::Display,
         {
             self.location = value
@@ -16509,7 +16429,7 @@ pub mod builder {
         description: Result<Option<super::ManyLangStringType>, String>,
         description_html: Result<Option<super::ManyHtmlType>, String>,
         duration: Result<Option<super::DurationType>, String>,
-        grant: Result<Option<super::ManyGrantType>, String>,
+        grant: Result<Option<ObjectOrVector<GrantType>>, String>,
         has_part: Result<Option<super::ManyLearningOpportunityType>, String>,
         homepage: Result<Option<super::ManyWebResourceType>, String>,
         id: Result<Option<super::GenericIdType>, String>,
@@ -16701,7 +16621,7 @@ pub mod builder {
         }
         pub fn grant<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyGrantType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<GrantType>>>,
             T::Error: std::fmt::Display,
         {
             self.grant = value
@@ -17511,7 +17431,7 @@ pub mod builder {
             self
         }
     }
-    impl std::convert::TryFrom<LocationType> for super::LocationType {
+    impl std::convert::TryFrom<LocationType> for super::Location {
         type Error = super::error::ConversionError;
         fn try_from(value: LocationType) -> Result<Self, super::error::ConversionError> {
             Ok(Self {
@@ -17526,8 +17446,8 @@ pub mod builder {
             })
         }
     }
-    impl From<super::LocationType> for LocationType {
-        fn from(value: super::LocationType) -> Self {
+    impl From<super::Location> for LocationType {
+        fn from(value: super::Location) -> Self {
             Self {
                 address: Ok(value.address),
                 description: Ok(value.description),
@@ -18149,7 +18069,7 @@ pub mod builder {
         date_modified: Result<Option<super::DateTimeType>, String>,
         dc_type: Result<Option<ObjectOrVector<ConceptType>>, String>,
         e_idas_identifier: Result<Option<super::LegalIdentifierType>, String>,
-        group_member_of: Result<Option<super::ManyGroupType>, String>,
+        group_member_of: Result<Option<ObjectOrVector<Group>>, String>,
         has_member: Result<Option<super::ManyPersonType>, String>,
         has_sub_organization: Result<Box<Option<super::ManyOrganisationType>>, String>,
         homepage: Result<Option<super::ManyWebResourceType>, String>,
@@ -18280,7 +18200,7 @@ pub mod builder {
         }
         pub fn group_member_of<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyGroupType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<Group>>>,
             T::Error: std::fmt::Display,
         {
             self.group_member_of = value
@@ -18612,23 +18532,23 @@ pub mod builder {
     pub struct PersonType {
         birth_name: Result<Option<super::ManyLangStringType>, String>,
         citizenship_country: Result<Option<ObjectOrVector<ConceptType>>, String>,
-        contact_point: Result<Option<super::ManyContactPointType>, String>,
+        contact_point: Result<Option<ObjectOrVector<ContactPoint>>, String>,
         date_modified: Result<Option<super::DateTimeType>, String>,
         date_of_birth: Result<Option<super::DateTimeType>, String>,
         family_name: Result<Option<super::LangStringType>, String>,
         full_name: Result<Option<super::LangStringType>, String>,
         gender: Result<Option<super::ConceptType>, String>,
         given_name: Result<Option<super::LangStringType>, String>,
-        group_member_of: Result<Option<super::ManyGroupType>, String>,
+        group_member_of: Result<Option<ObjectOrVector<Group>>, String>,
         has_claim: Result<Option<super::ManyClaimNodeType>, String>,
-        has_credential: Result<Option<super::ManyEuropeanDigitalCredentialType>, String>,
+        has_credential: Result<Option<ObjectOrVector<EuropeanDigitalCredential>>, String>,
         id: Result<Option<super::GenericIdType>, String>,
         identifier: Result<Option<super::IdentifierOrLegalIdentifierType>, String>,
-        location: Result<Option<super::LocationType>, String>,
-        member_of: Result<Box<Option<super::ManyOrganisationType>>, String>,
+        location: Result<Option<super::Location>, String>,
+        member_of: Result<Box<Option<ObjectOrVector<OrganisationType>>>, String>,
         national_id: Result<Option<super::LegalIdentifierType>, String>,
         patronymic_name: Result<Option<super::ManyLangStringType>, String>,
-        place_of_birth: Result<Option<super::LocationType>, String>,
+        place_of_birth: Result<Option<super::Location>, String>,
         type_: Result<Option<serde_json::Value>, String>,
     }
     impl Default for PersonType {
@@ -18770,7 +18690,7 @@ pub mod builder {
         }
         pub fn group_member_of<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::ManyGroupType>>,
+            T: std::convert::TryInto<Option<ObjectOrVector<Group>>>,
             T::Error: std::fmt::Display,
         {
             self.group_member_of = value
@@ -18828,7 +18748,7 @@ pub mod builder {
         }
         pub fn location<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::LocationType>>,
+            T: std::convert::TryInto<Option<super::Location>>,
             T::Error: std::fmt::Display,
         {
             self.location = value
@@ -18876,7 +18796,7 @@ pub mod builder {
         }
         pub fn place_of_birth<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<super::LocationType>>,
+            T: std::convert::TryInto<Option<super::Location>>,
             T::Error: std::fmt::Display,
         {
             self.place_of_birth = value
