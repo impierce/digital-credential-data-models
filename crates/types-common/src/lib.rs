@@ -29,7 +29,7 @@ impl<T> From<Vec<T>> for ObjectOrVector<T> {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum BoxObjectOrVector<T> {
-    Object(T),
+    Object(Box<T>),
     Vector(Vec<T>),
 }
 
@@ -41,7 +41,7 @@ impl<T: Clone> From<&BoxObjectOrVector<T>> for BoxObjectOrVector<T> {
 
 impl<T> From<T> for BoxObjectOrVector<T> {
     fn from(value: T) -> Self {
-        Self::Object(value)
+        Self::Object(Box::new(value))
     }
 }
 
