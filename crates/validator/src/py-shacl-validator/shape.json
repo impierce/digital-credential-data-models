@@ -1,0 +1,2325 @@
+[
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/AmountUnitRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Amount Unit restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Amount Unit restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Ne702a747a51f43738be96d54aa161756"
+      }
+    ]
+  },
+  {
+    "@id": "_:Ne702a747a51f43738be96d54aa161756",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://publications.europa.eu/resource/authority/currency"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EuropeanDigitalCredentialTypeRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "European Digital Credential Type restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "European Digital Credential Type restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N903fa40c8dbf4b1e83705a01ad8fc780"
+      }
+    ]
+  },
+  {
+    "@id": "_:N903fa40c8dbf4b1e83705a01ad8fc780",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/credential/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LegalIdentifierShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N5c6bca136f8746dbaeb99a4c232a32a0"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/LegalIdentifier"
+      }
+    ]
+  },
+  {
+    "@id": "_:N5c6bca136f8746dbaeb99a4c232a32a0",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "spatial"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/CountryRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/spatial"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/AmountShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N0337bf87b7c34aa9abf4b6b198c3900e"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/Amount"
+      }
+    ]
+  },
+  {
+    "@id": "_:N0337bf87b7c34aa9abf4b6b198c3900e",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "unit"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/AmountUnitRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/unit"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ReusabilityLevelRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Reusability Level restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Reusability Level restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N9ad961fc80404ba2bf2f0647cd1ad02f"
+      }
+    ]
+  },
+  {
+    "@id": "_:N9ad961fc80404ba2bf2f0647cd1ad02f",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/skill-reuse-level/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/CountryRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Country restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Country restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N6e4160fb003148d796c56524bc015d12"
+      }
+    ]
+  },
+  {
+    "@id": "_:N6e4160fb003148d796c56524bc015d12",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://publications.europa.eu/resource/authority/country"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/AccreditationTypeRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Accreditation Type restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Accreditation Type restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N9da83f33df034476bb89047c39cdf68c"
+      }
+    ]
+  },
+  {
+    "@id": "_:N9da83f33df034476bb89047c39cdf68c",
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/accreditation/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningOpportunityShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nac362142befd40228e1911d45b455a72"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/LearningOpportunity"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nac362142befd40228e1911d45b455a72",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "default language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/defaultLanguage"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EvidenceTypeRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Evidence Type restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Evidence Type restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nad2b77aadb2e41a69a2798e46cac74f5"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nad2b77aadb2e41a69a2798e46cac74f5",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/evidence-type/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/WebResourceShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N912c75acd0284c1a8fe012da97b7cb1d"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/WebResource"
+      }
+    ]
+  },
+  {
+    "@id": "_:N912c75acd0284c1a8fe012da97b7cb1d",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EvidenceShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@language": "en",
+        "@value": "The evidence of the verifiable credential. It contains information about the process which resulted in the issuance of the verifiable credential."
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N28d235a98b1d4bc09f210d2e0a5d7615"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/Evidence"
+      }
+    ]
+  },
+  {
+    "@id": "_:N28d235a98b1d4bc09f210d2e0a5d7615",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@value": "type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EvidenceTypeRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ThematicAreaRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Thematic Area restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Thematic Area restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N8104e4659a494f42abef6e1f050aca9e"
+      }
+    ]
+  },
+  {
+    "@id": "_:N8104e4659a494f42abef6e1f050aca9e",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/isced-f/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EuropeanDigitalCredentialShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N11fa26c9741a44d596b26af3c1428d0a"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/EuropeanDigitalCredential"
+      }
+    ]
+  },
+  {
+    "@id": "_:N11fa26c9741a44d596b26af3c1428d0a",
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "credential profile"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EuropeanDigitalCredentialTypeRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/credentialProfiles"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/DisplayParameterCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N94a5e51929e2448eae7b0574229ec92c"
+      },
+      {
+        "@id": "_:N616ce1e50f4148d59eb1e3bf1f4b0d0b"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/DisplayParameter"
+      }
+    ]
+  },
+  {
+    "@id": "_:N94a5e51929e2448eae7b0574229ec92c",
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@value": "available language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N616ce1e50f4148d59eb1e3bf1f4b0d0b",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@value": "primary language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/primaryLanguage"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EscoSkillRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "ESCO Skill restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "ESCO Skill restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nd196e8e166564bc996e1a9a2a8205e37"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nd196e8e166564bc996e1a9a2a8205e37",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/esco/concept-scheme/skills"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningSettingRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Learning Setting restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Learning Setting restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Neb07534030814c3599ff9d4ca9c56e62"
+      }
+    ]
+  },
+  {
+    "@id": "_:Neb07534030814c3599ff9d4ca9c56e62",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/learning-setting/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningEntitlementSpecificationShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N6f99ed1b18ca4672b03d1928f49df7ce"
+      },
+      {
+        "@id": "_:N4a467a58fb3441dbb488b9268650161a"
+      },
+      {
+        "@id": "_:Ne64b332c341640b8a179699fd845bf19"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/LearningEntitlementSpecification"
+      }
+    ]
+  },
+  {
+    "@id": "_:N6f99ed1b18ca4672b03d1928f49df7ce",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "related occupation"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EscoOccupationRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/limitOccupation"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N4a467a58fb3441dbb488b9268650161a",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "status"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningEntitlementStatusRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/entitlementStatus"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:Ne64b332c341640b8a179699fd845bf19",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "valid within"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/JurisdictionRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/limitJurisdiction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/VerificationCheckTypeRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Verification Check Type restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Verification Check Type restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nd314ecc35a384cd082be706324be402b"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nd314ecc35a384cd082be706324be402b",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/verification/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/VerificationCheckShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nd97bbf4462f34c85bf35f034b33f719e"
+      },
+      {
+        "@id": "_:N5cb37956c7934908b3517283325076ad"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/VerificationCheck"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nd97bbf4462f34c85bf35f034b33f719e",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "verification status"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/VerificationCheckStatusRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/verificationStatus"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N5cb37956c7934908b3517283325076ad",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/VerificationCheckTypeRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/JurisdictionRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Jurisdiction restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Jurisdiction restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N19bfde7183ed45c3b20a316ebacae208"
+      }
+    ]
+  },
+  {
+    "@id": "_:N19bfde7183ed45c3b20a316ebacae208",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://publications.europa.eu/resource/authority/atu"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningOutcomeShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N0aae238b3e0d42daabcb8ee7487391c4"
+      },
+      {
+        "@id": "_:Ncbb470753e554c2e8ce9f606c9176222"
+      },
+      {
+        "@id": "_:N9d6e894069de42c0a90c1706e97a319d"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/LearningOutcome"
+      }
+    ]
+  },
+  {
+    "@id": "_:N0aae238b3e0d42daabcb8ee7487391c4",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "related ESCO skill(s)"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EscoSkillRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/relatedESCOSkill"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:Ncbb470753e554c2e8ce9f606c9176222",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "reusability level"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ReusabilityLevelRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/reusabilityLevel"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N9d6e894069de42c0a90c1706e97a319d",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningOutcomeTypeRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/QualificationShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nfa2cd176627e478dbe17835992145f47"
+      },
+      {
+        "@id": "_:Na37fc2e729f342899bc60fde91a233e9"
+      },
+      {
+        "@id": "_:N3b976b6f06ad43098afc9dd5335eaef1"
+      },
+      {
+        "@id": "_:Nbf059e2837b14cac9d8ba77b9b8ea966"
+      },
+      {
+        "@id": "_:Nda1c5f5896e24096b0148e204fb6daca"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/Qualification"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nfa2cd176627e478dbe17835992145f47",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "NQF level"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/NQFLevelRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/NQFLevel"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:Na37fc2e729f342899bc60fde91a233e9",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "EQF level"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EQFLevelRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/EQFLevel"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N3b976b6f06ad43098afc9dd5335eaef1",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "learning setting"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningSettingRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/learningSetting"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nbf059e2837b14cac9d8ba77b9b8ea966",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@value": "language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nda1c5f5896e24096b0148e204fb6daca",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "thematic area"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ThematicAreaRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/ISCEDFCode"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningAssessmentSpecificationShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Ne896aa0d815344898c1a773fc0dc657a"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/LearningAssessmentSpecification"
+      }
+    ]
+  },
+  {
+    "@id": "_:Ne896aa0d815344898c1a773fc0dc657a",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full",
+    "@type": [
+      "http://www.w3.org/2002/07/owl#Ontology"
+    ],
+    "http://creativecommons.org/ns#attributionURL": [
+      {
+        "@id": "http://ec.europa.eu/"
+      }
+    ],
+    "http://purl.org/dc/terms/created": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#date",
+        "@value": "2021-09-25"
+      }
+    ],
+    "http://purl.org/dc/terms/description": [
+      {
+        "@language": "en",
+        "@value": "EDC constraints for the controlled vocabularies used by EDC application profile, provides the constraints on controlled vocabularies used."
+      }
+    ],
+    "http://purl.org/dc/terms/license": [
+      {
+        "@id": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "http://purl.org/dc/terms/modified": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#date",
+        "@value": "2023-07-06"
+      }
+    ],
+    "http://purl.org/dc/terms/publisher": [
+      {
+        "@id": "http://publications.europa.eu/resource/authority/corporate-body/DEMP"
+      }
+    ],
+    "http://purl.org/dc/terms/title": [
+      {
+        "@language": "en",
+        "@value": "SHACL constraints for the controlled vocabularies used by European Digital Credentials application profile"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@language": "en",
+        "@value": "This document specifies the set SHACL constraints on classes and properties used in the EDC application profile, with respect to the controlled vocabularies used."
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@language": "en",
+        "@value": "Controlled Vocabularies SHACL constraints for EDC Application Profile"
+      }
+    ],
+    "http://www.w3.org/2002/07/owl#imports": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-no-cv"
+      }
+    ],
+    "http://www.w3.org/2002/07/owl#versionInfo": [
+      {
+        "@value": "1.2.0"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ClaimTypeRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Claim Type restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Claim Type restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nfb197018d3b24a1fb66ae9a61a424812"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nfb197018d3b24a1fb66ae9a61a424812",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/claim-type/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ClaimShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N21627001ba734ee68b5a74132049da60"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/Claim"
+      }
+    ]
+  },
+  {
+    "@id": "_:N21627001ba734ee68b5a74132049da60",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ClaimTypeRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Language restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Language restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N1bb32e945b554361b34d80b5a394449f"
+      }
+    ]
+  },
+  {
+    "@id": "_:N1bb32e945b554361b34d80b5a394449f",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://publications.europa.eu/resource/authority/language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/AccreditationShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N195990acbab647e09d0af7656603ee33"
+      },
+      {
+        "@id": "_:N7b143d9c7d674e0fa1d343acfa53c9c7"
+      },
+      {
+        "@id": "_:Nfde6182e1f60453e83db328633128e18"
+      },
+      {
+        "@id": "_:N5a8eec2561b54234bb38f08a71b64a30"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/Accreditation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N195990acbab647e09d0af7656603ee33",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "accredited in jurisdiction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/JurisdictionRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/limitJurisdiction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N7b143d9c7d674e0fa1d343acfa53c9c7",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "accredited for EQF level"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EQFLevelRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/limitEQFLevel"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nfde6182e1f60453e83db328633128e18",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "accredited for thematic area"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ThematicAreaRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/limitField"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N5a8eec2561b54234bb38f08a71b64a30",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/AccreditationTypeRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/type"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EscoOccupationRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "ESCO Occupation restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "ESCO Occupation restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N0f4b625ee1064e0f9b4dd2129198ece5"
+      }
+    ]
+  },
+  {
+    "@id": "_:N0f4b625ee1064e0f9b4dd2129198ece5",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/esco/concept-scheme/occupations"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/PersonShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nee51432812b04d26b81fe35577cd84ff"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/Person"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nee51432812b04d26b81fe35577cd84ff",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "citizenship"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/CountryRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/citizenshipCountry"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/VerificationCheckStatusRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Verification Check Status restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Verification Check Status restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nd549975c366c4fc682298d2b306af2b9"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nd549975c366c4fc682298d2b306af2b9",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/verification-status/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/NQFLevelRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "NQF Level restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "NQF Level restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Naf2468f4d215485397a46630502b21b9"
+      }
+    ]
+  },
+  {
+    "@id": "_:Naf2468f4d215485397a46630502b21b9",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/qdr/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningOutcomeTypeRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Learning Outcome Type restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Learning Outcome Type restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nbd5150781a21481c94c13f111b903de5"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nbd5150781a21481c94c13f111b903de5",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/skill-type/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/EQFLevelRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "EQF Level restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "EQF Level restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N3226dbd8dbac40a1a1c0447a2dda6835"
+      }
+    ]
+  },
+  {
+    "@id": "_:N3226dbd8dbac40a1a1c0447a2dda6835",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/eqf/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/AddressShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N2c6dd25719004594bacc6b8a925286d8"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/Address"
+      }
+    ]
+  },
+  {
+    "@id": "_:N2c6dd25719004594bacc6b8a925286d8",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#minCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "country"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/CountryRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/countryCode"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningEntitlementStatusRestriction",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Learning Entitlement Status restriction"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Learning Entitlement Status restriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N5d94f4e6105a424c8013d254d33cce29"
+      }
+    ]
+  },
+  {
+    "@id": "_:N5d94f4e6105a424c8013d254d33cce29",
+    "http://www.w3.org/ns/shacl#class": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#hasValue": [
+      {
+        "@id": "http://data.europa.eu/snb/entitlement-status/25831c2"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningActivitySpecificationShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:N48be6520e22445c9b2c04041ccaba86e"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/LearningActivitySpecification"
+      }
+    ]
+  },
+  {
+    "@id": "_:N48be6520e22445c9b2c04041ccaba86e",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@value": "language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningAchievementSpecificationShapeCV",
+    "@type": [
+      "http://www.w3.org/ns/shacl#NodeShape"
+    ],
+    "http://www.w3.org/ns/shacl#property": [
+      {
+        "@id": "_:Nc8a49ce9708f479594a0eaba02d1d9cd"
+      },
+      {
+        "@id": "_:Nb0f02e0017624d5cad2b1de34677b30e"
+      },
+      {
+        "@id": "_:N7d8597c448c74f01a2b8a719b06765bc"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#targetClass": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/LearningAchievementSpecification"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nc8a49ce9708f479594a0eaba02d1d9cd",
+    "http://www.w3.org/ns/shacl#maxCount": [
+      {
+        "@value": 1
+      }
+    ],
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "learning setting"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LearningSettingRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/learningSetting"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:Nb0f02e0017624d5cad2b1de34677b30e",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@value": "language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/LanguageRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://purl.org/dc/terms/language"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  },
+  {
+    "@id": "_:N7d8597c448c74f01a2b8a719b06765bc",
+    "http://www.w3.org/ns/shacl#name": [
+      {
+        "@language": "en",
+        "@value": "thematic area"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#node": [
+      {
+        "@id": "http://data.europa.eu/snb/model/ap/edc-generic-full/ThematicAreaRestriction"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#nodeKind": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#IRI"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#path": [
+      {
+        "@id": "http://data.europa.eu/snb/model/elm/ISCEDFCode"
+      }
+    ],
+    "http://www.w3.org/ns/shacl#severity": [
+      {
+        "@id": "http://www.w3.org/ns/shacl#Violation"
+      }
+    ]
+  }
+]

@@ -1,0 +1,97 @@
+@prefix cred: <https://www.w3.org/2018/credentials#> .
+@prefix dc1: <http://purl.org/dc/terms/> .
+@prefix elm: <http://data.europa.eu/snb/model/elm/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix rov: <http://www.w3.org/ns/regorg#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/credential132> a elm:EuropeanDigitalCredential,
+        cred:VerifiableCredential ;
+    elm:credentialProfiles <http://data.europa.eu/snb/credential/bdc47cb449> ;
+    elm:displayParameter <http://example.org/display1> ;
+    cred:credentialSchema <http://data.europa.eu/snb/model/ap/edc-generic-no-cv> ;
+    cred:credentialSubject <http://example.org/pid1> ;
+    cred:evidence <http://example.org/evidence123> ;
+    cred:expirationDate "2024-09-25T00:00:00"^^xsd:dateTime ;
+    cred:issuanceDate "2010-01-01T00:00:00"^^xsd:dateTime ;
+    cred:issued "2010-01-01T00:00:00"^^xsd:dateTime ;
+    cred:issuer <http://example.org/issuer565049> ;
+    cred:validFrom "2010-10-01T00:00:00"^^xsd:dateTime ;
+    cred:validUntil "2024-09-25T00:00:00"^^xsd:dateTime .
+
+<http://data.europa.eu/snb/credential/25831c2> a skos:ConceptScheme .
+
+<http://data.europa.eu/snb/credential/bdc47cb449> a skos:Concept ;
+    skos:inScheme <http://data.europa.eu/snb/credential/25831c2> .
+
+<http://data.europa.eu/snb/evidence-type/25831c2> a skos:ConceptScheme .
+
+<http://data.europa.eu/snb/evidence-type/c_18016257> a skos:Concept ;
+    skos:inScheme <http://data.europa.eu/snb/evidence-type/25831c2> .
+
+<http://data.europa.eu/snb/model/ap/edc-generic-no-cv> a elm:ShaclValidator2017 .
+
+<http://example.org/add1> a elm:Address ;
+    elm:countryCode <http://publications.europa.eu/resource/authority/country/FRA> .
+
+<http://example.org/add2> a elm:Address ;
+    elm:countryCode <http://publications.europa.eu/resource/authority/country/FRA> .
+
+<http://example.org/awardingProcess1> a elm:AwardingProcess ;
+    elm:awardingBody <http://example.org/org1> ;
+    elm:educationalSystemNote <http://publications.europa.eu/someEducationalSystem> .
+
+<http://example.org/cl1> a elm:LearningAchievement ;
+    elm:awardedBy <http://example.org/awardingProcess1> ;
+    dc1:title "some kind of learning achievement"@en,
+        "une sorte de réussite scolaire"@fr .
+
+<http://example.org/display1> a elm:DisplayParameter ;
+    elm:primaryLanguage <http://publications.europa.eu/resource/authority/language/ENG> ;
+    dc1:language <http://publications.europa.eu/resource/authority/language/ENG>,
+        <http://publications.europa.eu/resource/authority/language/FRA> ;
+    dc1:title "Some kind of credential"@en .
+
+<http://example.org/evidence123> a elm:Evidence ;
+    dc1:type <http://data.europa.eu/snb/evidence-type/c_18016257> .
+
+<http://example.org/issuer565049> a elm:Organisation ;
+    elm:location <http://example.org/loc1> ;
+    rov:legalName "some legal name"@en,
+        "un nom légal"@fr .
+
+<http://example.org/loc1> a dc1:Location ;
+    elm:address <http://example.org/add1> .
+
+<http://example.org/loc2> a dc1:Location ;
+    elm:address <http://example.org/add2> .
+
+<http://example.org/org1> a elm:Organisation ;
+    elm:location <http://example.org/loc2> ;
+    rov:legalName "some legal name of the organistion"@en .
+
+<http://example.org/pid1> a elm:Person ;
+    elm:hasClaim <http://example.org/cl1> ;
+    person:birthName "Maxi"@en ;
+    foaf:familyName "Power"@en ;
+    foaf:fullName "Max Power"@en ;
+    foaf:givenName "Max"@en .
+
+<http://publications.europa.eu/resource/authority/country> a skos:ConceptScheme .
+
+<http://publications.europa.eu/resource/authority/language/FRA> a skos:Concept ;
+    skos:inScheme <http://publications.europa.eu/resource/authority/language> .
+
+<http://publications.europa.eu/someEducationalSystem> a skos:Concept ;
+    skos:definition "the definition of the the concept for the educational sytem"@en .
+
+<http://publications.europa.eu/resource/authority/country/FRA> a skos:Concept ;
+    skos:inScheme <http://publications.europa.eu/resource/authority/country> .
+
+<http://publications.europa.eu/resource/authority/language> a skos:ConceptScheme .
+
+<http://publications.europa.eu/resource/authority/language/ENG> a skos:Concept ;
+    skos:inScheme <http://publications.europa.eu/resource/authority/language> .
+
