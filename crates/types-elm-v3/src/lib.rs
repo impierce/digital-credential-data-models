@@ -1,4 +1,3 @@
-pub mod codegen1;
 pub mod codegen2;
 
 pub fn add(left: usize, right: usize) -> usize {

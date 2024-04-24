@@ -487,7 +487,7 @@ pub struct AwardingProcess {
     #[serde(rename = "awardingDate", default, skip_serializing_if = "Option::is_none")]
     pub awarding_date: Option<DateTimeType>,
     #[serde(default)]
-    pub awards: Box<Option<ManyClaimNodeType>>,
+    pub awards: Option<Box<ManyClaimNodeType>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(
@@ -527,16 +527,7 @@ impl std::ops::Deref for BooleanType {
         &self.0
     }
 }
-impl From<BooleanType> for String {
-    fn from(value: BooleanType) -> Self {
-        value.0
-    }
-}
-impl From<&BooleanType> for BooleanType {
-    fn from(value: &BooleanType) -> Self {
-        value.clone()
-    }
-}
+
 impl std::str::FromStr for BooleanType {
     type Err = self::error::ConversionError;
     fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
@@ -546,24 +537,28 @@ impl std::str::FromStr for BooleanType {
         Ok(Self(value.to_string()))
     }
 }
+
 impl std::convert::TryFrom<&str> for BooleanType {
     type Error = self::error::ConversionError;
     fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
         value.parse()
     }
 }
+
 impl std::convert::TryFrom<&String> for BooleanType {
     type Error = self::error::ConversionError;
     fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
         value.parse()
     }
 }
+
 impl std::convert::TryFrom<String> for BooleanType {
     type Error = self::error::ConversionError;
     fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
         value.parse()
     }
 }
+
 impl<'de> serde::Deserialize<'de> for BooleanType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -576,6 +571,7 @@ impl<'de> serde::Deserialize<'de> for BooleanType {
             })
     }
 }
+
 ///ClaimNodeType
 ///
 /// <details><summary>JSON schema</summary>
