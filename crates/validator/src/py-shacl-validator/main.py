@@ -1,46 +1,53 @@
 from rdflib import Graph
 from pyshacl import validate
 from os import path
-
-g_elm = Graph()
-g_elm.parse('EDC-generic-full.rdf')
-
-q = """
-PREFIX elm: <http://data.europa.eu/snb/model/elm/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT ?entity WHERE {
-        ?entity rdfs:subClassOf* elm:EuropeanDigitalCredential .
-}
-"""
-x = g_elm.query(q)
-
-print(list(x))
-
-# g_elm.serialize(format="turtle", destination="shape.ttl")
-g_elm.serialize(format="json-ld", destination="shape.json")
+import sys
+import getopt
+import argparse
 
 
-del g_elm
+def file_path(string):
+    if path.isfile(string) and ".json" in string:
+        return string
+    else:
+        raise argparse.ArgumentTypeError(
+            f"Input file:{path} is not a valid JSON file")
 
-g_data = Graph()
-g_data.parse("credential-sample.json", format="json-ld")
-g_data.serialize(destination="data.ttl", format="turtle")
 
-# Load the request
-data = path.abspath('data.ttl')
+def main(inputfile):
+    g_elm = Graph()
+    g_elm.parse('EDC-generic-full.rdf')
+    g_elm.serialize(format="turtle", destination="shape.ttl")
 
-# Load the SHACL shape
-shape = path.abspath('shape.ttl')
+    del g_elm
 
-# Validate the data against the shape
-conforms, _, text = validate(
-    data, shacl_graph=shape, inference='rdfs'
-)
+    g_data = Graph()
+    g_data.parse(inputfile, format="json-ld")
+    g_data.serialize(destination="data.ttl", format="turtle")
 
-# Print validation results
-if conforms:
-    print("Data conforms to the SHACL shape.")
-else:
-    print("Data does not conform to the SHACL shape. Validation report:")
-    print(text)
+    # Load the request
+    data = path.abspath('data.ttl')
+
+    # Load the SHACL shape
+    shape = path.abspath('shape.ttl')
+
+    # Validate the data against the shape
+    conforms, _, text = validate(data, shacl_graph=shape, inference='rdfs')
+
+    # Print validation results
+    if conforms:
+        print("Data conforms to the SHACL shape.")
+    else:
+        print("Data does not conform to the SHACL shape. Validation report:")
+        print(text)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input-file', type=file_path)
+    args = parser.parse_args()
+    if args.input_file is None:
+        print("main.py -i <inputfile>")
+        sys.exit(2)
+    print('Input file is:', args.input_file)
+    main(args.input_file)
