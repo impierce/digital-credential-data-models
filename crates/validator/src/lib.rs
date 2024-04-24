@@ -41,7 +41,7 @@ mod tests {
     }
 
     #[test]
-    fn test_request() {
+    fn test_sample_request() {
         let manifest_dir = manifest_dir();
         let result = validate(manifest_dir.join("elm-requests/credential-sample.json"));
 
