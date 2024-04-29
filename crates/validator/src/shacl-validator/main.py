@@ -14,13 +14,15 @@ def file_path(string):
             f"Input file:{path} is not a valid JSON file")
 
 
+# Add to main if shacl shape needs to be regenerated.
+def create_shacl_shape():
+    g_shape = Graph()
+    g_shape.parse('EDC-generic-full.rdf')
+    g_shape.serialize(format="turtle", destination="shape.ttl")
+
+    del g_shape
+
 def main(inputfile):
-    g_elm = Graph()
-    g_elm.parse('EDC-generic-full.rdf')
-    g_elm.serialize(format="turtle", destination="shape.ttl")
-
-    del g_elm
-
     g_data = Graph()
     g_data.parse(inputfile, format="json-ld")
     g_data.serialize(destination="data.ttl", format="turtle")

@@ -1,3 +1,4 @@
+@prefix : <https://www.w3.org/ns/credentials/issuer-dependent#> .
 @prefix cred: <https://www.w3.org/2018/credentials#> .
 @prefix dc1: <http://purl.org/dc/terms/> .
 @prefix elm: <http://data.europa.eu/snb/model/elm/> .
@@ -11,15 +12,15 @@
         cred:VerifiableCredential ;
     elm:credentialProfiles <http://data.europa.eu/snb/credential/bdc47cb449> ;
     elm:displayParameter <http://example.org/display1> ;
-    cred:credentialSchema <http://data.europa.eu/snb/model/ap/edc-generic-no-cv> ;
-    cred:credentialSubject <http://example.org/pid1> ;
-    cred:evidence <http://example.org/evidence123> ;
-    cred:expirationDate "2024-09-25T00:00:00"^^xsd:dateTime ;
-    cred:issuanceDate "2010-01-01T00:00:00"^^xsd:dateTime ;
-    cred:issued "2010-01-01T00:00:00"^^xsd:dateTime ;
-    cred:issuer <http://example.org/issuer565049> ;
-    cred:validFrom "2010-10-01T00:00:00"^^xsd:dateTime ;
-    cred:validUntil "2024-09-25T00:00:00"^^xsd:dateTime .
+    :credentialSchema <http://data.europa.eu/snb/model/ap/edc-generic-no-cv> ;
+    :credentialSubject <http://example.org/pid1> ;
+    :evidence <http://example.org/evidence123> ;
+    :expirationDate "2024-09-25T00:00:00" ;
+    :issuanceDate "2010-01-01T00:00:00" ;
+    :issued "2010-01-01T00:00:00" ;
+    :issuer <http://example.org/issuer565049> ;
+    :validFrom "2010-10-01T00:00:00" ;
+    :validUntil "2024-09-25T00:00:00" .
 
 <http://data.europa.eu/snb/credential/25831c2> a skos:ConceptScheme .
 
@@ -32,6 +33,10 @@
     skos:inScheme <http://data.europa.eu/snb/evidence-type/25831c2> .
 
 <http://data.europa.eu/snb/model/ap/edc-generic-no-cv> a elm:ShaclValidator2017 .
+
+<http://example.org/126839> a elm:LegalIdentifier ;
+    dc1:spatial <http://publications.europa.eu/resource/authority/country/FRA> ;
+    skos:notation "126839"^^xsd:string .
 
 <http://example.org/add1> a elm:Address ;
     elm:countryCode <http://publications.europa.eu/resource/authority/country/FRA> .
@@ -60,7 +65,8 @@
 <http://example.org/issuer565049> a elm:Organisation ;
     elm:location <http://example.org/loc1> ;
     rov:legalName "some legal name"@en,
-        "un nom légal"@fr .
+        "un nom légal"@fr ;
+    :eIDASΙdentifier <http://example.org/126839> .
 
 <http://example.org/loc1> a dc1:Location ;
     elm:address <http://example.org/add1> .
@@ -87,11 +93,11 @@
 <http://publications.europa.eu/someEducationalSystem> a skos:Concept ;
     skos:definition "the definition of the the concept for the educational sytem"@en .
 
-<http://publications.europa.eu/resource/authority/country/FRA> a skos:Concept ;
-    skos:inScheme <http://publications.europa.eu/resource/authority/country> .
-
 <http://publications.europa.eu/resource/authority/language> a skos:ConceptScheme .
 
 <http://publications.europa.eu/resource/authority/language/ENG> a skos:Concept ;
     skos:inScheme <http://publications.europa.eu/resource/authority/language> .
+
+<http://publications.europa.eu/resource/authority/country/FRA> a skos:Concept ;
+    skos:inScheme <http://publications.europa.eu/resource/authority/country> .
 

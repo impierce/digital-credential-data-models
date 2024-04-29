@@ -22,7 +22,12 @@
     owl:versionInfo "1.2.0" .
 
 edcf:AccreditationShapeCV a sh:NodeShape ;
-    sh:property [ sh:name "accredited for thematic area"@en ;
+    sh:property [ sh:name "accredited in jurisdiction"@en ;
+            sh:node edcf:JurisdictionRestriction ;
+            sh:nodeKind sh:IRI ;
+            sh:path elm:limitJurisdiction ;
+            sh:severity sh:Violation ],
+        [ sh:name "accredited for thematic area"@en ;
             sh:node edcf:ThematicAreaRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:limitField ;
@@ -38,11 +43,6 @@ edcf:AccreditationShapeCV a sh:NodeShape ;
             sh:node edcf:EQFLevelRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:limitEQFLevel ;
-            sh:severity sh:Violation ],
-        [ sh:name "accredited in jurisdiction"@en ;
-            sh:node edcf:JurisdictionRestriction ;
-            sh:nodeKind sh:IRI ;
-            sh:path elm:limitJurisdiction ;
             sh:severity sh:Violation ] ;
     sh:targetClass elm:Accreditation .
 
@@ -75,18 +75,18 @@ edcf:ClaimShapeCV a sh:NodeShape ;
     sh:targetClass elm:Claim .
 
 edcf:DisplayParameterCV a sh:NodeShape ;
-    sh:property [ sh:minCount 1 ;
-            sh:name "available language" ;
-            sh:node edcf:LanguageRestriction ;
-            sh:nodeKind sh:IRI ;
-            sh:path dcterms:language ;
-            sh:severity sh:Violation ],
-        [ sh:maxCount 1 ;
+    sh:property [ sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:name "primary language" ;
             sh:node edcf:LanguageRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:primaryLanguage ;
+            sh:severity sh:Violation ],
+        [ sh:minCount 1 ;
+            sh:name "available language" ;
+            sh:node edcf:LanguageRestriction ;
+            sh:nodeKind sh:IRI ;
+            sh:path dcterms:language ;
             sh:severity sh:Violation ] ;
     sh:targetClass elm:DisplayParameter .
 
@@ -146,15 +146,15 @@ edcf:LearningAssessmentSpecificationShapeCV a sh:NodeShape ;
     sh:targetClass elm:LearningAssessmentSpecification .
 
 edcf:LearningEntitlementSpecificationShapeCV a sh:NodeShape ;
-    sh:property [ sh:name "valid within"@en ;
-            sh:node edcf:JurisdictionRestriction ;
-            sh:nodeKind sh:IRI ;
-            sh:path elm:limitJurisdiction ;
-            sh:severity sh:Violation ],
-        [ sh:name "related occupation"@en ;
+    sh:property [ sh:name "related occupation"@en ;
             sh:node edcf:EscoOccupationRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:limitOccupation ;
+            sh:severity sh:Violation ],
+        [ sh:name "valid within"@en ;
+            sh:node edcf:JurisdictionRestriction ;
+            sh:nodeKind sh:IRI ;
+            sh:path elm:limitJurisdiction ;
             sh:severity sh:Violation ],
         [ sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -175,13 +175,7 @@ edcf:LearningOpportunityShapeCV a sh:NodeShape ;
     sh:targetClass elm:LearningOpportunity .
 
 edcf:LearningOutcomeShapeCV a sh:NodeShape ;
-    sh:property [ sh:maxCount 1 ;
-            sh:name "type"@en ;
-            sh:node edcf:LearningOutcomeTypeRestriction ;
-            sh:nodeKind sh:IRI ;
-            sh:path dcterms:type ;
-            sh:severity sh:Violation ],
-        [ sh:name "related ESCO skill(s)"@en ;
+    sh:property [ sh:name "related ESCO skill(s)"@en ;
             sh:node edcf:EscoSkillRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:relatedESCOSkill ;
@@ -191,6 +185,12 @@ edcf:LearningOutcomeShapeCV a sh:NodeShape ;
             sh:node edcf:ReusabilityLevelRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:reusabilityLevel ;
+            sh:severity sh:Violation ],
+        [ sh:maxCount 1 ;
+            sh:name "type"@en ;
+            sh:node edcf:LearningOutcomeTypeRestriction ;
+            sh:nodeKind sh:IRI ;
+            sh:path dcterms:type ;
             sh:severity sh:Violation ] ;
     sh:targetClass elm:LearningOutcome .
 
@@ -219,43 +219,43 @@ edcf:QualificationShapeCV a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:path elm:EQFLevel ;
             sh:severity sh:Violation ],
+        [ sh:name "language" ;
+            sh:node edcf:LanguageRestriction ;
+            sh:nodeKind sh:IRI ;
+            sh:path dcterms:language ;
+            sh:severity sh:Violation ],
         [ sh:maxCount 1 ;
             sh:name "learning setting"@en ;
             sh:node edcf:LearningSettingRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:learningSetting ;
             sh:severity sh:Violation ],
-        [ sh:name "NQF level"@en ;
-            sh:node edcf:NQFLevelRestriction ;
-            sh:nodeKind sh:IRI ;
-            sh:path elm:NQFLevel ;
-            sh:severity sh:Violation ],
         [ sh:name "thematic area"@en ;
             sh:node edcf:ThematicAreaRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:ISCEDFCode ;
             sh:severity sh:Violation ],
-        [ sh:name "language" ;
-            sh:node edcf:LanguageRestriction ;
+        [ sh:name "NQF level"@en ;
+            sh:node edcf:NQFLevelRestriction ;
             sh:nodeKind sh:IRI ;
-            sh:path dcterms:language ;
+            sh:path elm:NQFLevel ;
             sh:severity sh:Violation ] ;
     sh:targetClass elm:Qualification .
 
 edcf:VerificationCheckShapeCV a sh:NodeShape ;
     sh:property [ sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:name "type"@en ;
-            sh:node edcf:VerificationCheckTypeRestriction ;
-            sh:nodeKind sh:IRI ;
-            sh:path dcterms:type ;
-            sh:severity sh:Violation ],
-        [ sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:name "verification status"@en ;
             sh:node edcf:VerificationCheckStatusRestriction ;
             sh:nodeKind sh:IRI ;
             sh:path elm:verificationStatus ;
+            sh:severity sh:Violation ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "type"@en ;
+            sh:node edcf:VerificationCheckTypeRestriction ;
+            sh:nodeKind sh:IRI ;
+            sh:path dcterms:type ;
             sh:severity sh:Violation ] ;
     sh:targetClass elm:VerificationCheck .
 

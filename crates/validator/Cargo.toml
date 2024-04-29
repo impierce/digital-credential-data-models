@@ -11,3 +11,7 @@ serde_json = { workspace = true }
 regress = { workspace = true }
 chrono = { workspace = true }
 types-elm-v3 = { path = "../types-elm-v3" }
+
+[[bin]]
+path = "src/lib.rs"
+name = "validate"
