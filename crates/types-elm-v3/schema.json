@@ -158,7 +158,7 @@
       "properties": {
         "credentialSubject": {
           "description": "Defines additional information about the subject that is described by the Verifiable Accreditation",
-          "$ref": "#/$defs/CredentialSubjectType"
+          "$ref": "#/$defs/AgentOrPersonOrOrganisationType"
         },
         "credentialProfiles": {
           "$ref": "#/$defs/Many!ConceptType"
@@ -251,9 +251,6 @@
       "required": [
         "type"
       ]
-    },
-    "CredentialSubjectType": {
-      "$ref": "#/$defs/AgentOrPersonOrOrganisationType"
     },
     "IntegerType": {
       "type": "integer"
@@ -384,20 +381,20 @@
     "LiteralType": {
       "$ref": "#/$defs/StringType"
     },
-    "Many!AgentType": {
+    "Many!Agent": {
       "oneOf": [
         {
-          "$ref": "#/$defs/AgentType"
+          "$ref": "#/$defs/Agent"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/AgentType"
+            "$ref": "#/$defs/Agent"
           }
         }
       ]
     },
-    "AgentType": {
+    "Agent": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -434,20 +431,20 @@
       },
       "required": []
     },
-    "Many!PersonType": {
+    "Many!Person": {
       "oneOf": [
         {
-          "$ref": "#/$defs/PersonType"
+          "$ref": "#/$defs/Person"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/PersonType"
+            "$ref": "#/$defs/Person"
           }
         }
       ]
     },
-    "PersonType": {
+    "Person": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -482,7 +479,7 @@
           "$ref": "#/$defs/Many!LangStringType"
         },
         "memberOf": {
-          "$ref": "#/$defs/Many!OrganisationType"
+          "$ref": "#/$defs/Many!Organisation"
         },
         "dateOfBirth": {
           "$ref": "#/$defs/DateTimeType"
@@ -559,20 +556,20 @@
         }
       ]
     },
-    "Many!OrganisationType": {
+    "Many!Organisation": {
       "oneOf": [
         {
-          "$ref": "#/$defs/OrganisationType"
+          "$ref": "#/$defs/Organisation"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/OrganisationType"
+            "$ref": "#/$defs/Organisation"
           }
         }
       ]
     },
-    "OrganisationType": {
+    "Organisation": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -622,13 +619,13 @@
           "$ref": "#/$defs/MediaObjectType"
         },
         "hasSubOrganization": {
-          "$ref": "#/$defs/Many!OrganisationType"
+          "$ref": "#/$defs/Many!Organisation"
         },
         "subOrganizationOf": {
-          "$ref": "#/$defs/OrganisationType"
+          "$ref": "#/$defs/Organisation"
         },
         "hasMember": {
-          "$ref": "#/$defs/Many!PersonType"
+          "$ref": "#/$defs/Many!Person"
         },
         "groupMemberOf": {
           "$ref": "#/$defs/Many!GroupType"
@@ -771,7 +768,7 @@
           "$ref": "#/$defs/WebResourceType"
         },
         "organisation": {
-          "$ref": "#/$defs/Many!OrganisationType"
+          "$ref": "#/$defs/Many!Organisation"
         },
         "limitQualification": {
           "$ref": "#/$defs/QualificationType"
@@ -789,7 +786,7 @@
           "$ref": "#/$defs/Many!ConceptType"
         },
         "accreditingAgent": {
-          "$ref": "#/$defs/OrganisationType"
+          "$ref": "#/$defs/Organisation"
         },
         "reviewDate": {
           "$ref": "#/$defs/DateTimeType"
@@ -1411,13 +1408,13 @@
     "AgentOrPersonOrOrganisationType": {
       "oneOf": [
         {
-          "$ref": "#/$defs/AgentType"
+          "$ref": "#/$defs/Agent"
         },
         {
-          "$ref": "#/$defs/PersonType"
+          "$ref": "#/$defs/Person"
         },
         {
-          "$ref": "#/$defs/OrganisationType"
+          "$ref": "#/$defs/Organisation"
         }
       ]
     },
@@ -2287,7 +2284,7 @@
           "$ref": "#/$defs/ConceptType"
         },
         "limitOrganisation": {
-          "$ref": "#/$defs/Many!OrganisationType"
+          "$ref": "#/$defs/Many!Organisation"
         },
         "limitJurisdiction": {
           "$ref": "#/$defs/Many!ConceptType"
@@ -2389,7 +2386,7 @@
           "$ref": "#/$defs/Many!PriceDetailType"
         },
         "providedBy": {
-          "$ref": "#/$defs/OrganisationType"
+          "$ref": "#/$defs/Organisation"
         },
         "grant": {
           "$ref": "#/$defs/Many!GrantType"

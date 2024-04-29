@@ -237,14 +237,15 @@ pub struct Address {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AgentOrPersonOrOrganisation {
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub agent_type: Option<Agent>,
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub person: Option<Box<Person>>,
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub organisation: Option<Box<Organisation>>,
+#[serde(tag = "type")]
+pub enum AgentOrPersonOrOrganisation {
+    Agent(Agent),
+    Person(Box<Person>),
+    Organisation(Box<Organisation>),
 }
+
+
+
 
 ///AgentType
 ///
