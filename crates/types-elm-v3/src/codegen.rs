@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use std::ops;
 
 use chrono::{DateTime, Utc};
-use serde::de::Visitor;
 use serde::{Deserialize, Serialize};
 use types_common::{BoxObjectOrVector, ObjectOrVector};
 
@@ -243,7 +242,7 @@ pub struct Address {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum AgentOrPersonOrOrganisation {
-    Agent(Agent),
+    Agent(Box<Agent>),
     Person(Box<Person>),
     Organisation(Box<Organisation>),
 }
@@ -1517,24 +1516,25 @@ pub struct EuropassEdcCredential {
     pub credential_status: Option<EuropassEdcCredentialCredentialStatus>,
 
     pub credential_subject: ObjectOrVector<AgentOrPersonOrOrganisation>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub display_parameter: Option<DisplayParameter>,
 
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub evidence: Option<ObjectOrVector<Evidence>>,
-    /////Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
-    //pub id: String,
-    /////DID of the credential issuer
-    //pub issuer: EuropassEdcCredentialIssuer,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub terms_of_use: Option<ObjectOrVector<TermsOfUse>>,
-    /////Full type chain, used to identify the credential base types
-    //pub type_: Vec<String>,
-    /////Defines the earliest point when the credential becomes valid.
-    //pub valid_from: DateTime<Utc>,
-    /////Defines the latest point when the credential ceases to be valid.
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub valid_until: Option<DateTime<Utc>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub display_parameter: Option<DisplayParameter>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub evidence: Option<ObjectOrVector<Evidence>>,
+    ///Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
+    pub id: String,
+    ///DID of the credential issuer
+    pub issuer: EuropassEdcCredentialIssuer,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub terms_of_use: Option<ObjectOrVector<TermsOfUse>>,
+    ///Full type chain, used to identify the credential base types
+    pub type_: Vec<String>,
+    ///Defines the earliest point when the credential becomes valid.
+    pub valid_from: DateTime<Utc>,
+    ///Defines the latest point when the credential ceases to be valid.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub valid_until: Option<DateTime<Utc>>,
 }
 
 ///EuropassEdcCredentialContext
