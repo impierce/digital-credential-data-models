@@ -20,16 +20,6 @@ pub fn validate(file: PathBuf) -> io::Result<ValidateRequest> {
     ValidateRequest::new(absolute)
 }
 
-pub fn main() -> io::Result<()> {
-        let manifest_dir = manifest_dir();
-        let result = validate(manifest_dir.join("elm-requests/credential-sample.json"))?;
-
-        assert!(result.valid_shacl);
-        assert!(result.valid_rust);
-
-        Ok(())
-}
-
 pub fn manifest_dir() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -61,7 +51,18 @@ mod tests {
             assert!(result.valid_shacl);
             assert!(result.valid_shacl);
         }
+    }
+    
+    #[test]
+    fn test_bengales_diploma() {
+        let manifest_dir = manifest_dir();
+        let result = validate(manifest_dir.join("elm-requests/bengales-highschool-diploma.json"));
 
-        //
+        assert!(result.is_ok());
+
+        if let Ok(result) = result {
+            assert!(result.valid_shacl);
+            assert!(result.valid_shacl);
+        }
     }
 }

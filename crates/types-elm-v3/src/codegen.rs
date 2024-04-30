@@ -31,6 +31,43 @@ pub mod error {
         }
     }
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EuropassEdcCredential {
+    #[serde(rename = "@context")]
+    pub context: EuropassEdcCredentialContext,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub credential_profiles: Option<ObjectOrVector<Concept>>,
+    ///One or more schemas that validate the Verifiable Credential.
+    pub credential_schema: ObjectOrVector<CredentialSchema>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub credential_status: Option<EuropassEdcCredentialCredentialStatus>,
+
+    pub credential_subject: ObjectOrVector<AgentOrPersonOrOrganisation>,
+
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub display_parameter: Option<DisplayParameter>,
+
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub evidence: Option<ObjectOrVector<Evidence>>,
+    /////Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
+    //pub id: String,
+    /////DID of the credential issuer
+    //pub issuer: EuropassEdcCredentialIssuer,
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub terms_of_use: Option<ObjectOrVector<TermsOfUse>>,
+    /////Full type chain, used to identify the credential base types
+    //pub type_: Vec<String>,
+    /////Defines the earliest point when the credential becomes valid.
+    //pub valid_from: DateTime<Utc>,
+    /////Defines the latest point when the credential ceases to be valid.
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub valid_until: Option<DateTime<Utc>>,
+}
+
+
 ///AccreditationType
 ///
 /// <details><summary>JSON schema</summary>
@@ -1319,222 +1356,6 @@ pub struct EmailType {
     pub subtype_0: Option<String>,
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub subtype_1: Option<String>,
-}
-
-///Schema for EDC credential based on ELM 3.2
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "title": "Europass EDC credential",
-///  "description": "Schema for EDC credential based on ELM 3.2",
-///  "type": "object",
-///  "allOf": [
-///    {
-///      "title": "EBSI Verifiable Attestation",
-///      "description": "The schema defines a generic structure for any EBSI-related Verifiable Credentials according to the VCDM v2.0",
-///      "type": "object",
-///      "required": [
-///        "@context",
-///        "credentialSchema",
-///        "credentialSubject",
-///        "id",
-///        "issuer",
-///        "type",
-///        "validFrom"
-///      ],
-///      "properties": {
-///        "@context": {
-///          "oneOf": [
-///            {
-///              "const": "https://www.w3.org/ns/credentials/v2"
-///            },
-///            {
-///              "description": "Semantic context for the issued credential. First element MUST be https://www.w3.org/ns/credentials/v2",
-///              "type": "array",
-///              "items": {
-///                "type": "string",
-///                "format": "uri"
-///              },
-///              "minItems": 1,
-///              "uniqueItems": true
-///            }
-///          ]
-///        },
-///        "credentialSchema": {
-///          "description": "One or more schemas that validate the Verifiable Credential.",
-///          "anyOf": [
-///            {
-///              "$ref": "#/$defs/credentialSchema"
-///            },
-///            {
-///              "type": "array",
-///              "items": {
-///                "$ref": "#/$defs/credentialSchema"
-///              }
-///            }
-///          ]
-///        },
-///        "credentialStatus": {
-///          "description": "Defines suspension and/or revocation details for the issued credential. Further redefined by the type extension",
-///          "type": "object",
-///          "required": [
-///            "id",
-///            "type"
-///          ],
-///          "properties": {
-///            "id": {
-///              "description": "Exact identity for the credential status",
-///              "type": "string",
-///              "format": "uri"
-///            },
-///            "type": {
-///              "description": "Defines the revocation type extension",
-///              "type": "string"
-///            }
-///          }
-///        },
-///        "credentialSubject": {
-///          "anyOf": [
-///            {
-///              "$ref": "#/$defs/credentialSubject"
-///            },
-///            {
-///              "type": "array",
-///              "items": {
-///                "$ref": "#/$defs/credentialSubject"
-///              }
-///            }
-///          ]
-///        },
-///        "evidence": {
-///          "anyOf": [
-///            {
-///              "$ref": "#/$defs/evidence"
-///            },
-///            {
-///              "type": "array",
-///              "items": {
-///                "$ref": "#/$defs/evidence"
-///              }
-///            }
-///          ]
-///        },
-///        "id": {
-///          "description": "Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.",
-///          "type": "string",
-///          "format": "uri"
-///        },
-///        "issuer": {
-///          "description": "DID of the credential issuer",
-///          "oneOf": [
-///            {
-///              "type": "string",
-///              "format": "uri"
-///            },
-///            {
-///              "type": "object",
-///              "required": [
-///                "id"
-///              ],
-///              "properties": {
-///                "id": {
-///                  "description": "DID of the credential issuer",
-///                  "type": "string",
-///                  "format": "uri"
-///                }
-///              }
-///            }
-///          ]
-///        },
-///        "termsOfUse": {
-///          "anyOf": [
-///            {
-///              "$ref": "#/$defs/termsOfUse"
-///            },
-///            {
-///              "type": "array",
-///              "items": {
-///                "$ref": "#/$defs/termsOfUse"
-///              }
-///            }
-///          ]
-///        },
-///        "type": {
-///          "description": "Full type chain, used to identify the credential base types",
-///          "type": "array",
-///          "items": {
-///            "type": "string"
-///          }
-///        },
-///        "validFrom": {
-///          "description": "Defines the earliest point when the credential becomes valid.",
-///          "type": "string",
-///          "format": "date-time"
-///        },
-///        "validUntil": {
-///          "description": "Defines the latest point when the credential ceases to be valid.",
-///          "type": "string",
-///          "format": "date-time"
-///        }
-///      }
-///    },
-///    {
-///      "type": "object",
-///      "required": [
-///        "credentialSubject"
-///      ],
-///      "properties": {
-///        "credentialProfiles": {
-///          "$ref": "#/$defs/Many!ConceptType"
-///        },
-///        "credentialSubject": {
-///          "description": "Defines additional information about the subject that is described by the Verifiable Accreditation",
-///          "$ref": "#/$defs/CredentialSubjectType"
-///        },
-///        "displayParameter": {
-///          "$ref": "#/$defs/DisplayParameterType"
-///        }
-///      }
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct EuropassEdcCredential {
-    #[serde(rename = "@context")]
-    pub context: EuropassEdcCredentialContext,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub credential_profiles: Option<ObjectOrVector<Concept>>,
-    ///One or more schemas that validate the Verifiable Credential.
-    pub credential_schema: ObjectOrVector<CredentialSchema>,
-
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub credential_status: Option<EuropassEdcCredentialCredentialStatus>,
-
-    pub credential_subject: ObjectOrVector<AgentOrPersonOrOrganisation>,
-
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub display_parameter: Option<DisplayParameter>,
-
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub evidence: Option<ObjectOrVector<Evidence>>,
-    ///Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
-    pub id: String,
-    ///DID of the credential issuer
-    pub issuer: EuropassEdcCredentialIssuer,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub terms_of_use: Option<ObjectOrVector<TermsOfUse>>,
-    ///Full type chain, used to identify the credential base types
-    pub type_: Vec<String>,
-    ///Defines the earliest point when the credential becomes valid.
-    pub valid_from: DateTime<Utc>,
-    ///Defines the latest point when the credential ceases to be valid.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub valid_until: Option<DateTime<Utc>>,
 }
 
 ///EuropassEdcCredentialContext
