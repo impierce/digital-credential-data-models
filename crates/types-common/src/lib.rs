@@ -1,7 +1,11 @@
+use std::fmt;
 use regress::Regex;
-use serde::{de::Visitor, Deserialize, Serialize};
+use serde::{
+    de::{DeserializeOwned, Visitor},
+    Deserialize, Deserializer, Serialize,
+};
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum ObjectOrVector<T> {
     Object(T),
@@ -12,9 +16,45 @@ pub enum ObjectOrVector<T> {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum BoxObjectOrVector<T> {
-    Object(Box<T>),
+    /// Vector check needs to be before Object since T can be a vec too.
     Vector(Vec<T>),
+    Object(Box<T>),
 }
+
+impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<T> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let serde_value: serde_json::Value = Deserialize::deserialize(deserializer)?;
+
+        match serde_value {
+            serde_json::Value::Array(arr) => {
+                let arr: Vec<T> = arr
+                    .into_iter()
+                    .map(|item| { 
+                        println!("{item:?}");
+                        serde_json::from_value(item).expect("Item not good") })
+                    .collect();
+
+                Ok(ObjectOrVector::Vector(arr))
+            }
+            _ => {
+                let obj: T = serde_json::from_value(serde_value).unwrap();
+                println!("{obj:?}");
+                Ok(ObjectOrVector::Object(obj))
+            }
+        }
+    }
+}
+
+//fn deserialize_json_string<'de, D>(deserializer: D) -> Result<ActualData, D::Error>
+//where
+//D: Deserializer<'de>,
+//{
+//let s: &str = Deserialize::deserialize(deserializer)?;
+//serde_json::from_str(s).map_err(de::Error::custom)
+//}
 
 /// Email
 ///
