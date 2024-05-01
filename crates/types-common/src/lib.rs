@@ -1,50 +1,43 @@
+use std::fmt;
+
 use regress::Regex;
 use serde::{
     de::{DeserializeOwned, Error, Visitor},
     Deserialize, Deserializer, Serialize,
 };
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
+#[derive(Clone, Debug, Serialize)]
 pub enum ObjectOrVector<T> {
-    /// Vector check needs to be before Object since T can be a vec too.
-    Vector(Vec<T>),
-    Object(T),
-}
-
-/// Very large structs use box construct to prevent too much memory from being copied.
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum BoxObjectOrVector<T> {
-    /// Vector check needs to be before Object since T can be a vec too.
-    Vector(Vec<T>),
     Object(Box<T>),
+    Vector(Vec<T>),
 }
 
-//impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<T> {
-    //fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    //where
-        //D: Deserializer<'de>,
-    //{
-        //let deserializer = serde_stacker::Deserializer::new(deserializer);
-        //let serde_value = Value::deserialize(deserializer).unwrap();
+impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<T> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let deserializer = serde_stacker::Deserializer::new(deserializer);
+        let serde_value = serde_json::Value::deserialize(deserializer);
 
-        //match serde_value {
-            //serde_json::Value::Array(arr) => {
-                //let arr: Vec<T> = arr
-                    //.into_iter()
-                    //.map(|item| serde_json::from_value(item).expect("Item not good"))
-                    //.collect();
+        if let Err(err) = &serde_value {
+            eprintln!("Err: {:?}", serde_value);
+            eprintln!("Err: {:?}", err);
+            return Err(Error::custom("niet goed"));
+        }
 
-                //Ok(ObjectOrVector::Vector(arr))
-            //}
-            //_ => match serde_json::from_value::<T>(serde_value) {
-                //Ok(val) => Ok(ObjectOrVector::Object(val)),
-                //Err(e) => Err(Error::custom(e.to_string())),
-            //},
-        //}
-    //}
-//}
+        if let Ok(serde_json::Value::Array(arr)) = serde_value {
+            let arr: Vec<T> = arr
+                .into_iter()
+                .map(|item| serde_json::from_value(item).unwrap())
+                .collect();
+
+            Ok(ObjectOrVector::Vector(arr))
+        } else {
+            Ok(ObjectOrVector::Object(Box::new(serde_json::from_value(serde_value?).unwrap())))
+        }
+    }
+}
 
 /// Email
 ///

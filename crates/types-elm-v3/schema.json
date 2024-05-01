@@ -246,6 +246,9 @@
               }
             }
           ]
+        },
+        "dc_type": {
+          "$ref": "#/$defs/ConceptType"
         }
       },
       "required": [
