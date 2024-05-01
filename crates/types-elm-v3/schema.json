@@ -2882,8 +2882,7 @@
       "required": [
         "title",
         "language",
-        "primaryLanguage",
-        "individualDisplay"
+        "primaryLanguage"
       ]
     },
     "Many!IndividualDisplayType": {

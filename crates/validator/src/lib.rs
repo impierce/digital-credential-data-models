@@ -26,7 +26,18 @@ pub fn manifest_dir() -> PathBuf {
 
 #[cfg(test)]
 mod tests {
+    use env_logger::Env;
+
     use super::*;
+
+    #[ctor::ctor]
+    fn init() {
+        let env = Env::default()
+            .filter_or("DCDM_LOG_LEVEL", "debug")
+            .write_style_or("DCDM_LOG_STYLE", "always");
+
+        env_logger::init_from_env(env);
+    }
 
     #[test]
     #[should_panic]
@@ -49,10 +60,10 @@ mod tests {
 
         if let Ok(result) = result {
             assert!(result.valid_shacl);
-            assert!(result.valid_shacl);
+            assert!(result.valid_rust);
         }
     }
-    
+
     #[test]
     fn test_bengales_diploma() {
         let manifest_dir = manifest_dir();
@@ -62,7 +73,7 @@ mod tests {
 
         if let Ok(result) = result {
             assert!(result.valid_shacl);
-            assert!(result.valid_shacl);
+            assert!(result.valid_rust);
         }
     }
 }

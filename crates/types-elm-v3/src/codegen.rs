@@ -632,31 +632,31 @@ pub enum ClaimNode {
 }
 
 //impl<'de> Deserialize<'de> for ClaimNode {
-    //fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    //where
-        //D: serde::Deserializer<'de>,
-    //{
-        //let serde_value: serde_json::Value = Deserialize::deserialize(deserializer)?;
-        //println!("type {serde_value:?}");
-        ////
+//fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+//where
+//D: serde::Deserializer<'de>,
+//{
+//let serde_value: serde_json::Value = Deserialize::deserialize(deserializer)?;
+//println!("type {serde_value:?}");
+////
 
-        //let enum_type = serde_value.get("type");
-        //println!("type {enum_type:?}");
+//let enum_type = serde_value.get("type");
+//println!("type {enum_type:?}");
 
-        //if let Some(enum_type) = enum_type {
-            //match enum_type.as_str().unwrap() {
-                //"LearningAchievement" => {
-                    //let out: LearningAchievement =
-                        //serde_json::from_value(serde_value).map_err(|e| Error::custom("Can't parse"))?;
+//if let Some(enum_type) = enum_type {
+//match enum_type.as_str().unwrap() {
+//"LearningAchievement" => {
+//let out: LearningAchievement =
+//serde_json::from_value(serde_value).map_err(|e| Error::custom("Can't parse"))?;
 
-                    //return Ok(Self::LearningAchievement(out));
-                //}
-                //_ => return Err(Error::custom("Can't parse 2")),
-            //}
-        //}
+//return Ok(Self::LearningAchievement(out));
+//}
+//_ => return Err(Error::custom("Can't parse 2")),
+//}
+//}
 
-        //return Err(Error::custom("Can't parse 2"));
-    //}
+//return Err(Error::custom("Can't parse 2"));
+//}
 //}
 
 ///ClaimTypeNodeType
@@ -1280,18 +1280,16 @@ pub struct DisplayDetail {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct DisplayParameter {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
-    #[serde(rename = "individualDisplay")]
-    pub individual_display: ObjectOrVector<IndividualDisplay>,
+    pub individual_display: Option<ObjectOrVector<IndividualDisplay>>,
     pub language: ObjectOrVector<Concept>,
-    #[serde(rename = "primaryLanguage")]
     pub primary_language: Concept,
-    #[serde(rename = "summaryDisplay", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub summary_display: Option<StringType>,
     pub title: ManyLangStringType,
     #[serde(rename = "type")]
@@ -2201,9 +2199,8 @@ pub struct Identifier {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct IndividualDisplay {
-    #[serde(rename = "displayDetail")]
     pub display_detail: ObjectOrVector<DisplayDetail>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,

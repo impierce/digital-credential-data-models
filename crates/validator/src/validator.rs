@@ -43,9 +43,6 @@ fn validate_shacl(json_file: &PathBuf) -> io::Result<bool> {
 }
 
 fn validate_rust(json_file: &PathBuf) -> io::Result<bool> {
-    //let file = File::open(json_file)?;
-    //let rdr = BufReader::new(file);
-
     let json = fs::read_to_string(json_file)?;
     let mut deserializer = serde_json::Deserializer::from_str(&json);
     deserializer.disable_recursion_limit();

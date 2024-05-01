@@ -3,8 +3,6 @@ use serde::{
     de::{DeserializeOwned, Error, Visitor},
     Deserialize, Deserializer, Serialize,
 };
-use serde_json::Value;
-use std::fmt;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
