@@ -1,9 +1,9 @@
-use std::fmt;
 use regress::Regex;
 use serde::{
-    de::{DeserializeOwned, Visitor},
+    de::{DeserializeOwned, Error, Visitor},
     Deserialize, Deserializer, Serialize,
 };
+use std::fmt;
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
@@ -32,18 +32,15 @@ impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<
             serde_json::Value::Array(arr) => {
                 let arr: Vec<T> = arr
                     .into_iter()
-                    .map(|item| { 
-                        println!("{item:?}");
-                        serde_json::from_value(item).expect("Item not good") })
+                    .map(|item| serde_json::from_value(item).expect("Item not good"))
                     .collect();
 
                 Ok(ObjectOrVector::Vector(arr))
             }
-            _ => {
-                let obj: T = serde_json::from_value(serde_value).unwrap();
-                println!("{obj:?}");
-                Ok(ObjectOrVector::Object(obj))
-            }
+            _ => match serde_json::from_value::<T>(serde_value) {
+                Ok(val) => Ok(ObjectOrVector::Object(val)),
+                Err(e) => Err(Error::custom(e.to_string())),
+            },
         }
     }
 }
