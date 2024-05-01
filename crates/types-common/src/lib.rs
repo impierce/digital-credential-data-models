@@ -3,13 +3,15 @@ use serde::{
     de::{DeserializeOwned, Error, Visitor},
     Deserialize, Deserializer, Serialize,
 };
+use serde_json::Value;
 use std::fmt;
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ObjectOrVector<T> {
-    Object(T),
+    /// Vector check needs to be before Object since T can be a vec too.
     Vector(Vec<T>),
+    Object(T),
 }
 
 /// Very large structs use box construct to prevent too much memory from being copied.
@@ -21,36 +23,29 @@ pub enum BoxObjectOrVector<T> {
     Object(Box<T>),
 }
 
-impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<T> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let serde_value: serde_json::Value = Deserialize::deserialize(deserializer)?;
+//impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<T> {
+    //fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    //where
+        //D: Deserializer<'de>,
+    //{
+        //let deserializer = serde_stacker::Deserializer::new(deserializer);
+        //let serde_value = Value::deserialize(deserializer).unwrap();
 
-        match serde_value {
-            serde_json::Value::Array(arr) => {
-                let arr: Vec<T> = arr
-                    .into_iter()
-                    .map(|item| serde_json::from_value(item).expect("Item not good"))
-                    .collect();
+        //match serde_value {
+            //serde_json::Value::Array(arr) => {
+                //let arr: Vec<T> = arr
+                    //.into_iter()
+                    //.map(|item| serde_json::from_value(item).expect("Item not good"))
+                    //.collect();
 
-                Ok(ObjectOrVector::Vector(arr))
-            }
-            _ => match serde_json::from_value::<T>(serde_value) {
-                Ok(val) => Ok(ObjectOrVector::Object(val)),
-                Err(e) => Err(Error::custom(e.to_string())),
-            },
-        }
-    }
-}
-
-//fn deserialize_json_string<'de, D>(deserializer: D) -> Result<ActualData, D::Error>
-//where
-//D: Deserializer<'de>,
-//{
-//let s: &str = Deserialize::deserialize(deserializer)?;
-//serde_json::from_str(s).map_err(de::Error::custom)
+                //Ok(ObjectOrVector::Vector(arr))
+            //}
+            //_ => match serde_json::from_value::<T>(serde_value) {
+                //Ok(val) => Ok(ObjectOrVector::Object(val)),
+                //Err(e) => Err(Error::custom(e.to_string())),
+            //},
+        //}
+    //}
 //}
 
 /// Email

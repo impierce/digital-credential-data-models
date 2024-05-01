@@ -1,5 +1,6 @@
+use serde::Deserialize;
 use std::{
-    fs::File,
+    fs::{self, File},
     io::{self, BufReader},
     path::PathBuf,
     process::Command,
@@ -42,14 +43,20 @@ fn validate_shacl(json_file: &PathBuf) -> io::Result<bool> {
 }
 
 fn validate_rust(json_file: &PathBuf) -> io::Result<bool> {
-    let file = File::open(json_file)?;
-    let rdr = BufReader::new(file);
+    //let file = File::open(json_file)?;
+    //let rdr = BufReader::new(file);
 
-    let result: serde_json::Result<codegen::EuropassEdcCredential> = serde_json::from_reader(rdr);
+    let json = fs::read_to_string(json_file)?;
+    let mut deserializer = serde_json::Deserializer::from_str(&json);
+    deserializer.disable_recursion_limit();
 
-    if let Err(err) = &result {
+    let deserializer = serde_stacker::Deserializer::new(&mut deserializer);
+
+    let credential = codegen::EuropassEdcCredential::deserialize(deserializer);
+
+    if let Err(err) = &credential {
         eprintln!("Error: {err:?}");
     }
 
-    Ok(result.is_ok())
+    Ok(credential.is_ok())
 }

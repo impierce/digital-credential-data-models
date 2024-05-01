@@ -359,7 +359,7 @@ pub struct Agent {
     #[serde(rename = "prefLabel", default, skip_serializing_if = "Option::is_none")]
     pub pref_label: Option<ManyLangStringType>,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub type_: String,
 }
 
 ///AmountType
@@ -3775,7 +3775,7 @@ pub struct LegalIdentifier {
     #[serde(rename = "schemeVersion", default, skip_serializing_if = "Option::is_none")]
     pub scheme_version: Option<StringType>,
     pub spatial: Concept,
-    pub r#type: String,
+    pub type_: String,
 }
 
 ///LiteralType
