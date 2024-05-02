@@ -56,7 +56,9 @@ mod tests {
         let manifest_dir = manifest_dir();
         let result = validate(manifest_dir.join("elm-requests/credential-sample.json"));
 
-        assert!(result.is_ok());
+        if let Some(err) = result.as_ref().err() {
+            panic!("{}", err);
+        }
 
         if let Ok(result) = result {
             assert!(result.valid_shacl);

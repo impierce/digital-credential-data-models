@@ -1,10 +1,5 @@
 use serde::Deserialize;
-use std::{
-    fs::{self, File},
-    io::{self, BufReader},
-    path::PathBuf,
-    process::Command,
-};
+use std::{fs, io, path::PathBuf, process::Command};
 use types_elm_v3::codegen;
 
 use crate::manifest_dir;
@@ -17,11 +12,11 @@ pub struct ValidateRequest {
 
 impl ValidateRequest {
     pub fn new(json_file: PathBuf) -> io::Result<Self> {
-        //let valid_shacl = validate_shacl(&json_file)?;
+        let valid_shacl = validate_shacl(&json_file)?;
         let valid_rust = validate_rust(&json_file)?;
 
         Ok(Self {
-            valid_shacl: true,
+            valid_shacl,
             valid_rust,
         })
     }
