@@ -24,13 +24,15 @@ pub fn manifest_dir() -> PathBuf {
 
 #[cfg(test)]
 mod tests {
+    use std::{fs::File, io::BufWriter};
+
     use env_logger::Env;
 
     use super::*;
 
     #[ctor::ctor]
     fn init() {
-       let env = Env::default()
+        let env = Env::default()
             .filter_or("DCDM_LOG_LEVEL", "debug")
             .write_style_or("DCDM_LOG_STYLE", "always");
 
@@ -49,7 +51,7 @@ mod tests {
         let _ = validate(PathBuf::from("lib.rs"));
     }
 
-    fn validate_file(filename: &str) {
+    fn validate_file(filename: &str) -> io::Result<()> {
         let manifest_dir = manifest_dir();
 
         let file_path = format!("elm-requests/{}", filename);
@@ -62,31 +64,49 @@ mod tests {
         if let Ok(result) = result {
             assert!(result.valid_shacl);
             assert!(result.rust_object.is_ok());
+
+            let obj = result.rust_object.unwrap();
+
+            log::info!("{obj:?}");
+
+            let tmp = std::env::temp_dir().join("digital-credential-data-models");
+
+            if !tmp.is_dir() {
+                fs::create_dir(tmp.clone())?;
+            }
+
+            let file = File::create(tmp.join(filename))?;
+            let writer = BufWriter::new(file);
+            serde_json::to_writer(writer, &obj)?;
+
+            Ok(())
+        } else {
+            Ok(())
         }
     }
 
     #[test]
-    fn test_bengales_diploma() {
-        validate_file("bengales-highschool-diploma.json");
+    fn test_bengales_diploma() -> io::Result<()> {
+        validate_file("bengales-highschool-diploma.json")
     }
 
     #[test]
-    fn test_sample_request() {
-        validate_file("credential-sample.json");
+    fn test_sample_request() -> io::Result<()> {
+        validate_file("credential-sample.json")
     }
 
     #[test]
-    fn test_digicomp_generic() {
-        validate_file("digicomp-generic.json");
+    fn test_digicomp_generic() -> io::Result<()> {
+        validate_file("digicomp-generic.json")
     }
 
     #[test]
-    fn test_rntuo_credential() {
-        validate_file("diploma-rntuo-credential.json");
+    fn test_rntuo_credential() -> io::Result<()> {
+        validate_file("diploma-rntuo-credential.json")
     }
 
     #[test]
-    fn test_francisco_cruz() {
-        validate_file("francisco-cruz-argudo-cert-of-completion.json");
+    fn test_francisco_cruz() -> io::Result<()> {
+        validate_file("francisco-cruz-argudo-cert-of-completion.json")
     }
 }
