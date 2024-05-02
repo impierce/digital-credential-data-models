@@ -2,7 +2,7 @@ use std::fmt;
 
 use regress::Regex;
 use serde::{
-    de::{DeserializeOwned, Error, Visitor},
+    de::{DeserializeOwned, Visitor},
     Deserialize, Deserializer, Serialize,
 };
 
@@ -18,15 +18,9 @@ impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<
         D: Deserializer<'de>,
     {
         let deserializer = serde_stacker::Deserializer::new(deserializer);
-        let serde_value = serde_json::Value::deserialize(deserializer);
+        let serde_value = serde_json::Value::deserialize(deserializer)?;
 
-        if let Err(err) = &serde_value {
-            eprintln!("Err: {:?}", serde_value);
-            eprintln!("Err: {:?}", err);
-            return Err(Error::custom("niet goed"));
-        }
-
-        if let Ok(serde_json::Value::Array(arr)) = serde_value {
+        if let serde_json::Value::Array(arr) = serde_value {
             let arr: Vec<T> = arr
                 .into_iter()
                 .map(|item| serde_json::from_value(item).unwrap())
@@ -34,7 +28,9 @@ impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<
 
             Ok(ObjectOrVector::Vector(arr))
         } else {
-            Ok(ObjectOrVector::Object(Box::new(serde_json::from_value(serde_value?).unwrap())))
+            Ok(ObjectOrVector::Object(Box::new(
+                serde_json::from_value(serde_value).unwrap(),
+            )))
         }
     }
 }

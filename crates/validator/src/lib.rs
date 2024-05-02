@@ -1,5 +1,6 @@
 use std::{fs, io, path::PathBuf};
 
+use env_logger::Env;
 use validator::ValidateRequest;
 
 mod validator;
@@ -27,12 +28,13 @@ pub fn manifest_dir() -> PathBuf {
 #[cfg(test)]
 mod tests {
     use env_logger::Env;
+    use log::error;
 
     use super::*;
 
     #[ctor::ctor]
     fn init() {
-        let env = Env::default()
+       let env = Env::default()
             .filter_or("DCDM_LOG_LEVEL", "debug")
             .write_style_or("DCDM_LOG_STYLE", "always");
 
@@ -51,10 +53,11 @@ mod tests {
         let _ = validate(PathBuf::from("lib.rs"));
     }
 
-    #[test]
-    fn test_sample_request() {
+    fn validate_file(filename: &str) {
         let manifest_dir = manifest_dir();
-        let result = validate(manifest_dir.join("elm-requests/credential-sample.json"));
+
+        let file_path = format!("elm-requests/{}", filename);
+        let result = validate(manifest_dir.join(file_path));
 
         if let Some(err) = result.as_ref().err() {
             panic!("{}", err);
@@ -67,15 +70,12 @@ mod tests {
     }
 
     #[test]
+    fn test_sample_request() {
+        validate_file("credential-sample.json");
+    }
+
+    #[test]
     fn test_bengales_diploma() {
-        let manifest_dir = manifest_dir();
-        let result = validate(manifest_dir.join("elm-requests/bengales-highschool-diploma.json"));
-
-        assert!(result.is_ok());
-
-        if let Ok(result) = result {
-            assert!(result.valid_shacl);
-            assert!(result.valid_rust);
-        }
+        validate_file("bengales-highschool-diploma.json");
     }
 }

@@ -1,3 +1,4 @@
+use log::error;
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf, process::Command};
 use types_elm_v3::codegen;
@@ -32,7 +33,9 @@ fn validate_shacl(json_file: &PathBuf) -> io::Result<bool> {
         .args(["main.py", "--input-file", json_file.to_str().unwrap()])
         .output()?;
 
-    eprintln!("{}", String::from_utf8_lossy(&out.stderr));
+    if !out.status.success() {
+        error!("{}", String::from_utf8_lossy(&out.stderr));
+    }
 
     Ok(out.status.success())
 }

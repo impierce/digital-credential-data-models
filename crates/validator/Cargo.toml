@@ -13,6 +13,7 @@ regress = { workspace = true }
 chrono = { workspace = true }
 types-elm-v3 = { path = "../types-elm-v3" }
 env_logger = "0.11.3"
+log = "0.4"
 
 [dev-dependencies]
 ctor = "0.2.8"
