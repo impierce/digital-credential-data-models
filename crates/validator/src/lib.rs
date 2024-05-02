@@ -1,8 +1,5 @@
 use std::{fs, io, path::PathBuf};
-
-use env_logger::Env;
 use validator::ValidateRequest;
-
 mod validator;
 
 pub fn validate(file: PathBuf) -> io::Result<ValidateRequest> {
@@ -28,7 +25,6 @@ pub fn manifest_dir() -> PathBuf {
 #[cfg(test)]
 mod tests {
     use env_logger::Env;
-    use log::error;
 
     use super::*;
 
@@ -70,12 +66,27 @@ mod tests {
     }
 
     #[test]
+    fn test_bengales_diploma() {
+        validate_file("bengales-highschool-diploma.json");
+    }
+
+    #[test]
     fn test_sample_request() {
         validate_file("credential-sample.json");
     }
 
     #[test]
-    fn test_bengales_diploma() {
-        validate_file("bengales-highschool-diploma.json");
+    fn test_digicomp_generic() {
+        validate_file("digicomp-generic.json");
+    }
+
+    #[test]
+    fn test_rntuo_credential() {
+        validate_file("diploma-rntuo-credential.json");
+    }
+
+    #[test]
+    fn test_francisco_cruz() {
+        validate_file("francisco-cruz-argudo-cert-of-completion.json");
     }
 }
