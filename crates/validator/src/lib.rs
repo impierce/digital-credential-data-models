@@ -61,7 +61,7 @@ mod tests {
 
         if let Ok(result) = result {
             assert!(result.valid_shacl);
-            assert!(result.valid_rust);
+            assert!(result.rust_object.is_ok());
         }
     }
 

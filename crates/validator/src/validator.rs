@@ -5,20 +5,20 @@ use types_elm_v3::codegen;
 
 use crate::manifest_dir;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Debug)]
 pub struct ValidateRequest {
     pub valid_shacl: bool,
-    pub valid_rust: bool,
+    pub rust_object: io::Result<codegen::EuropassEdcCredential>,
 }
 
 impl ValidateRequest {
     pub fn new(json_file: PathBuf) -> io::Result<Self> {
         let valid_shacl = validate_shacl(&json_file)?;
-        let valid_rust = validate_rust(&json_file)?;
+        let rust_object = validate_rust(&json_file);
 
         Ok(Self {
             valid_shacl,
-            valid_rust,
+            rust_object,
         })
     }
 }
@@ -40,7 +40,7 @@ fn validate_shacl(json_file: &PathBuf) -> io::Result<bool> {
     Ok(out.status.success())
 }
 
-fn validate_rust(json_file: &PathBuf) -> io::Result<bool> {
+fn validate_rust(json_file: &PathBuf) -> io::Result<codegen::EuropassEdcCredential> {
     let json = fs::read_to_string(json_file)?;
     let mut deserializer = serde_json::Deserializer::from_str(&json);
     deserializer.disable_recursion_limit();
@@ -53,5 +53,5 @@ fn validate_rust(json_file: &PathBuf) -> io::Result<bool> {
         eprintln!("Error: {err:?}");
     }
 
-    Ok(credential.is_ok())
+    Ok(credential?)
 }

@@ -1,8 +1,8 @@
-use std::fmt;
+use std::{fmt, ops::Deref};
 
 use regress::Regex;
 use serde::{
-    de::{DeserializeOwned, Visitor},
+    de::{DeserializeOwned, Error, Visitor},
     Deserialize, Deserializer, Serialize,
 };
 
@@ -59,27 +59,11 @@ impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Email(pub String);
 
-struct EmailVisitor;
+impl Deref for Email {
+    type Target = String;
 
-impl<'de> Visitor<'de> for EmailVisitor {
-    type Value = Email;
-
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid email format")
-    }
-
-    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-    where
-        E: serde::de::Error,
-    {
-        let email_regex = regress::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
-        let email_uri_regex = Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
-
-        if email_regex.find(v).is_some() || email_uri_regex.find(v).is_some() {
-            Ok(Email(v.to_string()))
-        } else {
-            Err(E::custom(format!("Email format is not valid: {v}")))
-        }
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
 
@@ -88,6 +72,20 @@ impl<'de> Deserialize<'de> for Email {
     where
         D: serde::Deserializer<'de>,
     {
-        deserializer.deserialize_str(EmailVisitor)
+        let value = serde_json::Value::deserialize(deserializer)?;
+        let email: Email = serde_json::from_value(value).map_err(|e| Error::custom(e))?;
+
+        let email_str = email.as_ref();
+
+        let email_regex = regress::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
+        let email_uri_regex = Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
+
+        let valid = email_regex.find(email_str).is_some() || email_uri_regex.find(&email_str).is_some();
+
+        if valid {
+            Ok(email)
+        } else {
+            Err(Error::custom(format!("Email format is not valid: {email_str:?}")))
+        }
     }
 }
