@@ -25,10 +25,9 @@ def create_shacl_shape():
 def main(inputfile):
     g_data = Graph()
     g_data.parse(inputfile, format="json-ld")
-    g_data.serialize(destination="data.ttl", format="turtle")
 
     # Load the request
-    data = path.abspath('data.ttl')
+    data = g_data.serialize(format="turtle")
 
     # Load the SHACL shape
     shape = path.abspath('shape.ttl')
