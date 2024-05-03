@@ -39,26 +39,7 @@
           }
         },
         "issuer": {
-          "description": "DID of the credential issuer",
-          "oneOf": [
-            {
-              "type": "string",
-              "format": "uri"
-            },
-            {
-              "type": "object",
-              "required": [
-                "id"
-              ],
-              "properties": {
-                "id": {
-                  "description": "DID of the credential issuer",
-                  "type": "string",
-                  "format": "uri"
-                }
-              }
-            }
-          ]
+            "$ref": "#/$defs/IssuerNodeType"
         },
         "validFrom": {
           "description": "Defines the earliest point when the credential becomes valid.",
