@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::ops;
 
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
+use serde::{de, Deserialize, Serialize};
 use types_common::{Email, ObjectOrVector};
 
 /// Error types.
@@ -275,12 +275,43 @@ pub struct Address {
 ///}
 /// ```
 /// </details>
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum AgentOrPersonOrOrganisation {
     Agent(Box<Agent>),
     Person(Box<Person>),
     Organisation(Box<Organisation>),
+}
+
+impl<'de> Deserialize<'de> for AgentOrPersonOrOrganisation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let serde_value = serde_json::Value::deserialize(deserializer)?;
+
+        let obj_type = serde_value.get("type").unwrap();
+
+        match obj_type.as_str() {
+            Some("Agent") => Ok(Self::Agent(
+                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+            )),
+            Some("Person") => Ok(Self::Person(
+                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+            )),
+            Some("Organisation") => Ok(Self::Person(
+                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+            )),
+            Some(other) => Err(serde::de::Error::unknown_variant(
+                other,
+                &["Agent", "Person", "Organisation"],
+            )),
+            _ => Err(serde::de::Error::unknown_variant(
+                "",
+                &["Agent", "Person", "Organisation"],
+            )),
+        }
+    }
 }
 
 //pub struct AgOrPerOrOrgVisitor;
@@ -2046,28 +2077,40 @@ impl ToString for HtmlType {
     }
 }
 
-///IdentifierOrLegalIdentifierType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/IdentifierType"
-///    },
-///    {
-///      "$ref": "#/$defs/LegalIdentifierType"
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase", untagged)]
 pub enum IdentifierOrLegalIdentifier {
-    IdentifierType(Box<Identifier>),
-    LegalIdentifierType(Box<LegalIdentifier>),
+    Identifier(Box<Identifier>),
+    LegalIdentifier(Box<LegalIdentifier>),
+}
+
+impl<'de> Deserialize<'de> for IdentifierOrLegalIdentifier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let serde_value = serde_json::Value::deserialize(deserializer)?;
+
+        let obj_type = serde_value.get("type").ok_or({
+            if serde_value.is_object() {
+                de::Error::custom("type not available on IdentifierOrLegalIdentifier")
+            } else {
+                let msg = format!("IdentifierOrLegalIdentifier is not an object: {:?}", serde_value);
+                de::Error::custom(msg)
+            }
+        })?;
+
+        match obj_type.as_str() {
+            Some("Identifier") => Ok(Self::Identifier(
+                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+            )),
+            Some("LegalIdentifier") => Ok(Self::LegalIdentifier(
+                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+            )),
+            Some(other) => Err(de::Error::unknown_variant(other, &["Identifier", "LegalIdentifier"])),
+            _ => Err(de::Error::unknown_variant("", &["Identifier", "LegalIdentifier"])),
+        }
+    }
 }
 
 ///IdentifierType
@@ -2117,26 +2160,28 @@ pub enum IdentifierOrLegalIdentifier {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+//#[serde(deny_unknown_fields)]
+#[serde(rename_all = "camelCase")]
 pub struct Identifier {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub creator: Option<IriType>,
-    #[serde(rename = "dateIssued", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub date_issued: Option<DateTimeType>,
-    #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub notation: Literal,
-    #[serde(rename = "schemeAgency", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scheme_agency: Option<LangStringType>,
-    #[serde(rename = "schemeId", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scheme_id: Option<UriType>,
-    #[serde(rename = "schemeName", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scheme_name: Option<StringType>,
-    #[serde(rename = "schemeVersion", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scheme_version: Option<StringType>,
-    pub r#type: String,
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
 ///IndividualDisplayType
@@ -2703,8 +2748,8 @@ pub struct LearningAchievement {
     //#[serde(default, skip_serializing_if = "Option::is_none")]
     //pub supplementary_document: Option<ObjectOrVector<WebResource>>,
     //pub title: ManyLangStringType,
-    //#[serde(rename = "type")]
-    //pub r#type: String,
+    #[serde(rename = "type")]
+    pub r#type: String,
 }
 
 ///LearningActivitySpecificationType
@@ -4330,79 +4375,6 @@ pub struct PeriodOfTime {
     pub type_: String,
 }
 
-///PersonType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "birthName": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "citizenshipCountry": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "contactPoint": {
-///      "$ref": "#/$defs/Many!ContactPointType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dateOfBirth": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "familyName": {
-///      "$ref": "#/$defs/LangStringType"
-///    },
-///    "fullName": {
-///      "$ref": "#/$defs/LangStringType"
-///    },
-///    "gender": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "givenName": {
-///      "$ref": "#/$defs/LangStringType"
-///    },
-///    "groupMemberOf": {
-///      "$ref": "#/$defs/Many!GroupType"
-///    },
-///    "hasClaim": {
-///      "$ref": "#/$defs/Many!ClaimNodeType"
-///    },
-///    "hasCredential": {
-///      "$ref": "#/$defs/Many!EuropeanDigitalCredentialType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/LocationType"
-///    },
-///    "memberOf": {
-///      "$ref": "#/$defs/Many!OrganisationType"
-///    },
-///    "nationalID": {
-///      "$ref": "#/$defs/LegalIdentifierType"
-///    },
-///    "patronymicName": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "placeOfBirth": {
-///      "$ref": "#/$defs/LocationType"
-///    },
-///    "type": {
-///      "const": "Person"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 //#[serde(deny_unknown_fields, rename_all = "camelCase")]
 #[serde(rename_all = "camelCase")]
@@ -4429,24 +4401,24 @@ pub struct Person {
     pub group_member_of: Option<ObjectOrVector<Group>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_claim: Option<ObjectOrVector<ClaimNode>>,
-    //#[serde(rename = "hasCredential", default, skip_serializing_if = "Option::is_none")]
-    //pub has_credential: Option<ObjectOrVector<EuropeanDigitalCredential>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub id: Option<GenericIdType>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub identifier: Option<IdentifierOrLegalIdentifier>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub location: Option<Location>,
-    //#[serde(rename = "memberOf", default)]
-    //pub member_of: Option<Box<ObjectOrVector<Organisation>>>,
-    //#[serde(rename = "nationalID", default, skip_serializing_if = "Option::is_none")]
-    //pub national_id: Option<LegalIdentifier>,
-    //#[serde(rename = "patronymicName", default, skip_serializing_if = "Option::is_none")]
-    //pub patronymic_name: Option<ManyLangStringType>,
-    //#[serde(rename = "placeOfBirth", default, skip_serializing_if = "Option::is_none")]
-    //pub place_of_birth: Option<Location>,
-    //#[serde(rename = "type")]
-    //pub r#type: String,
+    #[serde(rename = "hasCredential", default, skip_serializing_if = "Option::is_none")]
+    pub has_credential: Option<ObjectOrVector<EuropeanDigitalCredential>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<GenericIdType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    #[serde(rename = "memberOf", default)]
+    pub member_of: Option<Box<ObjectOrVector<Organisation>>>,
+    #[serde(rename = "nationalID", default, skip_serializing_if = "Option::is_none")]
+    pub national_id: Option<LegalIdentifier>,
+    #[serde(rename = "patronymicName", default, skip_serializing_if = "Option::is_none")]
+    pub patronymic_name: Option<ManyLangStringType>,
+    #[serde(rename = "placeOfBirth", default, skip_serializing_if = "Option::is_none")]
+    pub place_of_birth: Option<Location>,
+    #[serde(rename = "type")]
+    pub r#type: String,
 }
 
 ///PhoneType

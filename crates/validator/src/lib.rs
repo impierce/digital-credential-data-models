@@ -67,7 +67,7 @@ mod tests {
 
             let obj = result.rust_object.unwrap();
 
-            log::info!("{obj:?}");
+            //log::info!("{obj:?}");
 
             let tmp = std::env::temp_dir().join("digital-credential-data-models");
 
@@ -78,11 +78,9 @@ mod tests {
             let file = File::create(tmp.join(filename))?;
             let writer = BufWriter::new(file);
             serde_json::to_writer(writer, &obj)?;
-
-            Ok(())
-        } else {
-            Ok(())
         }
+
+        Ok(())
     }
 
     #[test]

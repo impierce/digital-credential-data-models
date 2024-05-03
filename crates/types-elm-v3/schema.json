@@ -458,7 +458,7 @@
           "const": "Person"
         },
         "identifier": {
-          "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
+          "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
         },
         "location": {
           "$ref": "#/$defs/LocationType"
