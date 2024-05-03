@@ -1,7 +1,7 @@
 use std::{fmt, ops::Deref};
 
 use regress::Regex;
-use serde::de::Error;
+use serde::de::{self, Error};
 use serde::ser::Serialize;
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 
@@ -59,6 +59,15 @@ impl<T: Serialize> Serialize for ObjectOrVector<T> {
             Self::Object(obj) => obj.serialize(serializer),
         }
     }
+}
+
+pub trait EnumDeserialize
+where
+    Self: Sized,
+{
+    fn variants() -> &'static [&'static str];
+
+    fn into_enum(key: &str, value: serde_json::Value) -> Result<Self, serde_json::Error>;
 }
 
 /// Email

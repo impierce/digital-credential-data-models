@@ -1,7 +1,13 @@
 use chrono::{DateTime, Utc};
-use serde::{de, Deserialize, Serialize};
-use std::{collections::HashMap, ops};
-use types_common::{Email, ObjectOrVector};
+use serde::{
+    de::{self, DeserializeOwned},
+    Deserialize, Serialize,
+};
+use std::{
+    collections::{HashMap, HashSet},
+    ops,
+};
+use types_common::{Email, EnumDeserialize, ObjectOrVector};
 
 /// Error types.
 pub mod error {
@@ -141,36 +147,77 @@ pub enum AgentOrPersonOrOrganisation {
     Organisation(Box<Organisation>),
 }
 
-impl<'de> Deserialize<'de> for AgentOrPersonOrOrganisation {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let serde_value = serde_json::Value::deserialize(deserializer)?;
+impl EnumDeserialize for AgentOrPersonOrOrganisation {
+    fn variants() -> &'static [&'static str] {
+        &["Agent", "Person", "Organisation"]
+    }
 
-        let obj_type = serde_value.get("type").unwrap();
-
-        match obj_type.as_str() {
-            Some("Agent") => Ok(Self::Agent(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("Person") => Ok(Self::Person(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("Organisation") => Ok(Self::Organisation(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some(other) => Err(serde::de::Error::unknown_variant(
-                other,
-                &["Agent", "Person", "Organisation"],
-            )),
-            _ => Err(serde::de::Error::unknown_variant(
-                "",
-                &["Agent", "Person", "Organisation"],
-            )),
+    fn into_enum(key: &str, value: serde_json::Value) -> Result<Self, serde_json::Error> {
+        match key {
+            "Agent" => Ok(Self::Person(Box::new(serde_json::from_value(value)?))),
+            "Person" => Ok(Self::Person(Box::new(serde_json::from_value(value)?))),
+            "Organisation" => Ok(Self::Organisation(Box::new(serde_json::from_value(value)?))),
+            _ => panic!("Illegal state"),
         }
     }
 }
+
+//impl<'de> Deserialize<'de> for AgentOrPersonOrOrganisation {
+    //fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    //where
+        //D: de::Deserializer<'de>,
+    //{
+        //let serde_value = serde_json::Value::deserialize(deserializer)?;
+
+        //let obj_type = serde_value
+            //.get("type")
+            //.map(|t| t.as_str().map(|s| s.to_string()))
+            //.ok_or(de::Error::missing_field("type"))?;
+
+        //let variants = Self::variants();
+
+        //if let Some(obj_type) = obj_type {
+            //if variants.iter().any(|var_type| *var_type == obj_type) {
+                //return Self::into_enum(&obj_type, serde_value).map_err(de::Error::custom);
+            //} else {
+                //return Err(de::Error::unknown_variant(&obj_type, variants));
+            //}
+        //}
+
+        //Err(de::Error::unknown_variant("", variants))
+    //}
+//}
+
+//impl<'de> Deserialize<'de> for AgentOrPersonOrOrganisation {
+//fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+//where
+//D: serde::Deserializer<'de>,
+//{
+//let serde_value = serde_json::Value::deserialize(deserializer)?;
+
+//let obj_type = serde_value.get("type").unwrap();
+
+//match obj_type.as_str() {
+//Some("Agent") => Ok(Self::Agent(
+//serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+//)),
+//Some("Person") => Ok(Self::Person(
+//serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+//)),
+//Some("Organisation") => Ok(Self::Organisation(
+//serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+//)),
+//Some(other) => Err(serde::de::Error::unknown_variant(
+//other,
+//&["Agent", "Person", "Organisation"],
+//)),
+//_ => Err(serde::de::Error::unknown_variant(
+//"",
+//&["Agent", "Person", "Organisation"],
+//)),
+//}
+//}
+//}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
