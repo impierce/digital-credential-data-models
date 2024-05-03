@@ -1582,9 +1582,9 @@ pub struct LearningAchievementSpecification {
     pub entitles_to: Option<ObjectOrVector<LearningEntitlementSpecification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub entry_requirement: Option<Note>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub generalisation_of: Option<ObjectOrVector<LearningAchievementSpecificationOrQualification>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_part: Option<ObjectOrVector<LearningAchievementSpecificationOrQualification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub homepage: Option<ObjectOrVector<WebResource>>,
@@ -1592,9 +1592,9 @@ pub struct LearningAchievementSpecification {
     pub id: Option<GenericIdType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<IdentifierOrLegalIdentifier>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub influenced_by: Option<Box<ObjectOrVector<LearningActivitySpecification>>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<ObjectOrVector<LearningAchievementSpecificationOrQualification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub language: Option<ObjectOrVector<Concept>>,
@@ -1608,9 +1608,9 @@ pub struct LearningAchievementSpecification {
     pub maximum_duration: Option<DurationType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mode: Option<ObjectOrVector<Concept>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proven_by: Option<Box<ObjectOrVector<LearningAssessmentSpecification>>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub specialisation_of: Option<ObjectOrVector<LearningAchievementSpecificationOrQualification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<StringType>,
@@ -1641,7 +1641,7 @@ pub struct LearningAchievement {
     pub description: Option<ManyLangStringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub entitles_to: Option<ObjectOrVector<LearningEntitlement>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_part: Option<Box<ObjectOrVector<LearningAchievement>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
@@ -1649,11 +1649,11 @@ pub struct LearningAchievement {
     pub identifier: Option<IdentifierOrLegalIdentifier>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub influenced_by: Option<ObjectOrVector<LearningActivity>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<Box<ObjectOrVector<LearningAchievement>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub learning_opportunity: Option<LearningOpportunity>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proven_by: Option<Box<ObjectOrVector<LearningAssessment>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub specified_by: Option<LearningAchievementSpecificationOrQualification>,
@@ -1691,7 +1691,7 @@ pub struct LearningActivitySpecification {
     pub id: Option<GenericIdType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub influences: Option<ObjectOrVector<LearningAchievementSpecificationOrQualification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<ObjectOrVector<LearningAchievementSpecification>>,
@@ -1724,15 +1724,15 @@ pub struct LearningActivity {
     pub description: Option<ManyLangStringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub directed_by: Option<ObjectOrVector<AgentOrPersonOrOrganisation>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_part: Option<Box<ObjectOrVector<LearningActivity>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub influences: Option<Box<ObjectOrVector<LearningAchievement>>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<Box<ObjectOrVector<LearningActivity>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub learning_opportunity: Option<LearningOpportunity>,
@@ -1816,7 +1816,7 @@ pub struct LearningAssessment {
     pub grade: Note,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub grade_status: Option<Concept>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_part: Option<Box<ObjectOrVector<LearningAssessment>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
@@ -1824,7 +1824,7 @@ pub struct LearningAssessment {
     pub id_verification: Option<Concept>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<Box<ObjectOrVector<LearningAssessment>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
@@ -1903,7 +1903,7 @@ pub struct LearningEntitlement {
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub entitled_by: Option<Box<ObjectOrVector<LearningAchievement>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expiry_date: Option<DateTimeType>,
@@ -2348,7 +2348,7 @@ pub struct Person {
     pub group_member_of: Option<ObjectOrVector<Group>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_claim: Option<ObjectOrVector<ClaimNode>>,
-    #[serde(rename = "hasCredential", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_credential: Option<ObjectOrVector<EuropeanDigitalCredential>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
@@ -2356,13 +2356,13 @@ pub struct Person {
     pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
-    #[serde(rename = "memberOf", default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub member_of: Option<Box<ObjectOrVector<Organisation>>>,
-    #[serde(rename = "nationalID", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub national_id: Option<LegalIdentifier>,
-    #[serde(rename = "patronymicName", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub patronymic_name: Option<ManyLangStringType>,
-    #[serde(rename = "placeOfBirth", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub place_of_birth: Option<Location>,
     #[serde(rename = "type")]
     pub type_: String,
@@ -2400,17 +2400,17 @@ pub struct Person {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Phone {
-    #[serde(rename = "areaDialing", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub area_dialing: Option<StringType>,
-    #[serde(rename = "countryDialing", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub country_dialing: Option<StringType>,
-    #[serde(rename = "dialNumber", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dial_number: Option<StringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
-    #[serde(rename = "phoneNumber", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<StringType>,
     #[serde(rename = "type")]
     pub type_: String,
@@ -2471,9 +2471,9 @@ impl std::ops::Deref for PositiveIntegerType {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct PriceDetail {
-    #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub additional_note: Option<ObjectOrVector<Note>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub amount: Option<AmountType>,
@@ -2483,7 +2483,7 @@ pub struct PriceDetail {
     pub id: Option<GenericIdType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
-    #[serde(rename = "prefLabel", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pref_label: Option<ManyLangStringType>,
     #[serde(rename = "type")]
     pub type_: String,
@@ -2651,39 +2651,39 @@ pub struct Proof {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Qualification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub accreditation: Option<ObjectOrVector<Accreditation>>,
-    #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub additional_note: Option<ObjectOrVector<Note>>,
-    #[serde(rename = "altLabel", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub alt_label: Option<ManyLangStringType>,
-    #[serde(rename = "awardingOpportunity", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub awarding_opportunity: Option<ObjectOrVector<AwardingOpportunity>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub category: Option<ManyLangStringType>,
-    #[serde(rename = "creditPoint", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub credit_point: Option<ObjectOrVector<CreditPoint>>,
-    #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
-    #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
-    #[serde(rename = "educationLevel", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub education_level: Option<ObjectOrVector<Concept>>,
-    #[serde(rename = "educationSubject", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub education_subject: Option<ObjectOrVector<Concept>>,
-    #[serde(rename = "entitlesTo", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub entitles_to: Option<ObjectOrVector<LearningEntitlementSpecification>>,
-    #[serde(rename = "entryRequirement", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub entry_requirement: Option<Note>,
-    #[serde(rename = "eqfLevel", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub eqf_level: Option<Concept>,
-    #[serde(rename = "generalisationOf", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub generalisation_of: Option<ObjectOrVector<Qualification>>,
-    #[serde(rename = "hasPart", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_part: Option<ObjectOrVector<Qualification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub homepage: Option<ObjectOrVector<WebResource>>,
@@ -2691,42 +2691,42 @@ pub struct Qualification {
     pub id: Option<GenericIdType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<IdentifierOrLegalIdentifier>,
-    #[serde(rename = "influencedBy", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub influenced_by: Option<ObjectOrVector<LearningActivitySpecification>>,
-    #[serde(rename = "isPartOf", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<ObjectOrVector<Qualification>>,
-    #[serde(rename = "isPartialQualification", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_partial_qualification: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub language: Option<ObjectOrVector<Concept>>,
-    #[serde(rename = "learningOutcome", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub learning_outcome: Option<ObjectOrVector<LearningOutcome>>,
-    #[serde(rename = "learningOutcomeSummary", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub learning_outcome_summary: Option<Note>,
-    #[serde(rename = "learningSetting", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub learning_setting: Option<Concept>,
-    #[serde(rename = "maximumDuration", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_duration: Option<DurationType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mode: Option<ObjectOrVector<Concept>>,
-    #[serde(rename = "nqfLevel", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub nqf_level: Option<ObjectOrVector<Concept>>,
-    #[serde(rename = "provenBy", default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proven_by: Option<Box<ObjectOrVector<LearningAssessmentSpecification>>>,
-    #[serde(rename = "qualificationCode", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub qualification_code: Option<ObjectOrVector<Concept>>,
-    #[serde(rename = "specialisationOf", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub specialisation_of: Option<ObjectOrVector<Qualification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<StringType>,
-    #[serde(rename = "supplementaryDocument", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub supplementary_document: Option<ObjectOrVector<WebResource>>,
-    #[serde(rename = "targetGroup", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target_group: Option<ObjectOrVector<Concept>>,
-    #[serde(rename = "thematicArea", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub thematic_area: Option<ObjectOrVector<Concept>>,
     pub title: ManyLangStringType,
-    #[serde(rename = "volumeOfLearning", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub volume_of_learning: Option<DurationType>,
     #[serde(rename = "type")]
     pub type_: String,
@@ -2771,15 +2771,15 @@ pub struct Qualification {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ResultCategory {
     pub count: PositiveIntegerType,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub label: StringType,
-    #[serde(rename = "maximumScore", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_score: Option<StringType>,
-    #[serde(rename = "minimumScore", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub minimum_score: Option<StringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub score: Option<StringType>,
@@ -2813,13 +2813,13 @@ pub struct ResultCategory {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ResultDistribution {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
-    #[serde(rename = "resultCategory", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub result_category: Option<ObjectOrVector<ResultCategory>>,
     #[serde(rename = "type")]
     pub type_: String,
@@ -2887,15 +2887,12 @@ pub struct ShaclValidator2017 {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ShortenedGrading {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
-    #[serde(rename = "percentageEqual")]
     pub percentage_equal: IntegerType,
-    #[serde(rename = "percentageHigher")]
     pub percentage_higher: IntegerType,
-    #[serde(rename = "percentageLower")]
     pub percentage_lower: IntegerType,
     #[serde(rename = "type")]
     pub type_: String,
@@ -3096,18 +3093,16 @@ impl ToString for UriType {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct VerificationCheck {
-    #[serde(rename = "dcType")]
     pub dc_type: Concept,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
-    #[serde(rename = "elmSubject", default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub elm_subject: Option<EuropeanDigitalCredential>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub subject: serde_json::Value,
-    #[serde(rename = "verificationStatus")]
     pub verification_status: Concept,
     #[serde(rename = "type")]
     pub type_: String,
