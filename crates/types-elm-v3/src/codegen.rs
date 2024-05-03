@@ -66,96 +66,6 @@ pub struct EuropassEdcCredential {
     pub valid_until: Option<DateTime<Utc>>,
 }
 
-///AccreditationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "accreditingAgent",
-///    "dcType",
-///    "title"
-///  ],
-///  "properties": {
-///    "accreditingAgent": {
-///      "$ref": "#/$defs/OrganisationType"
-///    },
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "dateIssued": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "decision": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "expiryDate": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "homepage": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
-///    },
-///    "landingPage": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "limitCredentialType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "limitEQFLevel": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "limitField": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "limitJurisdiction": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "limitQualification": {
-///      "$ref": "#/$defs/QualificationType"
-///    },
-///    "organisation": {
-///      "$ref": "#/$defs/Many!OrganisationType"
-///    },
-///    "report": {
-///      "$ref": "#/$defs/WebResourceType"
-///    },
-///    "reviewDate": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "status": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "Accreditation"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Accreditation {
@@ -208,37 +118,6 @@ pub struct Accreditation {
     pub type_: String,
 }
 
-///AddressType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "countryCode"
-///  ],
-///  "properties": {
-///    "countryCode": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "fullAddress": {
-///      "$ref": "#/$defs/NoteType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
-///    },
-///    "type": {
-///      "const": "Address"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Address {
@@ -254,26 +133,6 @@ pub struct Address {
     pub type_: String,
 }
 
-///AgentOrPersonOrOrganisationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/AgentType"
-///    },
-///    {
-///      "$ref": "#/$defs/PersonType"
-///    },
-///    {
-///      "$ref": "#/$defs/OrganisationType"
-///    }
-///  ]
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum AgentOrPersonOrOrganisation {
@@ -313,61 +172,6 @@ impl<'de> Deserialize<'de> for AgentOrPersonOrOrganisation {
     }
 }
 
-//pub struct AgOrPerOrOrgVisitor;
-
-//impl Visitor<'_> for AgOrPerOrOrgVisitor {
-//type Value = AgentOrPersonOrOrganisation;
-
-//fn
-//}
-
-//impl<'de> Deserialize<'de> for AgentOrPersonOrOrganisation {
-
-//}
-
-///AgentType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "altLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "contactPoint": {
-///      "$ref": "#/$defs/Many!ContactPointType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "groupMemberOf": {
-///      "$ref": "#/$defs/Many!GroupType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/Many!LocationType"
-///    },
-///    "prefLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "Agent"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Agent {
@@ -393,35 +197,6 @@ pub struct Agent {
     pub type_: String,
 }
 
-///AmountType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "unit",
-///    "value"
-///  ],
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "type": {
-///      "const": "Amount"
-///    },
-///    "unit": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "value": {
-///      "$ref": "#/$defs/DecimalType"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AmountType {
@@ -433,43 +208,6 @@ pub struct AmountType {
     pub type_: String,
 }
 
-///AwardingOpportunityType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "awardingBody"
-///  ],
-///  "properties": {
-///    "awardingBody": {
-///      "$ref": "#/$defs/Many!AgentOrPersonOrOrganisationType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "learningAchievementSpecification": {
-///      "$ref": "#/$defs/LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/LocationType"
-///    },
-///    "temporal": {
-///      "$ref": "#/$defs/PeriodOfTimeType"
-///    },
-///    "type": {
-///      "const": "AwardingOpportunity"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AwardingOpportunity {
@@ -489,170 +227,32 @@ pub struct AwardingOpportunity {
     pub type_: String,
 }
 
-///AwardingProcessType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "awardingBody"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "awardingBody": {
-///      "$ref": "#/$defs/Many!AgentOrPersonOrOrganisationType"
-///    },
-///    "awardingDate": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "awards": {
-///      "$ref": "#/$defs/Many!ClaimNodeType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "educationalSystemNote": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/LocationType"
-///    },
-///    "type": {
-///      "const": "AwardingProcess"
-///    },
-///    "used": {
-///      "$ref": "#/$defs/Many!LearningAssessmentType"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-//#[serde(deny_unknown_fields, rename_all = "camelCase")]
-#[serde(rename_all = "camelCase")]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct AwardingProcess {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub additional_note: Option<ObjectOrVector<Note>>,
     pub awarding_body: ObjectOrVector<AgentOrPersonOrOrganisation>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub awarding_date: Option<DateTimeType>,
-    //#[serde(default)]
-    //pub awards: Option<ObjectOrVector<ClaimNode>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub description: Option<ManyLangStringType>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub educational_system_note: Option<Concept>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub id: Option<GenericIdType>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub location: Option<Location>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub used: Option<ObjectOrVector<LearningAssessment>>,
-    //#[serde(rename = "type")]
-    //pub r#type: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub awarding_date: Option<DateTimeType>,
+    #[serde(default)]
+    pub awards: Option<ObjectOrVector<ClaimNode>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<ManyLangStringType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub educational_system_note: Option<Concept>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<GenericIdType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub used: Option<ObjectOrVector<LearningAssessment>>,
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
-///BooleanType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "pattern": "^(true|false|1|0)$"
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct BooleanType(String);
-impl std::ops::Deref for BooleanType {
-    type Target = String;
-    fn deref(&self) -> &String {
-        &self.0
-    }
-}
-
-impl std::str::FromStr for BooleanType {
-    type Err = self::error::ConversionError;
-    fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
-        if regress::Regex::new("^(true|false|1|0)$").unwrap().find(value).is_none() {
-            return Err("doesn't match pattern \"^(true|false|1|0)$\"".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-
-impl std::convert::TryFrom<&str> for BooleanType {
-    type Error = self::error::ConversionError;
-    fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<&String> for BooleanType {
-    type Error = self::error::ConversionError;
-    fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<String> for BooleanType {
-    type Error = self::error::ConversionError;
-    fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-
-impl<'de> serde::Deserialize<'de> for BooleanType {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| <D::Error as serde::de::Error>::custom(e.to_string()))
-    }
-}
-
-///ClaimNodeType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/LearningAchievementType"
-///    },
-///    {
-///      "$ref": "#/$defs/LearningActivityType"
-///    },
-///    {
-///      "$ref": "#/$defs/LearningAssessmentType"
-///    },
-///    {
-///      "$ref": "#/$defs/LearningEntitlementType"
-///    },
-///    {
-///      "$ref": "#/$defs/ClaimTypeNodeType"
-///    }
-///  ]
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum ClaimNode {
@@ -712,47 +312,6 @@ impl<'de> Deserialize<'de> for ClaimNode {
     }
 }
 
-///ClaimTypeNodeType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "awardedBy",
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "awardedBy": {
-///      "$ref": "#/$defs/AwardingProcessType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "ClaimTypeNode"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ClaimTypeNode {
@@ -772,25 +331,6 @@ pub struct ClaimTypeNode {
     pub r#type: String,
 }
 
-///ConceptSchemeType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "type": {
-///      "const": "ConceptScheme"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ConceptScheme {
@@ -800,37 +340,6 @@ pub struct ConceptScheme {
     pub type_: String,
 }
 
-///ConceptType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "definition": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "inScheme": {
-///      "$ref": "#/$defs/ConceptSchemeType"
-///    },
-///    "notation": {
-///      "$ref": "#/$defs/LiteralType"
-///    },
-///    "prefLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "Concept"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Concept {
@@ -848,43 +357,6 @@ pub struct Concept {
     pub type_: String,
 }
 
-///ContactPointType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "address": {
-///      "$ref": "#/$defs/Many!AddressType"
-///    },
-///    "contactForm": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "emailAddress": {
-///      "$ref": "#/$defs/Many!MailboxType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "phone": {
-///      "$ref": "#/$defs/Many!PhoneType"
-///    },
-///    "type": {
-///      "const": "ContactPoint"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ContactPoint {
@@ -906,36 +378,6 @@ pub struct ContactPoint {
     pub type_: String,
 }
 
-///Contains information about the credential schema on which the issued credential is based
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Contains information about the credential schema on which the issued credential is based",
-///  "type": "object",
-///  "required": [
-///    "id",
-///    "type"
-///  ],
-///  "properties": {
-///    "id": {
-///      "description": "References the credential schema stored on the Trusted Schemas Registry (TSR)",
-///      "type": "string",
-///      "format": "uri"
-///    },
-///    "type": {
-///      "description": "Defines credential schema type",
-///      "type": "string",
-///      "enum": [
-///        "JsonSchema",
-///        "ShaclValidator2017"
-///      ]
-///    }
-///  }
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CredentialSchema {
     ///References the credential schema stored on the Trusted Schemas Registry (TSR)
@@ -945,31 +387,10 @@ pub struct CredentialSchema {
     pub cred_type: CredentialSchemaType,
 }
 
-///Defines credential schema type
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Defines credential schema type",
-///  "type": "string",
-///  "enum": [
-///    "JsonSchema",
-///    "ShaclValidator2017"
-///  ]
-///}
-/// ```
-/// </details>
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum CredentialSchemaType {
     JsonSchema,
     ShaclValidator2017,
-}
-
-impl From<&CredentialSchemaType> for CredentialSchemaType {
-    fn from(value: &CredentialSchemaType) -> Self {
-        value.clone()
-    }
 }
 
 impl ToString for CredentialSchemaType {
@@ -981,57 +402,6 @@ impl ToString for CredentialSchemaType {
     }
 }
 
-impl std::str::FromStr for CredentialSchemaType {
-    type Err = self::error::ConversionError;
-    fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
-        match value {
-            "JsonSchema" => Ok(Self::JsonSchema),
-            "ShaclValidator2017" => Ok(Self::ShaclValidator2017),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-
-impl std::convert::TryFrom<&str> for CredentialSchemaType {
-    type Error = self::error::ConversionError;
-    fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<&String> for CredentialSchemaType {
-    type Error = self::error::ConversionError;
-    fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<String> for CredentialSchemaType {
-    type Error = self::error::ConversionError;
-    fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-
-///CredentialStatusType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "type": {
-///      "const": "CredentialStatus"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CredentialStatus {
@@ -1041,24 +411,6 @@ pub struct CredentialStatus {
     pub type_: String,
 }
 
-///Defines information about the subject that is defined by the type chain
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Defines information about the subject that is defined by the type chain",
-///  "type": "object",
-///  "properties": {
-///    "id": {
-///      "description": "Defines the DID of the subject that is described by the issued credential",
-///      "type": "string",
-///      "format": "uri"
-///    }
-///  }
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CredentialSubject {
     ///Defines the DID of the subject that is described by the issued credential
@@ -1066,35 +418,6 @@ pub struct CredentialSubject {
     pub id: Option<String>,
 }
 
-///CreditPointType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "framework",
-///    "point"
-///  ],
-///  "properties": {
-///    "framework": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "point": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "type": {
-///      "const": "CreditPoint"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CreditPoint {
@@ -1400,35 +723,6 @@ impl ToString for DurationType {
     }
 }
 
-///EmailType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "anyOf": [
-///    {
-///      "type": "string",
-///      "format": "email"
-///    },
-///    {
-///      "type": "string",
-///      "format": "uri",
-///      "pattern": "^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)"
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct EmailType {
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_0: Option<String>,
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_1: Option<String>,
-}
-
 ///EuropassEdcCredentialContext
 ///
 /// <details><summary>JSON schema</summary>
@@ -1678,37 +972,6 @@ pub struct EuropeanDigitalCredential {
     pub type_: String,
 }
 
-///EuropeanDigitalPresentationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "holder": {
-///      "$ref": "#/$defs/Many!AgentOrPersonOrOrganisationType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "proof": {
-///      "$ref": "#/$defs/Many!ProofType"
-///    },
-///    "type": {
-///      "const": "EuropeanDigitalPresentation"
-///    },
-///    "verifiableCredential": {
-///      "$ref": "#/$defs/Many!EuropeanDigitalCredentialType"
-///    },
-///    "verificationCheck": {
-///      "$ref": "#/$defs/Many!VerificationCheckType"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct EuropeanDigitalPresentationType {
@@ -1737,37 +1000,6 @@ pub struct Evidence {
     pub type_: ObjectOrVector<String>,
 }
 
-///EvidenceType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "accreditation": {
-///      "$ref": "#/$defs/AccreditationType"
-///    },
-///    "embeddedEvidence": {
-///      "$ref": "#/$defs/Many!MediaObjectType"
-///    },
-///    "evidenceStatement": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "evidenceTarget": {
-///      "$ref": "#/$defs/AgentOrPersonOrOrganisationType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "type": {
-///      "const": "Evidence"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct EvidenceType {
@@ -1844,31 +1076,6 @@ impl ToString for GenericIdType {
     }
 }
 
-///GeometryType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "latitude": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "longitude": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "type": {
-///      "const": "Geometry"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Geometry {
@@ -2066,37 +1273,6 @@ impl std::ops::Deref for HtmlType {
     }
 }
 
-impl From<HtmlType> for String {
-    fn from(value: HtmlType) -> Self {
-        value.0
-    }
-}
-
-impl From<&HtmlType> for HtmlType {
-    fn from(value: &HtmlType) -> Self {
-        value.clone()
-    }
-}
-
-impl From<String> for HtmlType {
-    fn from(value: String) -> Self {
-        Self(value)
-    }
-}
-
-impl std::str::FromStr for HtmlType {
-    type Err = std::convert::Infallible;
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
-        Ok(Self(value.to_string()))
-    }
-}
-
-impl ToString for HtmlType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum IdentifierOrLegalIdentifier {
@@ -2180,8 +1356,7 @@ impl<'de> Deserialize<'de> for IdentifierOrLegalIdentifier {
 /// ```
 /// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-//#[serde(deny_unknown_fields)]
-#[serde(rename_all = "camelCase")]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Identifier {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub creator: Option<IriType>,
@@ -2262,50 +1437,7 @@ impl std::ops::Deref for IntegerType {
         &self.0
     }
 }
-impl From<IntegerType> for i64 {
-    fn from(value: IntegerType) -> Self {
-        value.0
-    }
-}
-impl From<&IntegerType> for IntegerType {
-    fn from(value: &IntegerType) -> Self {
-        value.clone()
-    }
-}
-impl From<i64> for IntegerType {
-    fn from(value: i64) -> Self {
-        Self(value)
-    }
-}
-impl std::str::FromStr for IntegerType {
-    type Err = <i64 as std::str::FromStr>::Err;
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
-        Ok(Self(value.parse()?))
-    }
-}
-impl std::convert::TryFrom<&str> for IntegerType {
-    type Error = <i64 as std::str::FromStr>::Err;
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-impl std::convert::TryFrom<&String> for IntegerType {
-    type Error = <i64 as std::str::FromStr>::Err;
-    fn try_from(value: &String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-impl std::convert::TryFrom<String> for IntegerType {
-    type Error = <i64 as std::str::FromStr>::Err;
-    fn try_from(value: String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-impl ToString for IntegerType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
+
 ///IriType
 ///
 /// <details><summary>JSON schema</summary>
@@ -2324,32 +1456,7 @@ impl std::ops::Deref for IriType {
         &self.0
     }
 }
-impl From<IriType> for String {
-    fn from(value: IriType) -> Self {
-        value.0
-    }
-}
-impl From<&IriType> for IriType {
-    fn from(value: &IriType) -> Self {
-        value.clone()
-    }
-}
-impl From<String> for IriType {
-    fn from(value: String) -> Self {
-        Self(value)
-    }
-}
-impl std::str::FromStr for IriType {
-    type Err = std::convert::Infallible;
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
-        Ok(Self(value.to_string()))
-    }
-}
-impl ToString for IriType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
+
 ///IssuerNodeType
 ///
 /// <details><summary>JSON schema</summary>
@@ -2412,188 +1519,42 @@ impl std::ops::Deref for LangStringType {
         &self.0
     }
 }
-impl From<LangStringType> for serde_json::Map<String, serde_json::Value> {
-    fn from(value: LangStringType) -> Self {
-        value.0
-    }
-}
-impl From<&LangStringType> for LangStringType {
-    fn from(value: &LangStringType) -> Self {
-        value.clone()
-    }
-}
-impl From<serde_json::Map<String, serde_json::Value>> for LangStringType {
-    fn from(value: serde_json::Map<String, serde_json::Value>) -> Self {
-        Self(value)
-    }
-}
-///LearningAchievementSpecificationOrQualificationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/LearningAchievementSpecificationType"
-///    },
-///    {
-///      "$ref": "#/$defs/QualificationType"
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
+
+#[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum LearningAchievementSpecificationOrQualification {
     LearningAchievementSpecification(Box<LearningAchievementSpecification>),
     Qualification(Box<Qualification>),
 }
 
-///LearningAchievementSpecificationOrSpecificationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "anyOf": [
-///    {
-///      "$ref": "#/$defs/LearningAchievementSpecificationType"
-///    },
-///    {
-///      "$ref": "#/$defs/QualificationType"
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct LearningAchievementSpecificationOrSpecificationType {
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_0: Option<LearningAchievementSpecification>,
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    pub subtype_1: Option<Qualification>,
+impl<'de> Deserialize<'de> for LearningAchievementSpecificationOrQualification {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let serde_value = serde_json::Value::deserialize(deserializer)?;
+
+        let obj_type = serde_value.get("type").unwrap();
+
+        match obj_type.as_str() {
+            Some("LearningAchievementSpecification") => Ok(Self::LearningAchievementSpecification(
+                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+            )),
+            Some("Qualification") => Ok(Self::Qualification(
+                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
+            )),
+            Some(other) => Err(serde::de::Error::unknown_variant(
+                other,
+                &["LearningAchievementSpecification", "Qualification"],
+            )),
+            _ => Err(serde::de::Error::unknown_variant(
+                "",
+                &["LearningAchievementSpecification", "Qualification"],
+            )),
+        }
+    }
 }
 
-///LearningAchievementSpecificationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "altLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "awardingOpportunity": {
-///      "$ref": "#/$defs/Many!AwardingOpportunityType"
-///    },
-///    "category": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "creditPoint": {
-///      "$ref": "#/$defs/Many!CreditPointType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "educationLevel": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "educationSubject": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "entitlesTo": {
-///      "$ref": "#/$defs/Many!LearningEntitlementSpecificationType"
-///    },
-///    "entryRequirement": {
-///      "$ref": "#/$defs/NoteType"
-///    },
-///    "generalisationOf": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "homepage": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
-///    },
-///    "influencedBy": {
-///      "$ref": "#/$defs/Many!LearningActivitySpecificationType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "language": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "learningOutcome": {
-///      "$ref": "#/$defs/Many!LearningOutcomeType"
-///    },
-///    "learningOutcomeSummary": {
-///      "$ref": "#/$defs/NoteType"
-///    },
-///    "learningSetting": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "maximumDuration": {
-///      "$ref": "#/$defs/DurationType"
-///    },
-///    "mode": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "provenBy": {
-///      "$ref": "#/$defs/Many!LearningAssessmentSpecificationType"
-///    },
-///    "specialisationOf": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "status": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "targetGroup": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "thematicArea": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningAchievementSpecification"
-///    },
-///    "volumeOfLearning": {
-///      "$ref": "#/$defs/DurationType"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningAchievementSpecification {
@@ -2666,194 +1627,43 @@ pub struct LearningAchievementSpecification {
     pub type_: String,
 }
 
-///LearningAchievementType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "awardedBy",
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "awardedBy": {
-///      "$ref": "#/$defs/AwardingProcessType"
-///    },
-///    "creditReceived": {
-///      "$ref": "#/$defs/Many!CreditPointType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "entitlesTo": {
-///      "$ref": "#/$defs/Many!LearningEntitlementType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningAchievementType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
-///    },
-///    "influencedBy": {
-///      "$ref": "#/$defs/Many!LearningActivityType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningAchievementType"
-///    },
-///    "learningOpportunity": {
-///      "$ref": "#/$defs/LearningOpportunityType"
-///    },
-///    "provenBy": {
-///      "$ref": "#/$defs/Many!LearningAssessmentType"
-///    },
-///    "specifiedBy": {
-///      "$ref": "#/$defs/LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningAchievement"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-//#[serde(deny_unknown_fields, rename_all = "camelCase")]
-#[serde(rename_all = "camelCase")]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningAchievement {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub additional_note: Option<ObjectOrVector<Note>>,
     pub awarded_by: Box<AwardingProcess>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub credit_received: Option<ObjectOrVector<CreditPoint>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub dc_type: Option<ObjectOrVector<Concept>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub description: Option<ManyLangStringType>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub entitles_to: Option<ObjectOrVector<LearningEntitlement>>,
-    //#[serde(default)]
-    //pub has_part: Option<Box<ObjectOrVector<LearningAchievement>>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub id: Option<GenericIdType>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub identifier: Option<IdentifierOrLegalIdentifier>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub influenced_by: Option<ObjectOrVector<LearningActivity>>,
-    //#[serde(default)]
-    //pub is_part_of: Option<Box<ObjectOrVector<LearningAchievement>>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub learning_opportunity: Option<LearningOpportunity>,
-    //#[serde(default)]
-    //pub proven_by: Option<Box<ObjectOrVector<LearningAssessment>>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub specified_by: Option<LearningAchievementSpecificationOrQualification>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub supplementary_document: Option<ObjectOrVector<WebResource>>,
-    //pub title: ManyLangStringType,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub credit_received: Option<ObjectOrVector<CreditPoint>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dc_type: Option<ObjectOrVector<Concept>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<ManyLangStringType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entitles_to: Option<ObjectOrVector<LearningEntitlement>>,
+    #[serde(default)]
+    pub has_part: Option<Box<ObjectOrVector<LearningAchievement>>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<GenericIdType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<IdentifierOrLegalIdentifier>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub influenced_by: Option<ObjectOrVector<LearningActivity>>,
+    #[serde(default)]
+    pub is_part_of: Option<Box<ObjectOrVector<LearningAchievement>>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub learning_opportunity: Option<LearningOpportunity>,
+    #[serde(default)]
+    pub proven_by: Option<Box<ObjectOrVector<LearningAssessment>>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub specified_by: Option<LearningAchievementSpecificationOrQualification>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub supplementary_document: Option<ObjectOrVector<WebResource>>,
+    pub title: ManyLangStringType,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub type_: String,
 }
 
-///LearningActivitySpecificationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "altLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "category": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "contactHour": {
-///      "$ref": "#/$defs/Many!StringType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "generalisationOf": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationType"
-///    },
-///    "homepage": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "influences": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationType"
-///    },
-///    "language": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "mode": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "specialisationOf": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationType"
-///    },
-///    "status": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningActivitySpecification"
-///    },
-///    "volumeOfLearning": {
-///      "$ref": "#/$defs/DurationType"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningActivitySpecification {
@@ -2902,80 +1712,6 @@ pub struct LearningActivitySpecification {
     pub type_: String,
 }
 
-///LearningActivityType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "awardedBy",
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "awardedBy": {
-///      "$ref": "#/$defs/AwardingProcessType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "directedBy": {
-///      "$ref": "#/$defs/Many!AgentOrPersonOrOrganisationType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningActivityType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "influences": {
-///      "$ref": "#/$defs/Many!LearningAchievementType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningActivityType"
-///    },
-///    "learningOpportunity": {
-///      "$ref": "#/$defs/LearningOpportunityType"
-///    },
-///    "levelOfCompletion": {
-///      "$ref": "#/$defs/PercentageIntegerType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/Many!LocationType"
-///    },
-///    "specifiedBy": {
-///      "$ref": "#/$defs/LearningActivitySpecificationType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "temporal": {
-///      "$ref": "#/$defs/Many!PeriodOfTimeType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningActivity"
-///    },
-///    "workload": {
-///      "$ref": "#/$defs/DurationType"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningActivity {
@@ -3017,85 +1753,6 @@ pub struct LearningActivity {
     pub r#type: String,
 }
 
-///LearningAssessmentSpecificationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "altLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "category": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "generalisationOf": {
-///      "$ref": "#/$defs/Many!LearningAssessmentSpecificationType"
-///    },
-///    "gradingScheme": {
-///      "$ref": "#/$defs/GradingSchemeType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningAssessmentSpecificationType"
-///    },
-///    "homepage": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningAssessmentSpecificationType"
-///    },
-///    "language": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "mode": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "proves": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "specialisationOf": {
-///      "$ref": "#/$defs/Many!LearningAssessmentSpecificationType"
-///    },
-///    "status": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningAssessmentSpecification"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LearningAssessmentSpecification {
@@ -3142,87 +1799,6 @@ pub struct LearningAssessmentSpecification {
     pub type_: String,
 }
 
-///LearningAssessmentType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "awardedBy",
-///    "grade",
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "assessedBy": {
-///      "$ref": "#/$defs/Many!AgentOrPersonOrOrganisationType"
-///    },
-///    "awardedBy": {
-///      "$ref": "#/$defs/AwardingProcessType"
-///    },
-///    "dateIssued": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "grade": {
-///      "$ref": "#/$defs/NoteType"
-///    },
-///    "gradeStatus": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningAssessmentType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "idVerification": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningAssessmentType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/LocationType"
-///    },
-///    "proves": {
-///      "$ref": "#/$defs/Many!LearningAchievementType"
-///    },
-///    "resultDistribution": {
-///      "$ref": "#/$defs/ResultDistributionType"
-///    },
-///    "shortenedGrading": {
-///      "$ref": "#/$defs/ShortenedGradingType"
-///    },
-///    "specifiedBy": {
-///      "$ref": "#/$defs/Many!LearningAssessmentSpecificationType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningAssessment"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningAssessment {
@@ -3267,93 +1843,6 @@ pub struct LearningAssessment {
     pub r#type: String,
 }
 
-///LearningEntitlementSpecificationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "dcType",
-///    "entitlementStatus",
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "altLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "category": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "entitledBy": {
-///      "$ref": "#/$defs/Many!LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "entitlementStatus": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "generalisationOf": {
-///      "$ref": "#/$defs/Many!LearningEntitlementSpecificationType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningEntitlementSpecificationType"
-///    },
-///    "homepage": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningEntitlementSpecificationType"
-///    },
-///    "limitJurisdiction": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "limitNationalOccupation": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "limitOccupation": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "limitOrganisation": {
-///      "$ref": "#/$defs/Many!OrganisationType"
-///    },
-///    "specialisationOf": {
-///      "$ref": "#/$defs/Many!LearningEntitlementSpecificationType"
-///    },
-///    "status": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningEntitlementSpecification"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LearningEntitlementSpecification {
@@ -3364,9 +1853,9 @@ pub struct LearningEntitlementSpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub category: Option<ManyLangStringType>,
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(rename = "dcType")]
-    pub dc_type: Concept,
+    pub dc_type: ObjectOrVector<Concept>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(rename = "entitledBy", default)]
@@ -3404,68 +1893,6 @@ pub struct LearningEntitlementSpecification {
     pub type_: String,
 }
 
-///LearningEntitlementType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "awardedBy",
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "awardedBy": {
-///      "$ref": "#/$defs/AwardingProcessType"
-///    },
-///    "dateIssued": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "entitledBy": {
-///      "$ref": "#/$defs/Many!LearningAchievementType"
-///    },
-///    "expiryDate": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningEntitlementType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningEntitlementType"
-///    },
-///    "specifiedBy": {
-///      "$ref": "#/$defs/Many!LearningEntitlementSpecificationType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningEntitlement"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningEntitlement {
@@ -3473,7 +1900,7 @@ pub struct LearningEntitlement {
     pub additional_note: Option<ObjectOrVector<Note>>,
     pub awarded_by: Box<AwardingProcess>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_issued: Option<DateTimeType>,
+    pub date_issued: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3499,109 +1926,6 @@ pub struct LearningEntitlement {
     pub r#type: String,
 }
 
-///LearningOpportunityType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "admissionProcedure": {
-///      "$ref": "#/$defs/NoteType"
-///    },
-///    "applicationDeadline": {
-///      "$ref": "#/$defs/Many!DateTimeType"
-///    },
-///    "bannerImage": {
-///      "$ref": "#/$defs/MediaObjectType"
-///    },
-///    "dateModified": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "defaultLanguage": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "descriptionHtml": {
-///      "$ref": "#/$defs/Many!HTMLType"
-///    },
-///    "duration": {
-///      "$ref": "#/$defs/DurationType"
-///    },
-///    "grant": {
-///      "$ref": "#/$defs/Many!GrantType"
-///    },
-///    "hasPart": {
-///      "$ref": "#/$defs/Many!LearningOpportunityType"
-///    },
-///    "homepage": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "isPartOf": {
-///      "$ref": "#/$defs/Many!LearningOpportunityType"
-///    },
-///    "learningAchievementSpecification": {
-///      "$ref": "#/$defs/LearningAchievementSpecificationOrQualificationType"
-///    },
-///    "learningActivitySpecification": {
-///      "$ref": "#/$defs/LearningActivitySpecificationType"
-///    },
-///    "learningSchedule": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/Many!LocationType"
-///    },
-///    "mode": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "priceDetail": {
-///      "$ref": "#/$defs/Many!PriceDetailType"
-///    },
-///    "providedBy": {
-///      "$ref": "#/$defs/OrganisationType"
-///    },
-///    "scheduleInformation": {
-///      "$ref": "#/$defs/NoteType"
-///    },
-///    "status": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "temporal": {
-///      "$ref": "#/$defs/PeriodOfTimeType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningOpportunity"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LearningOpportunity {
@@ -3672,49 +1996,6 @@ pub struct LearningOpportunity {
     pub type_: String,
 }
 
-///LearningOutcomeType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "title"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
-///    },
-///    "relatedESCOSkill": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "relatedSkill": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "reusabilityLevel": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "LearningOutcome"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LearningOutcome {
@@ -3737,56 +2018,6 @@ pub struct LearningOutcome {
     pub type_: String,
 }
 
-///LegalIdentifierType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "notation",
-///    "spatial"
-///  ],
-///  "properties": {
-///    "creator": {
-///      "$ref": "#/$defs/IRIType"
-///    },
-///    "dateIssued": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "notation": {
-///      "$ref": "#/$defs/LiteralType"
-///    },
-///    "schemeAgency": {
-///      "$ref": "#/$defs/LangStringType"
-///    },
-///    "schemeId": {
-///      "$ref": "#/$defs/URIType"
-///    },
-///    "schemeName": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "schemeVersion": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "spatial": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "type": {
-///      "const": "LegalIdentifier"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LegalIdentifier {
@@ -3812,16 +2043,6 @@ pub struct LegalIdentifier {
     pub type_: String,
 }
 
-///LiteralType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "$ref": "#/$defs/StringType"
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Literal(pub StringType);
 impl std::ops::Deref for Literal {
@@ -3831,137 +2052,26 @@ impl std::ops::Deref for Literal {
     }
 }
 
-impl From<Literal> for StringType {
-    fn from(value: Literal) -> Self {
-        value.0
-    }
-}
-
-impl From<&Literal> for Literal {
-    fn from(value: &Literal) -> Self {
-        value.clone()
-    }
-}
-
-impl From<StringType> for Literal {
-    fn from(value: StringType) -> Self {
-        Self(value)
-    }
-}
-
-impl std::str::FromStr for Literal {
-    type Err = <StringType as std::str::FromStr>::Err;
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
-        Ok(Self(value.parse()?))
-    }
-}
-
-impl std::convert::TryFrom<&str> for Literal {
-    type Error = <StringType as std::str::FromStr>::Err;
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<&String> for Literal {
-    type Error = <StringType as std::str::FromStr>::Err;
-    fn try_from(value: &String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<String> for Literal {
-    type Error = <StringType as std::str::FromStr>::Err;
-    fn try_from(value: String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl ToString for Literal {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-
-///LocationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "address"
-///  ],
-///  "properties": {
-///    "address": {
-///      "$ref": "#/$defs/Many!AddressType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "geographicName": {
-///      "$ref": "#/$defs/Many!AddressType"
-///    },
-///    "geometry": {
-///      "$ref": "#/$defs/Many!GeometryType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/IdentifierOrLegalIdentifierType"
-///    },
-///    "spatialCode": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "type": {
-///      "const": "Location"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
-//#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields)]
 pub struct Location {
-    //pub address: Option<ObjectOrVector<Address>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub description: Option<ManyLangStringType>,
-    //#[serde(rename = "geographicName", default, skip_serializing_if = "Option::is_none")]
-    //pub geographic_name: Option<ObjectOrVector<Address>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub geometry: Option<ObjectOrVector<Geometry>>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub id: Option<GenericIdType>,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub identifier: Option<IdentifierOrLegalIdentifier>,
-    //#[serde(rename = "spatialCode", default, skip_serializing_if = "Option::is_none")]
-    //pub spatial_code: Option<ObjectOrVector<Concept>>,
-    //#[serde(rename = "type")]
-    //pub type_: String,
+    pub address: Option<ObjectOrVector<Address>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<ManyLangStringType>,
+    #[serde(rename = "geographicName", default, skip_serializing_if = "Option::is_none")]
+    pub geographic_name: Option<ObjectOrVector<Address>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub geometry: Option<ObjectOrVector<Geometry>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<GenericIdType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<IdentifierOrLegalIdentifier>,
+    #[serde(rename = "spatialCode", default, skip_serializing_if = "Option::is_none")]
+    pub spatial_code: Option<ObjectOrVector<Concept>>,
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
-///MailboxType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/EmailType"
-///    },
-///    "type": {
-///      "const": "Mailbox"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Mailbox {
@@ -4126,7 +2236,7 @@ pub struct Note {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-//#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields)]
 pub struct Organisation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub accreditation: Option<ObjectOrVector<Accreditation>>,
@@ -4237,8 +2347,7 @@ pub struct PeriodOfTime {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-//#[serde(deny_unknown_fields, rename_all = "camelCase")]
-#[serde(rename_all = "camelCase")]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Person {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub birth_name: Option<ManyLangStringType>,
@@ -4249,7 +2358,7 @@ pub struct Person {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub date_modified: Option<DateTimeType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_of_birth: Option<DateTimeType>,
+    pub date_of_birth: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub family_name: Option<LangStringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -4270,16 +2379,16 @@ pub struct Person {
     pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
-    //#[serde(rename = "memberOf", default)]
-    //pub member_of: Option<Box<ObjectOrVector<Organisation>>>,
-    //#[serde(rename = "nationalID", default, skip_serializing_if = "Option::is_none")]
-    //pub national_id: Option<LegalIdentifier>,
-    //#[serde(rename = "patronymicName", default, skip_serializing_if = "Option::is_none")]
-    //pub patronymic_name: Option<ManyLangStringType>,
-    //#[serde(rename = "placeOfBirth", default, skip_serializing_if = "Option::is_none")]
-    //pub place_of_birth: Option<Location>,
+    #[serde(rename = "memberOf", default)]
+    pub member_of: Option<Box<ObjectOrVector<Organisation>>>,
+    #[serde(rename = "nationalID", default, skip_serializing_if = "Option::is_none")]
+    pub national_id: Option<LegalIdentifier>,
+    #[serde(rename = "patronymicName", default, skip_serializing_if = "Option::is_none")]
+    pub patronymic_name: Option<ManyLangStringType>,
+    #[serde(rename = "placeOfBirth", default, skip_serializing_if = "Option::is_none")]
+    pub place_of_birth: Option<Location>,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub type_: String,
 }
 
 ///PhoneType
@@ -4610,7 +2719,7 @@ pub struct Qualification {
     #[serde(rename = "isPartOf", default, skip_serializing_if = "Option::is_none")]
     pub is_part_of: Option<ObjectOrVector<Qualification>>,
     #[serde(rename = "isPartialQualification", default, skip_serializing_if = "Option::is_none")]
-    pub is_partial_qualification: Option<BooleanType>,
+    pub is_partial_qualification: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub language: Option<ObjectOrVector<Concept>>,
     #[serde(rename = "learningOutcome", default, skip_serializing_if = "Option::is_none")]
