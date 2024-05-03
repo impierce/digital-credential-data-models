@@ -53,7 +53,7 @@ pub struct EuropassEdcCredential {
     ///Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
     pub id: String,
     ///DID of the credential issuer
-    pub issuer: EuropassEdcCredentialIssuer,
+    pub issuer: Organisation,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub terms_of_use: Option<ObjectOrVector<TermsOfUse>>,
     ///Full type chain, used to identify the credential base types
