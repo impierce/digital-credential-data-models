@@ -1,11 +1,12 @@
 use std::{fmt, ops::Deref};
 
 use regress::Regex;
-use serde::de::{self, Error};
-use serde::ser::Serialize;
+use serde::de::Error;
+use serde::Serialize;
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
+pub use macro_derive::EnumDeserialize;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize)]
 pub enum ObjectOrVector<T> {
     Object(Box<T>),
     Vector(Vec<T>),
@@ -16,7 +17,6 @@ impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<
     where
         D: Deserializer<'de>,
     {
-        let deserializer = serde_stacker::Deserializer::new(deserializer);
         let serde_value = serde_json::Value::deserialize(deserializer)?;
 
         if let serde_json::Value::Array(arr) = serde_value {
@@ -47,27 +47,6 @@ impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<
             }
         }
     }
-}
-
-impl<T: Serialize> Serialize for ObjectOrVector<T> {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        match self {
-            Self::Vector(vector) => vector.serialize(serializer),
-            Self::Object(obj) => obj.serialize(serializer),
-        }
-    }
-}
-
-pub trait EnumDeserialize
-where
-    Self: Sized,
-{
-    fn variants() -> &'static [&'static str];
-
-    fn into_enum(key: &str, value: serde_json::Value) -> Result<Self, serde_json::Error>;
 }
 
 /// Email
@@ -102,23 +81,6 @@ impl Deref for Email {
         &self.0
     }
 }
-
-//impl TryFrom<String> for Email {
-//type Error = String;
-
-//fn try_from(email: String) -> Result<Self, Self::Error> {
-//let email_regex = regress::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
-//let email_uri_regex = Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
-
-//let valid = email_regex.find(&email).is_some() || email_uri_regex.find(&email).is_some();
-
-//if valid {
-//Ok(Email(email))
-//} else {
-//Err(format!("Email format is not valid: {email:?}"))
-//}
-//}
-//}
 
 impl<'de> Deserialize<'de> for Email {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
