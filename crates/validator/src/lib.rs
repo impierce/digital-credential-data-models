@@ -67,8 +67,6 @@ mod tests {
 
             let obj = result.rust_object.unwrap();
 
-            //log::info!("{obj:?}");
-
             let tmp = std::env::temp_dir().join("digital-credential-data-models");
 
             if !tmp.is_dir() {
