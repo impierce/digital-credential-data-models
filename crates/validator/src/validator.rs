@@ -1,4 +1,4 @@
-use log::error;
+use log::{error, info};
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf, process::Command};
 use types_elm_v3::EuropassEdcCredential;
@@ -35,6 +35,8 @@ fn validate_shacl(json_file: &PathBuf) -> io::Result<bool> {
 
     if !out.status.success() {
         error!("{}", String::from_utf8_lossy(&out.stderr));
+    } else {
+        info!("{}", String::from_utf8_lossy(&out.stdout));
     }
 
     Ok(out.status.success())

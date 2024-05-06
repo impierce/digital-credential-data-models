@@ -17,7 +17,6 @@ Date Issued:        September 22, 2023
 This library contains all structs and enums needed to (De)Serialize OpenBadges from and into JSON format. These structs and enums are enhanced with implementations and builders for more convenient usage.
 
 ### Index
-
 - `src`: This folder contains all the structs, enums and their implementations and builders.
 - `tests/obv3_json_examples`: This folder contains all JSON format examples specified on the website (https://www.imsglobal.org/spec/ob/v3p0#examples-0) as JSON files.
 - `tests/tests`: This folder contains the tests indexed per example JSON file.

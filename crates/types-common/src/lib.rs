@@ -4,7 +4,8 @@ use regress::Regex;
 use serde::de::Error;
 use serde::Serialize;
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
-pub use macro_derive::EnumDeserialize;
+
+pub use macro_derive::{EnumDeserialize, TagType};
 
 #[derive(Clone, Debug, Serialize)]
 pub enum ObjectOrVector<T> {
