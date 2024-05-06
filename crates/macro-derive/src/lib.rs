@@ -12,7 +12,7 @@ pub fn enum_deserialize(input: proc_macro::TokenStream) -> proc_macro::TokenStre
     let mut variant_names: Vec<String> = vec![];
 
     fn invalid_enum() {
-        panic!("EnumDeserialize may only have one unnamed field e.g.: Employee::Person(Box<Person>)");
+        panic!("EnumDeserialize may only have one unnamed field");
     }
 
     if let syn::Data::Enum(curr_enum) = &input.data {
@@ -28,8 +28,9 @@ pub fn enum_deserialize(input: proc_macro::TokenStream) -> proc_macro::TokenStre
 
             let variant = &variant.ident;
 
+            // Deserialize the object if matches the tag
             variants.push(quote! {
-                if (&obj_type == stringify!(#variant)) {
+                if (&tag == stringify!(#variant)) {
                     return
                         Ok(Self::#variant(serde_json::from_value(serde_value).map_err(::serde::de::Error::custom)?));
                 }
@@ -58,7 +59,7 @@ pub fn enum_deserialize(input: proc_macro::TokenStream) -> proc_macro::TokenStre
     let choices = create_choices(&variant_names);
     let parse_variants = proc_macro2::TokenStream::from_iter(variants);
 
-    // Build the output, possibly using quasi-quotation
+    // This will add the trait to the struct.
     let expanded = quote! {
         impl<'de> ::serde::Deserialize<'de> for #name {
             fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -67,15 +68,17 @@ pub fn enum_deserialize(input: proc_macro::TokenStream) -> proc_macro::TokenStre
             {
                 let serde_value = serde_json::Value::deserialize(deserializer)?;
 
-                let obj_type = serde_value
+                // Look if type exist on the json object.
+                let tag = serde_value
                     .get("type")
                     .map(|t| t.as_str().map(|s| s.to_string()))
                     .ok_or(::serde::de::Error::missing_field("type"))?;
 
-                if let Some(obj_type) = obj_type {
+                if let Some(tag) = tag {
+                    // Deserialize the correct variant
                     #parse_variants
 
-                    Err(::serde::de::Error::unknown_variant(&obj_type, #choices))
+                    Err(::serde::de::Error::unknown_variant(&tag, #choices))
                 } else {
                     Err(::serde::de::Error::missing_field("type"))
                 }
@@ -83,6 +86,5 @@ pub fn enum_deserialize(input: proc_macro::TokenStream) -> proc_macro::TokenStre
         }
     };
 
-    // Hand the output tokens back to the compiler
     expanded.into()
 }

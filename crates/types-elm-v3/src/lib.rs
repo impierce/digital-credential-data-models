@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use serde::{de, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, ops};
 use types_common::{Email, EnumDeserialize, ObjectOrVector};
 
