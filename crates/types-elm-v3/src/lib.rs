@@ -141,52 +141,6 @@ pub enum AgentOrPersonOrOrganisation {
     Organisation(Box<Organisation>),
 }
 
-//impl EnumDeserialize for AgentOrPersonOrOrganisation {
-    //fn variants() -> &'static [&'static str] {
-        //&["Agent", "Person", "Organisation"]
-    //}
-
-    //fn into_enum(key: &str, value: serde_json::Value) -> Result<Self, serde_json::Error> {
-        //match key {
-            //"Agent" => Ok(Self::Person(Box::new(serde_json::from_value(value)?))),
-            //"Person" => Ok(Self::Person(Box::new(serde_json::from_value(value)?))),
-            //"Organisation" => Ok(Self::Organisation(Box::new(serde_json::from_value(value)?))),
-            //_ => panic!("Illegal state"),
-        //}
-    //}
-//}
-
-//impl<'de> Deserialize<'de> for AgentOrPersonOrOrganisation {
-//fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-//where
-//D: serde::Deserializer<'de>,
-//{
-//let serde_value = serde_json::Value::deserialize(deserializer)?;
-
-//let obj_type = serde_value.get("type").unwrap();
-
-//match obj_type.as_str() {
-//Some("Agent") => Ok(Self::Agent(
-//serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-//)),
-//Some("Person") => Ok(Self::Person(
-//serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-//)),
-//Some("Organisation") => Ok(Self::Organisation(
-//serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-//)),
-//Some(other) => Err(serde::de::Error::unknown_variant(
-//other,
-//&["Agent", "Person", "Organisation"],
-//)),
-//_ => Err(serde::de::Error::unknown_variant(
-//"",
-//&["Agent", "Person", "Organisation"],
-//)),
-//}
-//}
-//}
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Agent {
@@ -268,7 +222,7 @@ pub struct AwardingProcess {
     pub type_: String,
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, EnumDeserialize)]
 #[serde(untagged)]
 pub enum ClaimNode {
     LearningAchievement(Box<LearningAchievement>),
@@ -276,55 +230,6 @@ pub enum ClaimNode {
     LearningAssessment(Box<LearningAssessment>),
     LearningEntitlement(Box<LearningEntitlement>),
     ClaimNodeType(Box<ClaimTypeNode>),
-}
-
-impl<'de> Deserialize<'de> for ClaimNode {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let serde_value = serde_json::Value::deserialize(deserializer)?;
-
-        let obj_type = serde_value.get("type").unwrap();
-
-        match obj_type.as_str() {
-            Some("LearningAchievement") => Ok(Self::LearningAchievement(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("LearningActivity") => Ok(Self::LearningActivity(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("LearningAssessment") => Ok(Self::LearningAssessment(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("LearningEntitlement") => Ok(Self::LearningEntitlement(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("ClaimNodeType") => Ok(Self::ClaimNodeType(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some(other) => Err(serde::de::Error::unknown_variant(
-                other,
-                &[
-                    "LearningAchievement",
-                    "LearningActivity",
-                    "LearningAssessment",
-                    "LearningEntitlement",
-                    "ClaimNodeType",
-                ],
-            )),
-            _ => Err(serde::de::Error::unknown_variant(
-                "",
-                &[
-                    "LearningAchievement",
-                    "LearningActivity",
-                    "LearningAssessment",
-                    "LearningEntitlement",
-                    "ClaimNodeType",
-                ],
-            )),
-        }
-    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -1288,40 +1193,11 @@ impl std::ops::Deref for HtmlType {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, EnumDeserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum IdentifierOrLegalIdentifier {
     Identifier(Box<Identifier>),
     LegalIdentifier(Box<LegalIdentifier>),
-}
-
-impl<'de> Deserialize<'de> for IdentifierOrLegalIdentifier {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let serde_value = serde_json::Value::deserialize(deserializer)?;
-
-        let obj_type = serde_value.get("type").ok_or({
-            if serde_value.is_object() {
-                de::Error::custom("type not available on IdentifierOrLegalIdentifier")
-            } else {
-                let msg = format!("IdentifierOrLegalIdentifier is not an object: {:?}", serde_value);
-                de::Error::custom(msg)
-            }
-        })?;
-
-        match obj_type.as_str() {
-            Some("Identifier") => Ok(Self::Identifier(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("LegalIdentifier") => Ok(Self::LegalIdentifier(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some(other) => Err(de::Error::unknown_variant(other, &["Identifier", "LegalIdentifier"])),
-            _ => Err(de::Error::unknown_variant("", &["Identifier", "LegalIdentifier"])),
-        }
-    }
 }
 
 ///IdentifierType
@@ -1535,39 +1411,11 @@ impl std::ops::Deref for LangStringType {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, EnumDeserialize)]
 #[serde(untagged)]
 pub enum LearningAchievementSpecificationOrQualification {
     LearningAchievementSpecification(Box<LearningAchievementSpecification>),
     Qualification(Box<Qualification>),
-}
-
-impl<'de> Deserialize<'de> for LearningAchievementSpecificationOrQualification {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let serde_value = serde_json::Value::deserialize(deserializer)?;
-
-        let obj_type = serde_value.get("type").unwrap();
-
-        match obj_type.as_str() {
-            Some("LearningAchievementSpecification") => Ok(Self::LearningAchievementSpecification(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some("Qualification") => Ok(Self::Qualification(
-                serde_json::from_value(serde_value).map_err(de::Error::custom)?,
-            )),
-            Some(other) => Err(serde::de::Error::unknown_variant(
-                other,
-                &["LearningAchievementSpecification", "Qualification"],
-            )),
-            _ => Err(serde::de::Error::unknown_variant(
-                "",
-                &["LearningAchievementSpecification", "Qualification"],
-            )),
-        }
-    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
