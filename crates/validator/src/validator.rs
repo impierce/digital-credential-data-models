@@ -25,8 +25,8 @@ impl ValidateRequest {
 
 pub fn validate_shacl(json_file: &PathBuf) -> io::Result<bool> {
     let manifest_dir = manifest_dir();
-    let cwd = manifest_dir.join("src/shacl-validator/");
-    let python_bin = manifest_dir.join("src/shacl-validator/venv/bin/python");
+    let cwd = manifest_dir.join("shacl-validator/");
+    let python_bin = manifest_dir.join("shacl-validator/venv/bin/python");
 
     let out = Command::new(python_bin)
         .current_dir(cwd)
