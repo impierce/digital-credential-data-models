@@ -74,9 +74,9 @@ pub struct Accreditation {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
     pub additional_note: Option<ObjectOrVector<Note>>,
     #[serde(rename = "dateIssued", default, skip_serializing_if = "Option::is_none")]
-    pub date_issued: Option<DateTimeType>,
+    pub date_issued: Option<DateTime<Utc>>,
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(rename = "dcType")]
     pub dc_type: Concept,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -84,7 +84,7 @@ pub struct Accreditation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<ManyLangStringType>,
     #[serde(rename = "expiryDate", default, skip_serializing_if = "Option::is_none")]
-    pub expiry_date: Option<DateTimeType>,
+    pub expiry_date: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub homepage: Option<ObjectOrVector<WebResource>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -108,7 +108,7 @@ pub struct Accreditation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub report: Option<WebResource>,
     #[serde(rename = "reviewDate", default, skip_serializing_if = "Option::is_none")]
-    pub review_date: Option<DateTimeType>,
+    pub review_date: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     #[serde(rename = "supplementaryDocument", default, skip_serializing_if = "Option::is_none")]
@@ -151,7 +151,7 @@ pub struct Agent {
     #[serde(rename = "contactPoint", default, skip_serializing_if = "Option::is_none")]
     pub contact_point: Option<ObjectOrVector<ContactPoint>>,
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(rename = "groupMemberOf", default, skip_serializing_if = "Option::is_none")]
     pub group_member_of: Option<ObjectOrVector<Group>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -203,7 +203,7 @@ pub struct AwardingProcess {
     pub additional_note: Option<ObjectOrVector<Note>>,
     pub awarding_body: ObjectOrVector<AgentOrPersonOrOrganisation>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub awarding_date: Option<DateTimeType>,
+    pub awarding_date: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub awards: Option<ObjectOrVector<ClaimNode>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -347,78 +347,6 @@ pub struct CreditPoint {
     pub point: String,
     #[serde(rename = "type")]
     pub type_: CreditPointTag,
-}
-
-///DateTimeType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "format": "date-time"
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct DateTimeType(pub DateTime<Utc>);
-impl std::ops::Deref for DateTimeType {
-    type Target = DateTime<Utc>;
-    fn deref(&self) -> &DateTime<Utc> {
-        &self.0
-    }
-}
-
-impl From<DateTimeType> for DateTime<Utc> {
-    fn from(value: DateTimeType) -> Self {
-        value.0
-    }
-}
-
-impl From<&DateTimeType> for DateTimeType {
-    fn from(value: &DateTimeType) -> Self {
-        value.clone()
-    }
-}
-
-impl From<DateTime<Utc>> for DateTimeType {
-    fn from(value: DateTime<Utc>) -> Self {
-        Self(value)
-    }
-}
-
-impl std::str::FromStr for DateTimeType {
-    type Err = <DateTime<Utc> as std::str::FromStr>::Err;
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
-        Ok(Self(value.parse()?))
-    }
-}
-
-impl std::convert::TryFrom<&str> for DateTimeType {
-    type Error = <DateTime<Utc> as std::str::FromStr>::Err;
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<&String> for DateTimeType {
-    type Error = <DateTime<Utc> as std::str::FromStr>::Err;
-    fn try_from(value: &String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<String> for DateTimeType {
-    type Error = <DateTime<Utc> as std::str::FromStr>::Err;
-    fn try_from(value: String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl ToString for DateTimeType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
 }
 
 ///DecimalType
@@ -870,7 +798,7 @@ pub struct EuropeanDigitalCredential {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub evidence: Option<ObjectOrVector<Evidence>>,
     #[serde(rename = "expirationDate")]
-    pub expiration_date: ObjectOrVector<DateTimeType>,
+    pub expiration_date: ObjectOrVector<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub holder: Option<ObjectOrVector<AgentOrPersonOrOrganisation>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -878,17 +806,17 @@ pub struct EuropeanDigitalCredential {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<ObjectOrVector<IdentifierOrLegalIdentifier>>,
     #[serde(rename = "issuanceDate", default, skip_serializing_if = "Option::is_none")]
-    pub issuance_date: Option<DateTimeType>,
-    pub issued: DateTimeType,
+    pub issuance_date: Option<DateTime<Utc>>,
+    pub issued: DateTime<Utc>,
     pub issuer: AgentOrPersonOrOrganisation,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proof: Option<ObjectOrVector<Proof>>,
     #[serde(rename = "termsOfUse", default, skip_serializing_if = "Option::is_none")]
     pub terms_of_use: Option<ObjectOrVector<TermsOfUseValue>>,
     #[serde(rename = "validFrom")]
-    pub valid_from: DateTimeType,
+    pub valid_from: DateTime<Utc>,
     #[serde(rename = "validUntil", default, skip_serializing_if = "Option::is_none")]
-    pub valid_until: Option<DateTimeType>,
+    pub valid_until: Option<DateTime<Utc>>,
     #[serde(rename = "type")]
     pub type_: EuropeanDigitalCredentialTag,
 }
@@ -1253,7 +1181,7 @@ pub struct Identifier {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub creator: Option<IriType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_issued: Option<DateTimeType>,
+    pub date_issued: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1433,7 +1361,7 @@ pub struct LearningAchievementSpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub credit_point: Option<ObjectOrVector<CreditPoint>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1540,7 +1468,7 @@ pub struct LearningActivitySpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub contact_hour: Option<ObjectOrVector<String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1627,7 +1555,7 @@ pub struct LearningAssessmentSpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub category: Option<ManyLangStringType>,
     #[serde(rename = "dateModified", default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(rename = "dcType", default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<Concept>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1672,7 +1600,7 @@ pub struct LearningAssessment {
     pub assessed_by: Option<ObjectOrVector<AgentOrPersonOrOrganisation>>,
     pub awarded_by: Box<AwardingProcess>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_issued: Option<DateTimeType>,
+    pub date_issued: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1770,7 +1698,7 @@ pub struct LearningEntitlement {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub entitled_by: Option<Box<ObjectOrVector<LearningAchievement>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub expiry_date: Option<DateTimeType>,
+    pub expiry_date: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub has_part: Option<Box<ObjectOrVector<LearningEntitlement>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1796,11 +1724,11 @@ pub struct LearningOpportunity {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub admission_procedure: Option<Note>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub application_deadline: Option<ObjectOrVector<DateTimeType>>,
+    pub application_deadline: Option<ObjectOrVector<DateTime<Utc>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub banner_image: Option<MediaObject>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1878,7 +1806,7 @@ pub struct LegalIdentifier {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub creator: Option<IriType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_issued: Option<DateTimeType>,
+    pub date_issued: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2090,7 +2018,7 @@ pub struct Organisation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub contact_point: Option<ObjectOrVector<ContactPoint>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(rename = "eIDASIdentifier", default, skip_serializing_if = "Option::is_none")]
@@ -2177,13 +2105,13 @@ impl ops::Deref for PercentageInteger {
 #[serde(deny_unknown_fields)]
 pub struct PeriodOfTime {
     #[serde(rename = "endDate", default, skip_serializing_if = "Option::is_none")]
-    pub end_date: Option<DateTimeType>,
+    pub end_date: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     #[serde(rename = "prefLabel", default, skip_serializing_if = "Option::is_none")]
     pub pref_label: Option<ManyLangStringType>,
     #[serde(rename = "startDate", default, skip_serializing_if = "Option::is_none")]
-    pub start_date: Option<DateTimeType>,
+    pub start_date: Option<DateTime<Utc>>,
     #[serde(rename = "type")]
     pub type_: PeriodOfTimeTag,
 }
@@ -2198,7 +2126,7 @@ pub struct Person {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub contact_point: Option<ObjectOrVector<ContactPoint>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub date_of_birth: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2539,7 +2467,7 @@ pub struct Qualification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub credit_point: Option<ObjectOrVector<CreditPoint>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub date_modified: Option<DateTimeType>,
+    pub date_modified: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dc_type: Option<ObjectOrVector<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
