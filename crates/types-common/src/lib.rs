@@ -8,6 +8,7 @@ use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 pub use macro_derive::{EnumDeserialize, TagType};
 
 #[derive(Clone, Debug, Serialize)]
+#[serde(untagged)]
 pub enum ObjectOrVector<T> {
     Object(Box<T>),
     Vector(Vec<T>),

@@ -582,6 +582,7 @@ pub struct DisplayParameter {
     pub description: Option<ManyLangStringType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub individual_display: Option<ObjectOrVector<IndividualDisplay>>,
     pub language: ObjectOrVector<Concept>,
     pub primary_language: Concept,

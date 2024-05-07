@@ -28,6 +28,8 @@ mod tests {
 
     use env_logger::Env;
 
+    use crate::validator::validate_shacl;
+
     use super::*;
 
     #[ctor::ctor]
@@ -73,9 +75,17 @@ mod tests {
                 fs::create_dir(tmp.clone())?;
             }
 
-            let file = File::create(tmp.join(filename))?;
+            let path = tmp.join(filename);
+            let file = File::create(&path)?;
             let writer = BufWriter::new(file);
             serde_json::to_writer(writer, &obj)?;
+            let result = validate_shacl(&path);
+
+            if let Some(err) = result.as_ref().err() {
+                panic!("Serialize err: {}", err);
+            }
+
+            assert!(result.unwrap(), "Serialize is valid");
         }
 
         Ok(())
