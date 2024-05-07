@@ -10,3 +10,4 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 regress = { workspace = true }
 chrono = { workspace = true }
+types-common = { path = "../types-common" }
