@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 serde = { workspace = true }
 serde_json = { workspace = true }
-regress = { workspace = true }
+regex = { workspace = true }
 chrono = { workspace = true }
 types-common = { path = "../types-common" }
+time = { version = "0.3.36", features = ["serde", "macros", "parsing"] }

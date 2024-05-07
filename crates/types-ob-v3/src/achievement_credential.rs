@@ -111,14 +111,14 @@ impl From<&AchievementCredentialEndorsementJwtItem> for AchievementCredentialEnd
 impl std::str::FromStr for AchievementCredentialEndorsementJwtItem {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
-        if regress::Regex::new("^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$")
+        if regex::Regex::new("^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$")
             .unwrap()
-            .find(value)
-            .is_none()
+            .is_match(value)
         {
-            return Err("doesn't match pattern \"^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$\"");
+            Ok(Self(value.to_string()))
+        } else {
+            Err("doesn't match pattern \"^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$\"")
         }
-        Ok(Self(value.to_string()))
     }
 }
 

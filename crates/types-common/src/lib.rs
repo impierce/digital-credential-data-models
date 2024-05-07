@@ -1,11 +1,11 @@
 use std::{fmt, ops::Deref};
 
-use regress::Regex;
-use serde::de::{Error, Expected, Unexpected};
+use serde::de::{Error, Unexpected};
 use serde::Serialize;
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 
 pub use macro_derive::{EnumDeserialize, TagType};
+use time::OffsetDateTime;
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
@@ -89,20 +89,17 @@ impl<'de> Deserialize<'de> for Email {
     where
         D: serde::Deserializer<'de>,
     {
-        let value = serde_json::Value::deserialize(deserializer)?;
-        let email: Email = serde_json::from_value(value).map_err(|e| Error::custom(e))?;
+        let email = String::deserialize(deserializer)?;
 
-        let email_str = email.as_ref();
+        let email_regex = regex::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
+        let email_uri_regex = regex::Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
 
-        let email_regex = regress::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
-        let email_uri_regex = Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
-
-        let valid = email_regex.find(email_str).is_some() || email_uri_regex.find(&email_str).is_some();
+        let valid = email_regex.is_match(&email) || email_uri_regex.is_match(&email);
 
         if valid {
-            Ok(email)
+            Ok(Email(email))
         } else {
-            Err(Error::custom(format!("Email format is not valid: {email_str:?}")))
+            Err(Error::invalid_value(Unexpected::Str(&email), &"A valid email format"))
         }
     }
 }
@@ -119,10 +116,11 @@ impl std::ops::Deref for PositiveInteger {
 impl<'de> Deserialize<'de> for PositiveInteger {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: Deserializer<'de> {
+        D: Deserializer<'de>,
+    {
         let number: i64 = i64::deserialize(deserializer)?;
 
-        if 0 < number {
+        if 0 <= number {
             Ok(PositiveInteger(number as u32))
         } else {
             Err(D::Error::invalid_value(
@@ -130,5 +128,37 @@ impl<'de> Deserialize<'de> for PositiveInteger {
                 &"A positive integer",
             ))
         }
+    }
+}
+
+///DurationType
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "format": "duration"
+///}
+/// ```
+/// </details>
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub struct DurationType(pub OffsetDateTime);
+
+impl std::ops::Deref for DurationType {
+    type Target = OffsetDateTime;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl<'de> Deserialize<'de> for DurationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let duration = time::serde::iso8601::deserialize(deserializer)?;
+
+        Ok(DurationType(duration))
     }
 }

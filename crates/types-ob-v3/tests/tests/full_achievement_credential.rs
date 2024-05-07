@@ -1,6 +1,6 @@
 use crate::tests::assert_eq_json_value;
 use std::{fs::File, str::FromStr};
-use types_ob_v3::prelude::*; 
+use types_ob_v3::prelude::*;
 
 #[test]
 fn full_achievement_credential() {

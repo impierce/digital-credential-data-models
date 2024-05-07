@@ -11,10 +11,10 @@ edition = "2021"
 serde = { version = "1.0", features = ["derive"] }
 serde_stacker = "0.1"
 serde_json = { version = "1.0", features = ["unbounded_depth"] }
-regress = "0.7"
 chrono = { version = "0.4", features = ["serde"] }
-env_logger = "0.11.3"
+env_logger = "0.11"
 log = "0.4"
+regex = "1.10"
 
 [dependencies]
 types-elm-v3 = { path = "crates/types-elm-v3" }
