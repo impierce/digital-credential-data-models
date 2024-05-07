@@ -15,6 +15,7 @@ chrono = { version = "0.4", features = ["serde"] }
 env_logger = "0.11"
 log = "0.4"
 regex = "1.10"
+uri = "0.4.0"
 
 [dependencies]
 types-elm-v3 = { path = "crates/types-elm-v3" }
