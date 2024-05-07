@@ -172,7 +172,7 @@ pub struct Amount {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub unit: Concept,
-    pub value: DecimalType,
+    pub value: f32,
     #[serde(rename = "type")]
     pub type_: AmountTag,
 }
@@ -347,77 +347,6 @@ pub struct CreditPoint {
     pub point: String,
     #[serde(rename = "type")]
     pub type_: CreditPointTag,
-}
-
-///DecimalType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "number"
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct DecimalType(pub f64);
-impl std::ops::Deref for DecimalType {
-    type Target = f64;
-    fn deref(&self) -> &f64 {
-        &self.0
-    }
-}
-
-impl From<DecimalType> for f64 {
-    fn from(value: DecimalType) -> Self {
-        value.0
-    }
-}
-
-impl From<&DecimalType> for DecimalType {
-    fn from(value: &DecimalType) -> Self {
-        value.clone()
-    }
-}
-
-impl From<f64> for DecimalType {
-    fn from(value: f64) -> Self {
-        Self(value)
-    }
-}
-
-impl std::str::FromStr for DecimalType {
-    type Err = <f64 as std::str::FromStr>::Err;
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
-        Ok(Self(value.parse()?))
-    }
-}
-
-impl std::convert::TryFrom<&str> for DecimalType {
-    type Error = <f64 as std::str::FromStr>::Err;
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<&String> for DecimalType {
-    type Error = <f64 as std::str::FromStr>::Err;
-    fn try_from(value: &String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl std::convert::TryFrom<String> for DecimalType {
-    type Error = <f64 as std::str::FromStr>::Err;
-    fn try_from(value: String) -> Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-
-impl ToString for DecimalType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
 }
 
 ///DisplayDetailType
@@ -700,86 +629,6 @@ impl From<&EuropassEdcCredentialIssuer> for EuropassEdcCredentialIssuer {
     }
 }
 
-///EuropeanDigitalCredentialType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "credentialProfiles",
-///    "credentialSchema",
-///    "credentialSubject",
-///    "displayParameter",
-///    "expirationDate",
-///    "issued",
-///    "issuer",
-///    "validFrom"
-///  ],
-///  "properties": {
-///    "attachment": {
-///      "$ref": "#/$defs/Many!MediaObjectType"
-///    },
-///    "credentialProfiles": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "credentialSchema": {
-///      "$ref": "#/$defs/Many!ShaclValidator2017Type"
-///    },
-///    "credentialStatus": {
-///      "$ref": "#/$defs/CredentialStatusType"
-///    },
-///    "credentialSubject": {
-///      "$ref": "#/$defs/AgentOrPersonOrOrganisationType"
-///    },
-///    "displayParameter": {
-///      "$ref": "#/$defs/DisplayParameterType"
-///    },
-///    "evidence": {
-///      "$ref": "#/$defs/Many!EvidenceType"
-///    },
-///    "expirationDate": {
-///      "$ref": "#/$defs/Many!DateTimeType"
-///    },
-///    "holder": {
-///      "$ref": "#/$defs/Many!AgentOrPersonOrOrganisationType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "issuanceDate": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "issued": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "issuer": {
-///      "$ref": "#/$defs/AgentOrPersonOrOrganisationType"
-///    },
-///    "proof": {
-///      "$ref": "#/$defs/Many!ProofType"
-///    },
-///    "termsOfUse": {
-///      "$ref": "#/$defs/Many!TermsOfUseType"
-///    },
-///    "type": {
-///      "const": "EuropeanDigitalCredential"
-///    },
-///    "validFrom": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "validUntil": {
-///      "$ref": "#/$defs/DateTimeType"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct EuropeanDigitalCredential {
