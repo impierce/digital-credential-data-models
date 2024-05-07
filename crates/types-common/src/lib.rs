@@ -1,7 +1,7 @@
 use std::{fmt, ops::Deref};
 
 use regress::Regex;
-use serde::de::Error;
+use serde::de::{Error, Expected, Unexpected};
 use serde::Serialize;
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 
@@ -103,6 +103,32 @@ impl<'de> Deserialize<'de> for Email {
             Ok(email)
         } else {
             Err(Error::custom(format!("Email format is not valid: {email_str:?}")))
+        }
+    }
+}
+
+#[derive(Clone, Debug, Serialize)]
+pub struct PositiveInteger(pub u32);
+impl std::ops::Deref for PositiveInteger {
+    type Target = u32;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl<'de> Deserialize<'de> for PositiveInteger {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de> {
+        let number: i64 = i64::deserialize(deserializer)?;
+
+        if 0 < number {
+            Ok(PositiveInteger(number as u32))
+        } else {
+            Err(D::Error::invalid_value(
+                Unexpected::Signed(number),
+                &"A positive integer",
+            ))
         }
     }
 }

@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, ops};
-use types_common::{Email, EnumDeserialize, ObjectOrVector, TagType};
+use types_common::{Email, EnumDeserialize, ObjectOrVector, PositiveInteger, TagType};
 
 /// Error types.
 pub mod error {
@@ -349,42 +349,13 @@ pub struct CreditPoint {
     pub type_: CreditPointTag,
 }
 
-///DisplayDetailType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "image",
-///    "page"
-///  ],
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "image": {
-///      "$ref": "#/$defs/MediaObjectType"
-///    },
-///    "page": {
-///      "$ref": "#/$defs/PositiveIntegerType"
-///    },
-///    "type": {
-///      "const": "DisplayDetail"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct DisplayDetail {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub image: MediaObject,
-    pub page: PositiveIntegerType,
+    pub page: PositiveInteger,
     #[serde(rename = "type")]
     pub type_: DisplayDetailTag,
 }
@@ -2066,26 +2037,6 @@ pub struct Phone {
     pub type_: PhoneTag,
 }
 
-///PositiveIntegerType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "integer",
-///  "minimum": 0.0
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct PositiveIntegerType(pub u64);
-impl std::ops::Deref for PositiveIntegerType {
-    type Target = u64;
-    fn deref(&self) -> &u64 {
-        &self.0
-    }
-}
-
 ///PriceDetailType
 ///
 /// <details><summary>JSON schema</summary>
@@ -2382,48 +2333,10 @@ pub struct Qualification {
     pub type_: QualificationTag,
 }
 
-///ResultCategoryType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "count",
-///    "label"
-///  ],
-///  "properties": {
-///    "count": {
-///      "$ref": "#/$defs/PositiveIntegerType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "label": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "maximumScore": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "minimumScore": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "score": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "type": {
-///      "const": "ResultCategory"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ResultCategory {
-    pub count: PositiveIntegerType,
+    pub count: PositiveInteger,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<GenericIdType>,
     pub label: String,
@@ -2437,31 +2350,6 @@ pub struct ResultCategory {
     pub type_: ResultCategoryTag,
 }
 
-///ResultDistributionType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "resultCategory": {
-///      "$ref": "#/$defs/Many!ResultCategoryType"
-///    },
-///    "type": {
-///      "const": "ResultDistribution"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ResultDistribution {
@@ -2475,25 +2363,6 @@ pub struct ResultDistribution {
     pub type_: ResultDistributionTag,
 }
 
-///ShaclValidator2017Type
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "type": {
-///      "const": "ShaclValidator2017"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct ShaclValidator2017 {
@@ -2503,39 +2372,6 @@ pub struct ShaclValidator2017 {
     pub type_: ShaclValidator2017Tag,
 }
 
-///ShortenedGradingType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "percentageEqual",
-///    "percentageHigher",
-///    "percentageLower"
-///  ],
-///  "properties": {
-///    "id": {
-///      "$ref": "#/$defs/GenericIdType"
-///    },
-///    "percentageEqual": {
-///      "$ref": "#/$defs/IntegerType"
-///    },
-///    "percentageHigher": {
-///      "$ref": "#/$defs/IntegerType"
-///    },
-///    "percentageLower": {
-///      "$ref": "#/$defs/IntegerType"
-///    },
-///    "type": {
-///      "const": "ShortenedGrading"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ShortenedGrading {
@@ -2548,31 +2384,6 @@ pub struct ShortenedGrading {
     pub type_: ShortenedGradingTag,
 }
 
-///Contains the terms under which the issued credential was issued
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Contains the terms under which the issued credential was issued",
-///  "type": "object",
-///  "required": [
-///    "type"
-///  ],
-///  "properties": {
-///    "id": {
-///      "description": "Contains a URL that points to where more information about this instance of terms of use can be found.",
-///      "type": "string",
-///      "format": "uri"
-///    },
-///    "type": {
-///      "description": "Defines the type extension",
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct TermsOfUseValue {
     ///Contains a URL that points to where more information about this instance of terms of use can be found.
