@@ -115,7 +115,7 @@ pub struct Accreditation {
     pub supplementary_document: Option<ObjectOrVector<WebResource>>,
     pub title: ManyLangStringType,
     #[serde(rename = "type")]
-    pub type_: AccreditationTag,
+    pub type_: ObjectOrVector<AccreditationTag>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
@@ -2292,40 +2292,41 @@ pub struct TermsOfUseValue {
 ///}
 /// ```
 /// </details>
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct UriType(pub Uri);
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct UriType(pub fluent_uri::Uri<String>);
+
 impl std::ops::Deref for UriType {
-    type Target = String;
-    fn deref(&self) -> &String {
+    type Target = fluent_uri::Uri<String>;
+    fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
-impl From<UriType> for String {
-    fn from(value: UriType) -> Self {
-        value.0
+
+impl Serialize for UriType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
     }
 }
-impl From<&UriType> for UriType {
-    fn from(value: &UriType) -> Self {
-        value.clone()
+
+impl<'de> Deserialize<'de> for UriType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        let value = String::deserialize(deserializer)?;
+
+        let uri = fluent_uri::Uri::parse(value.clone());
+
+        match uri {
+            Ok(uri) => Ok(UriType(uri)),
+            Err(err) => Err(<D::Error as de::Error>::custom(err)),
+        }
     }
 }
-impl From<String> for UriType {
-    fn from(value: String) -> Self {
-        Self(value)
-    }
-}
-impl std::str::FromStr for UriType {
-    type Err = std::convert::Infallible;
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
-        Ok(Self(value.to_string()))
-    }
-}
-impl ToString for UriType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
+
 ///VerificationCheckType
 ///
 /// <details><summary>JSON schema</summary>

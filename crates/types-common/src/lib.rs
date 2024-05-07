@@ -22,31 +22,13 @@ impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<
         let serde_value = serde_json::Value::deserialize(deserializer)?;
 
         if let serde_json::Value::Array(arr) = serde_value {
-            let mut out = vec![];
-
-            for item in arr {
-                let result = serde_json::from_value(item);
-
-                match result {
-                    Ok(item) => out.push(item),
-                    Err(err) => {
-                        eprintln!("{}", err);
-                        return Err(Error::custom(err));
-                    }
-                };
-            }
+            let out = serde_json::from_value(serde_json::Value::Array(arr)).map_err(Error::custom)?;
 
             Ok(Self::Vector(out))
         } else {
-            let result = serde_json::from_value(serde_value.clone());
+            let result = serde_json::from_value(serde_value).map_err(Error::custom)?;
 
-            match result {
-                Ok(result) => Ok(Self::Object(Box::new(result))),
-                Err(err) => {
-                    eprintln!("{}", err);
-                    Err(Error::custom(err))
-                }
-            }
+            Ok(Self::Object(result))
         }
     }
 }
