@@ -940,25 +940,6 @@ pub struct IndividualDisplay {
     pub type_: IndividualDisplayTag,
 }
 
-///IntegerType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "integer"
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct IntegerType(pub i64);
-impl std::ops::Deref for IntegerType {
-    type Target = i64;
-    fn deref(&self) -> &i64 {
-        &self.0
-    }
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct IriType(pub String);
 impl std::ops::Deref for IriType {
@@ -1959,9 +1940,9 @@ pub struct CredentialSchema {
 pub struct ShortenedGrading {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<UriType>,
-    pub percentage_equal: IntegerType,
-    pub percentage_higher: IntegerType,
-    pub percentage_lower: IntegerType,
+    pub percentage_equal: i32,
+    pub percentage_higher: i32,
+    pub percentage_lower: i32,
     #[serde(rename = "type")]
     pub type_: ShortenedGradingTag,
 }
