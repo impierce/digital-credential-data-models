@@ -889,7 +889,7 @@ pub struct Identifier {
     pub id: Option<UriType>,
     pub notation: Literal,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub scheme_agency: Option<LangStringType>,
+    pub scheme_agency: Option<LangKV>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scheme_id: Option<UriType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -959,16 +959,6 @@ impl std::ops::Deref for IntegerType {
     }
 }
 
-///IriType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string"
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct IriType(pub String);
 impl std::ops::Deref for IriType {
@@ -978,31 +968,6 @@ impl std::ops::Deref for IriType {
     }
 }
 
-///IssuerNodeType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "eidasLegalIdentifier"
-///  ],
-///  "properties": {
-///    "eidasLegalIdentifier": {
-///      "$ref": "#/$defs/LegalIdentifierType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/UriTypeType"
-///    },
-///    "type": {
-///      "const": "IssuerNode"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct IssuerNode {
@@ -1014,30 +979,37 @@ pub struct IssuerNode {
     pub type_: IssuerNodeTag,
 }
 
-///LangStringType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "allOf": [
-///    {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    {
-///      "type": "object",
-///      "maxProperties": 1
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct LangStringType(pub serde_json::Map<String, serde_json::Value>);
-impl std::ops::Deref for LangStringType {
+#[derive(Clone, Debug, Serialize)]
+pub struct LangKV(pub serde_json::Map<String, serde_json::Value>);
+
+impl LangKV {
+    pub fn new(kv_pair: serde_json::Map::<String, serde_json::Value>) -> Option<Self> {
+        if 1 == kv_pair.len()  {
+            Some(Self(kv_pair))
+        } else {
+            None
+        }
+    }
+}
+
+impl std::ops::Deref for LangKV {
     type Target = serde_json::Map<String, serde_json::Value>;
     fn deref(&self) -> &serde_json::Map<String, serde_json::Value> {
         &self.0
+    }
+}
+
+impl<'de> Deserialize<'de> for LangKV {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de> {
+        let map = serde_json::Map::deserialize(deserializer)?;
+
+        if let Some(kv_pair) = LangKV::new(map) {
+            Ok(kv_pair)
+        } else {
+            Err(<D::Error as de::Error>::missing_field("Requires 1 lang key value pair"))
+        }
     }
 }
 
@@ -1514,7 +1486,7 @@ pub struct LegalIdentifier {
     pub id: Option<UriType>,
     pub notation: Literal,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub scheme_agency: Option<LangStringType>,
+    pub scheme_agency: Option<LangKV>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scheme_id: Option<UriType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1565,21 +1537,6 @@ pub struct Mailbox {
     pub type_: MailboxTag,
 }
 
-///ManyLangStringType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "minProperties": 1,
-///  "propertyNames": {
-///    "pattern": "^(aa|ab|ae|af|ak|am|an|ar|as|av|ay|az|ba|be|bg|bh|bi|bm|bn|bo|br|bs|ca|ce|ch|co|cr|cs|cu|cv|cy|da|de|dv|dz|ee|el|en|eo|es|et|eu|fa|ff|fi|fj|fo|fr|fy|ga|gd|gl|gn|gu|gv|ha|he|hi|ho|hr|ht|hu|hy|hz|ia|id|ie|ig|ii|ik|in|io|is|it|iu|iw|ja|ji|jv|jw|ka|kg|ki|kj|kk|kl|km|kn|ko|kr|ks|ku|kv|kw|ky|la|lb|lg|li|ln|lo|lt|lu|lv|mg|mh|mi|mk|ml|mn|mo|mr|ms|mt|my|na|nb|nd|ne|ng|nl|nn|no|nr|nv|ny|oc|oj|om|or|os|pa|pi|pl|ps|pt|qu|rm|rn|ro|ru|rw|sa|sc|sd|se|sg|sh|si|sk|sl|sm|sn|so|sq|sr|ss|st|su|sv|sw|ta|te|tg|th|ti|tk|tl|tn|to|tr|ts|tt|tw|ty|ug|uk|ur|uz|ve|vi|vo|wa|wo|xh|yi|yo|za|zh|zu)$"
-///  }
-///}
-/// ```
-/// </details>
-/// TODO refactor!!!
 #[derive(Clone, Debug, Serialize)]
 pub struct LangKVPairs(HashMap<LangKey, serde_json::Value>);
 
@@ -1800,13 +1757,13 @@ pub struct Person {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub date_of_birth: Option<DateTime<Utc>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub family_name: Option<LangStringType>,
+    pub family_name: Option<LangKV>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub full_name: Option<LangStringType>,
+    pub full_name: Option<LangKV>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gender: Option<Concept>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub given_name: Option<LangStringType>,
+    pub given_name: Option<LangKV>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub group_member_of: Option<ObjectOrVector<Group>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
