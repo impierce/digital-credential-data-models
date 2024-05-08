@@ -1,11 +1,8 @@
-use std::{fmt, ops::Deref};
-
+pub use macro_derive::{EnumDeserialize, TagType};
 use serde::de::{Error, Unexpected};
 use serde::Serialize;
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
-
-pub use macro_derive::{EnumDeserialize, TagType};
-use time::OffsetDateTime;
+use std::{fmt, ops::Deref};
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
@@ -124,13 +121,28 @@ impl<'de> Deserialize<'de> for PositiveInteger {
 ///}
 /// ```
 /// </details>
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct DurationType(pub OffsetDateTime);
+#[derive(Clone, Debug)]
+pub struct DurationType(iso8601_duration::Duration);
+
+impl DurationType {
+    pub fn new(duration: iso8601_duration::Duration) -> Self {
+        DurationType(duration)
+    }
+}
 
 impl std::ops::Deref for DurationType {
-    type Target = OffsetDateTime;
+    type Target = iso8601_duration::Duration;
     fn deref(&self) -> &Self::Target {
         &self.0
+    }
+}
+
+impl Serialize for DurationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.0.to_string())
     }
 }
 
@@ -139,7 +151,11 @@ impl<'de> Deserialize<'de> for DurationType {
     where
         D: serde::Deserializer<'de>,
     {
-        let duration = time::serde::iso8601::deserialize(deserializer)?;
+        let str = String::deserialize(deserializer)?;
+
+        let duration: iso8601_duration::Duration = str
+            .parse()
+            .map_err(|e: iso8601_duration::ParseDurationError| serde::de::Error::custom(&e.input))?;
 
         Ok(DurationType(duration))
     }
