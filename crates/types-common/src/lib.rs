@@ -1,33 +1,44 @@
 pub use macro_derive::{EnumDeserialize, TagType};
-use serde::de::{Error, Unexpected};
 use serde::Serialize;
-use serde::{de::DeserializeOwned, Deserialize, Deserializer};
+use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
 use std::{fmt, ops::Deref};
 
-#[derive(Clone, Debug, Serialize)]
-#[serde(untagged)]
-pub enum ObjectOrVector<T> {
-    Object(Box<T>),
-    Vector(Vec<T>),
+#[derive(Clone, Debug)]
+pub enum OneOrMany<T> {
+    One(Box<T>),
+    Many(Vec<T>),
 }
 
-impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<T> {
+impl<'de, T: DeserializeOwned + fmt::Debug> de::Deserialize<'de> for OneOrMany<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: Deserializer<'de>,
+        D: de::Deserializer<'de>,
     {
         let serde_value = serde_json::Value::deserialize(deserializer)?;
 
         if let serde_json::Value::Array(arr) = serde_value {
-            let out = serde_json::from_value(serde_json::Value::Array(arr)).map_err(Error::custom)?;
+            let val = serde_json::Value::Array(arr);
+            let out = Vec::deserialize(val).map_err(de::Error::custom)?;
 
-            Ok(Self::Vector(out))
+            Ok(Self::Many(out))
         } else {
-            let result = serde_json::from_value(serde_value).map_err(Error::custom)?;
+            let out = serde_json::from_value(serde_value).map_err(de::Error::custom)?;
 
-            Ok(Self::Object(result))
+            Ok(Self::One(out))
         }
     }
+}
+
+impl<T: Serialize> Serialize for OneOrMany<T> {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer {
+        match self {
+            OneOrMany::One(obj) => obj.serialize(serializer),
+            OneOrMany::Many(vec) => vec.serialize(serializer),
+        }
+    }
+
 }
 
 /// Email
@@ -63,7 +74,7 @@ impl Deref for Email {
     }
 }
 
-impl<'de> Deserialize<'de> for Email {
+impl<'de> de::Deserialize<'de> for Email {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -78,7 +89,10 @@ impl<'de> Deserialize<'de> for Email {
         if valid {
             Ok(Email(email))
         } else {
-            Err(Error::invalid_value(Unexpected::Str(&email), &"A valid email format"))
+            Err(de::Error::invalid_value(
+                Unexpected::Str(&email),
+                &"A valid email format",
+            ))
         }
     }
 }
@@ -92,7 +106,7 @@ impl std::ops::Deref for PositiveInteger {
     }
 }
 
-impl<'de> Deserialize<'de> for PositiveInteger {
+impl<'de> de::Deserialize<'de> for PositiveInteger {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -102,7 +116,7 @@ impl<'de> Deserialize<'de> for PositiveInteger {
         if 0 <= number {
             Ok(PositiveInteger(number as u32))
         } else {
-            Err(D::Error::invalid_value(
+            Err(<D::Error as de::Error>::invalid_value(
                 Unexpected::Signed(number),
                 &"A positive integer",
             ))
@@ -146,7 +160,7 @@ impl Serialize for DurationType {
     }
 }
 
-impl<'de> Deserialize<'de> for DurationType {
+impl<'de> de::Deserialize<'de> for DurationType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
