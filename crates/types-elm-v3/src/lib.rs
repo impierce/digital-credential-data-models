@@ -358,8 +358,7 @@ pub struct DisplayParameter {
     pub description: Option<LangKVPairs>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<UriType>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub individual_display: Option<OneOrMany<IndividualDisplay>>,
+    pub individual_display: OneOrMany<IndividualDisplay>,
     pub language: OneOrMany<Concept>,
     pub primary_language: Concept,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -503,7 +502,8 @@ pub struct EuropeanDigitalPresentation {
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Evidence {
-    pub accreditation: Box<Accreditation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub accreditation: Option<Box<Accreditation>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub embedded_evidence: Option<OneOrMany<MediaObject>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -513,7 +513,8 @@ pub struct Evidence {
     ///If present, it MUST contain a URL that points to where more information about this instance of evidence can be found.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<UriType>,
-    pub dc_type: Concept,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dc_type: Option<Concept>,
     #[serde(rename = "type")]
     pub type_: EvidenceTag,
 }
@@ -646,9 +647,8 @@ impl std::ops::Deref for IriType {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct IssuerNode {
-    #[serde(rename = "eidasLegalIdentifier")]
     pub eidas_legal_identifier: LegalIdentifier,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<UriType>,
@@ -1296,7 +1296,7 @@ pub struct MediaObject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content_size: Option<i64>,
     pub content_type: Concept,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "contentURL", default, skip_serializing_if = "Option::is_none")]
     pub content_url: Option<UriType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<LangKVPairs>,
