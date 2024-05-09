@@ -435,10 +435,12 @@ pub enum EuropassEdcCredentialIssuer {
         id: String,
     },
 }
-impl From<&EuropassEdcCredentialIssuer> for EuropassEdcCredentialIssuer {
-    fn from(value: &EuropassEdcCredentialIssuer) -> Self {
-        value.clone()
-    }
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum DataOrUri {
+    Data(AgentOrPersonOrOrganisation),
+    GenericId(UriType)
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
@@ -451,7 +453,7 @@ pub struct EuropeanDigitalCredential {
     #[serde(rename = "credentialSchema")]
     pub credential_schema: OneOrMany<CredentialSchema>,
     #[serde(rename = "credentialStatus", default, skip_serializing_if = "Option::is_none")]
-    pub credential_status: Option<CredentialStatus>,
+    pub credential_status: Option<OneOrMany<CredentialStatus>>,
     #[serde(rename = "credentialSubject")]
     pub credential_subject: AgentOrPersonOrOrganisation,
     #[serde(rename = "displayParameter")]
@@ -459,7 +461,7 @@ pub struct EuropeanDigitalCredential {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub evidence: Option<OneOrMany<Evidence>>,
     #[serde(rename = "expirationDate")]
-    pub expiration_date: OneOrMany<DateTime<Utc>>,
+    pub expiration_date: Option<OneOrMany<DateTime<Utc>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub holder: Option<OneOrMany<AgentOrPersonOrOrganisation>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -469,7 +471,7 @@ pub struct EuropeanDigitalCredential {
     #[serde(rename = "issuanceDate", default, skip_serializing_if = "Option::is_none")]
     pub issuance_date: Option<DateTime<Utc>>,
     pub issued: DateTime<Utc>,
-    pub issuer: AgentOrPersonOrOrganisation,
+    pub issuer: DataOrUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proof: Option<OneOrMany<Proof>>,
     #[serde(rename = "termsOfUse", default, skip_serializing_if = "Option::is_none")]
