@@ -412,119 +412,64 @@ pub struct DisplayParameter {
     pub type_: DisplayParameterTag,
 }
 
-///EuropassEdcCredentialContext
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "oneOf": [
-///    {
-///      "const": "https://www.w3.org/ns/credentials/v2"
-///    },
-///    {
-///      "description": "Semantic context for the issued credential. First element MUST be https://www.w3.org/ns/credentials/v2",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "format": "uri"
-///      },
-///      "minItems": 1,
-///      "uniqueItems": true
-///    }
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum EuropassEdcCredentialContext {
-    Object(serde_json::Value),
-    Vector(Vec<String>),
+    One(String),
+    Many(Vec<String>),
 }
 
-impl From<&EuropassEdcCredentialContext> for EuropassEdcCredentialContext {
-    fn from(value: &EuropassEdcCredentialContext) -> Self {
-        value.clone()
+impl<'de> de::Deserialize<'de> for EuropassEdcCredentialContext {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        let value = serde_json::Value::deserialize(deserializer)?;
+
+        let must_contain = "https://www.w3.org/ns/credentials/v2";
+
+        match value {
+            serde_json::Value::Array(arr) => {
+                let val = serde_json::Value::Array(arr);
+                let many: Vec<String> = Vec::deserialize(val).map_err(de::Error::custom)?;
+
+                if many.is_empty() {
+                    return Err(de::Error::invalid_value(de::Unexpected::Seq, &"Array cannot be empty"));
+                }
+
+                if &must_contain != &many[0] {
+                    Err(de::Error::invalid_value(
+                        de::Unexpected::Str(&many[0]),
+                        &format!("First value must be: {}", must_contain).as_str(),
+                    ))
+                } else {
+                    Ok(Self::Many(many))
+                }
+            }
+            serde_json::Value::String(one) => {
+                if &must_contain == &one {
+                    Ok(Self::One(one))
+                } else {
+                    Err(de::Error::invalid_value(de::Unexpected::Str(&one), &must_contain))
+                }
+            }
+            _ => Err(de::Error::invalid_type(
+                de::Unexpected::Other(&value.to_string()),
+                &"An array of string or a string",
+            )),
+        }
     }
 }
 
-impl From<serde_json::Value> for EuropassEdcCredentialContext {
-    fn from(value: serde_json::Value) -> Self {
-        Self::Object(value)
-    }
-}
-
-impl From<Vec<String>> for EuropassEdcCredentialContext {
-    fn from(value: Vec<String>) -> Self {
-        Self::Vector(value)
-    }
-}
-
-///Defines suspension and/or revocation details for the issued credential. Further redefined by the type extension
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Defines suspension and/or revocation details for the issued credential. Further redefined by the type extension",
-///  "type": "object",
-///  "required": [
-///    "id",
-///    "type"
-///  ],
-///  "properties": {
-///    "id": {
-///      "description": "Exact identity for the credential status",
-///      "type": "string",
-///      "format": "uri"
-///    },
-///    "type": {
-///      "description": "Defines the revocation type extension",
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct EuropassEdcCredentialCredentialStatus {
     ///Exact identity for the credential status
-    pub id: String,
+    pub id: UriType,
     ///Defines the revocation type extension
     #[serde(rename = "type")]
     pub revocation_type: String,
 }
 
-///DID of the credential issuer
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "DID of the credential issuer",
-///  "oneOf": [
-///    {
-///      "type": "string",
-///      "format": "uri"
-///    },
-///    {
-///      "type": "object",
-///      "required": [
-///        "id"
-///      ],
-///      "properties": {
-///        "id": {
-///          "description": "DID of the credential issuer",
-///          "type": "string",
-///          "format": "uri"
-///        }
-///      }
-///    }
-///  ]
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum EuropassEdcCredentialIssuer {
@@ -639,40 +584,6 @@ pub struct Geometry {
     pub type_: GeometryTag,
 }
 
-///GradingSchemeType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "title"
-///  ],
-///  "properties": {
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/UriTypeType"
-///    },
-///    "identifier": {
-///      "$ref": "#/$defs/Many!IdentifierOrLegalIdentifierType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "GradingScheme"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct GradingScheme {
@@ -689,43 +600,6 @@ pub struct GradingScheme {
     pub type_: GradingSchemeTag,
 }
 
-///GrantType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "title"
-///  ],
-///  "properties": {
-///    "contentURL": {
-///      "$ref": "#/$defs/URIType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/UriTypeType"
-///    },
-///    "supplementaryDocument": {
-///      "$ref": "#/$defs/Many!WebResourceType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "Grant"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct Grant {
@@ -744,46 +618,6 @@ pub struct Grant {
     pub type_: GrantTag,
 }
 
-///GroupType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "prefLabel"
-///  ],
-///  "properties": {
-///    "additionalNote": {
-///      "$ref": "#/$defs/Many!NoteType"
-///    },
-///    "altLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "contactPoint": {
-///      "$ref": "#/$defs/Many!ContactPointType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/UriTypeType"
-///    },
-///    "location": {
-///      "$ref": "#/$defs/Many!LocationType"
-///    },
-///    "member": {
-///      "$ref": "#/$defs/Many!AgentOrPersonOrOrganisationType"
-///    },
-///    "prefLabel": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "Group"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Group {
@@ -804,16 +638,6 @@ pub struct Group {
     pub type_: GroupTag,
 }
 
-///HtmlType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string"
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct HtmlType(pub String);
 impl std::ops::Deref for HtmlType {
@@ -830,52 +654,6 @@ pub enum IdentifierOrLegalIdentifier {
     LegalIdentifier(Box<LegalIdentifier>),
 }
 
-///IdentifierType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "notation"
-///  ],
-///  "properties": {
-///    "creator": {
-///      "$ref": "#/$defs/IRIType"
-///    },
-///    "dateIssued": {
-///      "$ref": "#/$defs/DateTimeType"
-///    },
-///    "dcType": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/UriTypeType"
-///    },
-///    "notation": {
-///      "$ref": "#/$defs/LiteralType"
-///    },
-///    "schemeAgency": {
-///      "$ref": "#/$defs/LangStringType"
-///    },
-///    "schemeId": {
-///      "$ref": "#/$defs/URIType"
-///    },
-///    "schemeName": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "schemeVersion": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "type": {
-///      "const": "Identifier"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Identifier {
@@ -900,35 +678,6 @@ pub struct Identifier {
     pub type_: IdentifierTag,
 }
 
-///IndividualDisplayType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "displayDetail",
-///    "language"
-///  ],
-///  "properties": {
-///    "displayDetail": {
-///      "$ref": "#/$defs/Many!DisplayDetailType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/UriTypeType"
-///    },
-///    "language": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "type": {
-///      "const": "IndividualDisplay"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct IndividualDisplay {
@@ -964,8 +713,8 @@ pub struct IssuerNode {
 pub struct LangKV(pub serde_json::Map<String, serde_json::Value>);
 
 impl LangKV {
-    pub fn new(kv_pair: serde_json::Map::<String, serde_json::Value>) -> Option<Self> {
-        if 1 == kv_pair.len()  {
+    pub fn new(kv_pair: serde_json::Map<String, serde_json::Value>) -> Option<Self> {
+        if 1 == kv_pair.len() {
             Some(Self(kv_pair))
         } else {
             None
@@ -983,7 +732,8 @@ impl std::ops::Deref for LangKV {
 impl<'de> Deserialize<'de> for LangKV {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: de::Deserializer<'de> {
+        D: de::Deserializer<'de>,
+    {
         let map = serde_json::Map::deserialize(deserializer)?;
 
         if let Some(kv_pair) = LangKV::new(map) {
