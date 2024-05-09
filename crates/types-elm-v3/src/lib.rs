@@ -500,32 +500,22 @@ pub struct EuropeanDigitalPresentation {
     pub type_: EuropeanDigitalPresentationTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Evidence {
+    pub accreditation: Box<Accreditation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub embedded_evidence: Option<OneOrMany<MediaObject>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub evidence_statement: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub evidence_target: Option<AgentOrPersonOrOrganisation>,
     ///If present, it MUST contain a URL that points to where more information about this instance of evidence can be found.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: Option<UriType>,
     pub dc_type: Concept,
     #[serde(rename = "type")]
-    pub type_: OneOrMany<String>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
-#[serde(deny_unknown_fields)]
-pub struct EvidenceType {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub accreditation: Option<Box<Accreditation>>,
-    #[serde(rename = "embeddedEvidence", default, skip_serializing_if = "Option::is_none")]
-    pub embedded_evidence: Option<OneOrMany<MediaObject>>,
-    #[serde(rename = "evidenceStatement", default, skip_serializing_if = "Option::is_none")]
-    pub evidence_statement: Option<String>,
-    #[serde(rename = "evidenceTarget", default, skip_serializing_if = "Option::is_none")]
-    pub evidence_target: Option<AgentOrPersonOrOrganisation>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub id: Option<UriType>,
-    #[serde(rename = "type")]
-    pub type_: EvidenceTypeTag,
+    pub type_: EvidenceTag,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
@@ -835,9 +825,9 @@ pub struct LearningActivitySpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<LangKVPairs>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub generalisation_of: Option<OneOrMany<LearningAchievementSpecification>>,
+    pub generalisation_of: Option<OneOrMany<LearningActivitySpecification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub has_part: Option<OneOrMany<LearningAchievementSpecification>>,
+    pub has_part: Option<OneOrMany<LearningActivitySpecification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub homepage: Option<OneOrMany<WebResource>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -847,13 +837,13 @@ pub struct LearningActivitySpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub influences: Option<OneOrMany<LearningAchievementSpecificationOrQualification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub is_part_of: Option<OneOrMany<LearningAchievementSpecification>>,
+    pub is_part_of: Option<OneOrMany<LearningActivitySpecification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub language: Option<OneOrMany<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mode: Option<OneOrMany<Concept>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub specialisation_of: Option<OneOrMany<LearningAchievementSpecification>>,
+    pub specialisation_of: Option<OneOrMany<LearningActivitySpecification>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1360,7 +1350,7 @@ pub struct Organisation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<UriType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub identifier: Option<IdentifierOrLegalIdentifier>,
+    pub identifier: Option<OneOrMany<IdentifierOrLegalIdentifier>>,
     pub legal_name: LangKVPairs,
     pub location: OneOrMany<Location>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1466,7 +1456,7 @@ pub struct Person {
     pub location: Option<Location>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub member_of: Option<Box<OneOrMany<Organisation>>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "nationalID", default, skip_serializing_if = "Option::is_none")]
     pub national_id: Option<LegalIdentifier>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub patronymic_name: Option<LangKVPairs>,
