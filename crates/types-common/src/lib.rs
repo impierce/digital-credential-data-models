@@ -124,17 +124,6 @@ impl<'de> de::Deserialize<'de> for PositiveInteger {
     }
 }
 
-///DurationType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "format": "duration"
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug)]
 pub struct DurationType(iso8601_duration::Duration);
 
