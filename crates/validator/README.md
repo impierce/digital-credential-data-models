@@ -2,6 +2,7 @@
 This will validate the requests.
 
 ### Validate elm requests 
+Sometimes its good to run the `fetch-json.sh` script to update the latest JSON requests.
 
 #### Unix
 - Run the `init-py.sh` script to initialize the python shacl validator.
