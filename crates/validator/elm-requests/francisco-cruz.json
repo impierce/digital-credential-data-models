@@ -444,7 +444,7 @@
     {
       "id": "urn:epass:identifier:3",
       "type": "Identifier",
-      "notation": "urn:schac:personalwalletID:xxxxxxxxxx",
+      "notation": "\"urn:schac:personalwalletID:xxxxxxxxxx",
       "schemeName": "Europass Wallet"
     }
   ]

@@ -97,11 +97,6 @@ mod tests {
     }
 
     #[test]
-    fn test_sample_request() -> io::Result<()> {
-        validate_file("credential-sample.json")
-    }
-
-    #[test]
     fn test_digicomp_generic() -> io::Result<()> {
         validate_file("digicomp-generic.json")
     }
@@ -113,6 +108,16 @@ mod tests {
 
     #[test]
     fn test_francisco_cruz() -> io::Result<()> {
-        validate_file("francisco-cruz-argudo-cert-of-completion.json")
+        validate_file("francisco-cruz.json")
+    }
+
+    #[test]
+    fn test_microcredential() -> io::Result<()> {
+        validate_file("microcredential.json")
+    }
+
+    #[test]
+    fn test_transcript_of_records() -> io::Result<()> {
+        validate_file("transcript-of-records.json")
     }
 }

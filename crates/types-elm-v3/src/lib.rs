@@ -351,49 +351,6 @@ pub struct DisplayDetail {
     pub type_: DisplayDetailTag,
 }
 
-///DisplayParameterType
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "individualDisplay",
-///    "language",
-///    "primaryLanguage",
-///    "title"
-///  ],
-///  "properties": {
-///    "description": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "id": {
-///      "$ref": "#/$defs/UriTypeType"
-///    },
-///    "individualDisplay": {
-///      "$ref": "#/$defs/Many!IndividualDisplayType"
-///    },
-///    "language": {
-///      "$ref": "#/$defs/Many!ConceptType"
-///    },
-///    "primaryLanguage": {
-///      "$ref": "#/$defs/ConceptType"
-///    },
-///    "summaryDisplay": {
-///      "$ref": "#/$defs/StringType"
-///    },
-///    "title": {
-///      "$ref": "#/$defs/Many!LangStringType"
-///    },
-///    "type": {
-///      "const": "DisplayParameter"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct DisplayParameter {
