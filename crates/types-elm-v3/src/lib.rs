@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
-use types_common::{DurationType, Email, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
+use types_common::{DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
 
 /// Error types.
 pub mod error {
@@ -440,7 +440,7 @@ pub enum EuropassEdcCredentialIssuer {
 #[serde(untagged)]
 pub enum DataOrUri {
     Data(AgentOrPersonOrOrganisation),
-    GenericId(UriType)
+    GenericId(UriType),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
@@ -1206,6 +1206,53 @@ pub struct Location {
     pub spatial_code: Option<OneOrMany<Concept>>,
     #[serde(rename = "type")]
     pub type_: LocationTag,
+}
+
+#[derive(Debug, Clone)]
+pub struct MailTo(String);
+
+impl ops::Deref for MailTo {
+    type Target = String;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl Serialize for MailTo {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.0)
+    }
+}
+
+impl<'de> Deserialize<'de> for MailTo {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        let email_str = String::deserialize(deserializer)?;
+
+        let mail_to_regex = regex::Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
+
+        if mail_to_regex.is_match(&email_str) {
+            Ok(Self(email_str))
+        } else {
+            Err(de::Error::invalid_value(
+                de::Unexpected::Str(&email_str),
+                &"A valid email format",
+            ))
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(untagged)]
+pub enum Email {
+    EmailAddress(EmailAddress),
+    MailTo(MailTo),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]

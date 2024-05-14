@@ -11,3 +11,4 @@ regex = { workspace = true }
 chrono = { workspace = true }
 macro-derive = { path = "../macro-derive" }
 iso8601-duration = "0.2.0"
+email_address = "0.2.4"
