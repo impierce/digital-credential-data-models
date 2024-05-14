@@ -158,7 +158,7 @@ impl<'de> de::Deserialize<'de> for DurationType {
 
         let duration: iso8601_duration::Duration = str
             .parse()
-            .map_err(|e: iso8601_duration::ParseDurationError| serde::de::Error::custom(&e.input))?;
+            .map_err(|e: iso8601_duration::ParseDurationError| serde::de::Error::custom(e.input))?;
 
         Ok(DurationType(duration))
     }

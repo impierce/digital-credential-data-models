@@ -51,7 +51,7 @@ pub fn impl_enum_deserialize(input: proc_macro::TokenStream) -> proc_macro::Toke
             }
         }
 
-        choices.push_str("]");
+        choices.push(']');
         choices.parse().unwrap()
     }
 
