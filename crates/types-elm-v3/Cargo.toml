@@ -3,11 +3,11 @@ name = "types-elm-v3"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 serde = { workspace = true }
 serde_json = { workspace = true }
-regress = { workspace = true }
+regex = { workspace = true }
 chrono = { workspace = true }
+fluent-uri = { workspace = true }
 types-common = { path = "../types-common" }
+time = { version = "0.3.36", features = ["serde", "macros", "parsing"] }

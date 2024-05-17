@@ -46,14 +46,14 @@ impl From<&RelatedLanguage> for RelatedLanguage {
 impl std::str::FromStr for RelatedLanguage {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
-        if regress::Regex::new("^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$")
+        if regex::Regex::new("^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$")
             .unwrap()
-            .find(value)
-            .is_none()
+            .is_match(value)
         {
-            return Err("doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"");
+            Ok(Self(value.to_string()))
+        } else {
+            Err("doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"")
         }
-        Ok(Self(value.to_string()))
     }
 }
 

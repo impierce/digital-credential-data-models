@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "$0")/src/shacl-validator"
+cd "$(dirname "$0")/shacl-validator"
 
+python3 -m venv "venv"
 source venv/bin/activate
-python3 -m ensurepip --upgrade
+venv/bin/python -m ensurepip --upgrade
 pip install -r requirements.txt --upgrade

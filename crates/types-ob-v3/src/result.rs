@@ -316,14 +316,11 @@ impl From<&ResultDescriptionTypeString> for ResultDescriptionTypeString {
 impl std::str::FromStr for ResultDescriptionTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
-        if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
-            .unwrap()
-            .find(value)
-            .is_none()
-        {
-            return Err("doesn't match pattern \"(ext:)[a-z|A-Z|0-9|.|-|_]+\"");
+        if regex::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+").unwrap().is_match(value) {
+            Ok(Self(value.to_string()))
+        } else {
+            Err("doesn't match pattern \"(ext:)[a-z|A-Z|0-9|.|-|_]+\"")
         }
-        Ok(Self(value.to_string()))
     }
 }
 impl std::convert::TryFrom<&str> for ResultDescriptionTypeString {

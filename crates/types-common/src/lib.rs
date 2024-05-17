@@ -1,135 +1,111 @@
-use std::{fmt, ops::Deref};
+pub use email_address::*;
+pub use macro_derive::{EnumDeserialize, TagType};
 
-use regress::Regex;
-use serde::de::Error;
-use serde::ser::Serialize;
-use serde::{de::DeserializeOwned, Deserialize, Deserializer};
+use serde::Serialize;
+use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
+use std::fmt;
 
 #[derive(Clone, Debug)]
-pub enum ObjectOrVector<T> {
-    Object(Box<T>),
-    Vector(Vec<T>),
+pub enum OneOrMany<T> {
+    One(Box<T>),
+    Many(Vec<T>),
 }
 
-impl<'de, T: DeserializeOwned + fmt::Debug> Deserialize<'de> for ObjectOrVector<T> {
+impl<'de, T: DeserializeOwned + fmt::Debug> de::Deserialize<'de> for OneOrMany<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: Deserializer<'de>,
+        D: de::Deserializer<'de>,
     {
-        let deserializer = serde_stacker::Deserializer::new(deserializer);
         let serde_value = serde_json::Value::deserialize(deserializer)?;
 
         if let serde_json::Value::Array(arr) = serde_value {
-            let mut out = vec![];
+            let val = serde_json::Value::Array(arr);
+            let out = Vec::deserialize(val).map_err(de::Error::custom)?;
 
-            for item in arr {
-                let result = serde_json::from_value(item);
-
-                match result {
-                    Ok(item) => out.push(item),
-                    Err(err) => {
-                        eprintln!("{}", err);
-                        return Err(Error::custom(err));
-                    }
-                };
-            }
-
-            Ok(Self::Vector(out))
+            Ok(Self::Many(out))
         } else {
-            let result = serde_json::from_value(serde_value.clone());
+            let out = serde_json::from_value(serde_value).map_err(de::Error::custom)?;
 
-            match result {
-                Ok(result) => Ok(Self::Object(Box::new(result))),
-                Err(err) => {
-                    eprintln!("{}", err);
-                    Err(Error::custom(err))
-                }
-            }
+            Ok(Self::One(out))
         }
     }
 }
 
-impl<T: Serialize> Serialize for ObjectOrVector<T> {
+impl<T: Serialize> Serialize for OneOrMany<T> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
         match self {
-            Self::Vector(vector) => vector.serialize(serializer),
-            Self::Object(obj) => obj.serialize(serializer),
+            OneOrMany::One(obj) => obj.serialize(serializer),
+            OneOrMany::Many(vec) => vec.serialize(serializer),
         }
     }
 }
 
-/// Email
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-/// {
-///   "type": "string",
-///   "oneOf": [
-///     {
-///       "type": "string",
-///       "format": "email"
-///     },
-///     {
-///       "type": "string",
-///       "format": "uri",
-///       "pattern": "^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)"
-///     }
-///   ]
-/// }
-/// ```
-/// </details>
-#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize)]
-#[serde(try_from = "String")]
-pub struct Email(pub String);
-
-impl Deref for Email {
-    type Target = String;
-
+#[derive(Clone, Debug, Serialize)]
+pub struct PositiveInteger(pub u32);
+impl std::ops::Deref for PositiveInteger {
+    type Target = u32;
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-//impl TryFrom<String> for Email {
-//type Error = String;
+impl<'de> de::Deserialize<'de> for PositiveInteger {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let number: i64 = i64::deserialize(deserializer)?;
 
-//fn try_from(email: String) -> Result<Self, Self::Error> {
-//let email_regex = regress::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
-//let email_uri_regex = Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
+        if 0 <= number {
+            Ok(PositiveInteger(number as u32))
+        } else {
+            Err(<D::Error as de::Error>::invalid_value(
+                Unexpected::Signed(number),
+                &"A positive integer",
+            ))
+        }
+    }
+}
 
-//let valid = email_regex.find(&email).is_some() || email_uri_regex.find(&email).is_some();
+#[derive(Clone, Debug)]
+pub struct DurationType(iso8601_duration::Duration);
 
-//if valid {
-//Ok(Email(email))
-//} else {
-//Err(format!("Email format is not valid: {email:?}"))
-//}
-//}
-//}
+impl DurationType {
+    pub fn new(duration: iso8601_duration::Duration) -> Self {
+        DurationType(duration)
+    }
+}
 
-impl<'de> Deserialize<'de> for Email {
+impl std::ops::Deref for DurationType {
+    type Target = iso8601_duration::Duration;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl Serialize for DurationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.0.to_string())
+    }
+}
+
+impl<'de> de::Deserialize<'de> for DurationType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
-        let value = serde_json::Value::deserialize(deserializer)?;
-        let email: Email = serde_json::from_value(value).map_err(|e| Error::custom(e))?;
+        let str = String::deserialize(deserializer)?;
 
-        let email_str = email.as_ref();
+        let duration: iso8601_duration::Duration = str
+            .parse()
+            .map_err(|e: iso8601_duration::ParseDurationError| serde::de::Error::custom(e.input))?;
 
-        let email_regex = regress::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
-        let email_uri_regex = Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
-
-        let valid = email_regex.find(email_str).is_some() || email_uri_regex.find(&email_str).is_some();
-
-        if valid {
-            Ok(email)
-        } else {
-            Err(Error::custom(format!("Email format is not valid: {email_str:?}")))
-        }
+        Ok(DurationType(duration))
     }
 }

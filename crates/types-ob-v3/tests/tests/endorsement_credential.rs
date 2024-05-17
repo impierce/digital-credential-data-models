@@ -1,6 +1,6 @@
 use crate::tests::assert_eq_json_value;
-use types_ob_v3::prelude::*; 
 use std::fs::File;
+use types_ob_v3::prelude::*;
 
 #[test]
 fn endorsement_credential() {

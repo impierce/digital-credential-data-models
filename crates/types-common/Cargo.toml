@@ -3,11 +3,12 @@ name = "types-common"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 serde = { workspace = true }
 serde_stacker = { workspace = true }
 serde_json = { workspace = true }
-regress = { workspace = true }
+regex = { workspace = true }
 chrono = { workspace = true }
+macro-derive = { path = "../macro-derive" }
+iso8601-duration = "0.2.0"
+email_address = "0.2.4"

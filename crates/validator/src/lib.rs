@@ -28,6 +28,8 @@ mod tests {
 
     use env_logger::Env;
 
+    use crate::validator::validate_shacl;
+
     use super::*;
 
     #[ctor::ctor]
@@ -67,17 +69,23 @@ mod tests {
 
             let obj = result.rust_object.unwrap();
 
-            //log::info!("{obj:?}");
-
             let tmp = std::env::temp_dir().join("digital-credential-data-models");
 
             if !tmp.is_dir() {
                 fs::create_dir(tmp.clone())?;
             }
 
-            let file = File::create(tmp.join(filename))?;
+            let path = tmp.join(filename);
+            let file = File::create(&path)?;
             let writer = BufWriter::new(file);
             serde_json::to_writer(writer, &obj)?;
+            let result = validate_shacl(&path);
+
+            if let Some(err) = result.as_ref().err() {
+                panic!("Serialize err: {}", err);
+            }
+
+            assert!(result.unwrap(), "Serialize is valid");
         }
 
         Ok(())
@@ -86,11 +94,6 @@ mod tests {
     #[test]
     fn test_bengales_diploma() -> io::Result<()> {
         validate_file("bengales-highschool-diploma.json")
-    }
-
-    #[test]
-    fn test_sample_request() -> io::Result<()> {
-        validate_file("credential-sample.json")
     }
 
     #[test]
@@ -105,6 +108,16 @@ mod tests {
 
     #[test]
     fn test_francisco_cruz() -> io::Result<()> {
-        validate_file("francisco-cruz-argudo-cert-of-completion.json")
+        validate_file("francisco-cruz.json")
+    }
+
+    #[test]
+    fn test_microcredential() -> io::Result<()> {
+        validate_file("microcredential.json")
+    }
+
+    #[test]
+    fn test_transcript_of_records() -> io::Result<()> {
+        validate_file("transcript-of-records.json")
     }
 }
