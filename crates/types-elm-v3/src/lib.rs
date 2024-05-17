@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
-use types_common::{DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
+use types_common::{DurationType, EmailAddress, EnumDeserialize, GenPaths, OneOrMany, PositiveInteger, TagType};
 
 /// Error types.
 pub mod error {
@@ -30,7 +30,7 @@ pub mod error {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 #[serde(rename_all = "camelCase")]
 pub struct EuropassEdcCredential {
     #[serde(rename = "@context")]

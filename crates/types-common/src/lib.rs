@@ -1,9 +1,11 @@
-pub use macro_derive::{EnumDeserialize, TagType};
+pub use macro_derive::*;
 pub use email_address::*;
 
 use serde::Serialize;
 use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
 use std::{fmt, ops::Deref};
+
+mod traits;
 
 #[derive(Clone, Debug)]
 pub enum OneOrMany<T> {
