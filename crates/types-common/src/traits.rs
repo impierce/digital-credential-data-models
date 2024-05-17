@@ -41,20 +41,6 @@ pub trait AddSchemaTypes {
     fn add_schema_types(map: &mut HashMap<String, Vec<SchemaData>>);
 }
 
-#[derive(GenPaths)]
-pub struct Address {
-    pub street: String,
-    pub number: usize,
-}
-
-#[derive(GenPaths)]
-pub struct Person {
-    name: String,
-    sur_name: String,
-    age: usize,
-    address: Address,
-}
-
 //impl AddSchemaTypes for Option<bool> {
 //fn add_schema_types(map: &mut HashMap<String, Vec<SchemaData>>) {
 

@@ -1,8 +1,10 @@
 use std::collections::HashSet;
 
-use proc_macro2::TokenStream;
-use quote::{format_ident, quote};
-use syn::{parse_macro_input, DeriveInput, FieldsNamed, Ident, Type, TypePath};
+use proc_macro2::{Span, TokenStream};
+use quote::quote;
+use syn::{
+    parse_macro_input, AngleBracketedGenericArguments, DeriveInput, FieldsNamed, Ident, PathArguments, Type, TypePath,
+};
 
 pub fn gen_paths(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
@@ -13,7 +15,7 @@ pub fn gen_paths(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
         let src_schema_str = src_schema.to_string();
         let expand = quote! {
             impl AddSchemaTypes for #src_schema {
-                fn add_schema_types(map: &mut HashMap<String, Vec<SchemaData>>) {
+                fn add_schema_types(map: &mut std::collections::HashMap<String, Vec<SchemaData>>) {
                     if map.contains_key(#src_schema_str) {
                         return;
                     }
@@ -30,7 +32,6 @@ pub fn gen_paths(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
         expand.into()
     }
 
-
     match input.data {
         syn::Data::Enum(_) => {}
         syn::Data::Union(_) => {}
@@ -46,7 +47,7 @@ pub fn gen_paths(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
                 syn::Fields::Named(named) => {
                     let tokens = handle_named_fields(src_schema.to_string(), named);
                     return implement_add_schema_types(src_schema, tokens);
-                } ,
+                }
                 _ => {}
             }
         }
@@ -55,43 +56,76 @@ pub fn gen_paths(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     proc_macro::TokenStream::new()
 }
 
-// Return object or vector
+#[derive(Default)]
+pub struct TargetMetadata {
+    target_type: Option<Ident>,
+    optional: bool,
+    is_array: bool,
+}
+
+fn traverse_type(field_type: &Type, meta: &mut TargetMetadata) {
+    match field_type {
+        Type::Path(path_type) => {
+            for segment in path_type.path.segments.iter() {
+                let type_name = segment.ident.to_string();
+
+                if &type_name == "Vec" {
+                    meta.is_array = true;
+                    fetch_schema_target_ident(&segment.arguments, meta);
+                } else if &type_name == "Option" {
+                    meta.optional = true;
+                    fetch_schema_target_ident(&segment.arguments, meta);
+                } else {
+                    meta.target_type = Some(segment.ident.clone());
+                };
+            }
+        }
+        _ => {}
+    }
+}
+
+fn fetch_schema_target_ident(path_args: &PathArguments, meta: &mut TargetMetadata) {
+    fn search_segments(ab_args: &AngleBracketedGenericArguments, meta: &mut TargetMetadata) {
+        for arg in ab_args.args.iter() {
+            match arg {
+                syn::GenericArgument::Type(type_args) => traverse_type(type_args, meta),
+                _ => {}
+            }
+        }
+    }
+
+    match path_args {
+        syn::PathArguments::AngleBracketed(ab_args) => search_segments(ab_args, meta),
+        _ => {
+            // TODO?
+            panic!("Not implemented");
+        }
+    }
+}
 
 fn handle_field(tokens: &mut Vec<TokenStream>, src_schema: &str, json_path: String, field_type: &Type) {
     let mut all_tgt_schemas = HashSet::new();
 
-    match field_type {
-        syn::Type::Path(path_type) => {
-            for segment in path_type.path.segments.iter() {
-                all_tgt_schemas.insert(segment.ident.clone());
-                let tgt_schema = segment.ident.to_string();
+    let mut meta = TargetMetadata::default();
+    traverse_type(field_type, &mut meta);
 
-                // TODO something with args like Option<T>
-                let args_str = if segment.arguments.is_empty() {
-                    "has no args"
-                } else {
-                    "has args"
-                };
+    if let Some(target_ident) = &meta.target_type {
+        all_tgt_schemas.insert(target_ident.clone());
 
-                println!("{tgt_schema}: {args_str}");
+        let multiplicity = if meta.is_array {
+            quote! { Multiplicity::Many }
+        } else {
+            quote! { Multiplicity::One }
+        };
 
-                let multiplicity = if &tgt_schema == "Vec" {
-                    quote! { Multiplicity::Many }
-                } else {
-                    quote! { Multiplicity::One }
-                };
-
-                tokens.push(quote! {
-                    data.push(SchemaData {
-                        src_schema: #src_schema.to_string(),
-                        json_path: #json_path.to_string(),
-                        multiplicity: #multiplicity,
-                        tgt_schema: #tgt_schema.to_string(),
-                    });
-                });
-            }
-        }
-        _ => {}
+        tokens.push(quote! {
+            data.push(SchemaData {
+                src_schema: #src_schema.to_string(),
+                json_path: #json_path.to_string(),
+                multiplicity: #multiplicity,
+                tgt_schema: stringify!(#target_ident).to_string(),
+            });
+        });
     }
 
     // TODO recurse into tree.

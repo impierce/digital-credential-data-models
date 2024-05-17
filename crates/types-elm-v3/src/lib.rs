@@ -30,7 +30,7 @@ pub mod error {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EuropassEdcCredential {
     #[serde(rename = "@context")]
