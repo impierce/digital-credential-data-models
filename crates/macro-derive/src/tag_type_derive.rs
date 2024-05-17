@@ -15,7 +15,7 @@ pub fn impl_tag_type(input: proc_macro::TokenStream) -> proc_macro::TokenStream 
         }
 
         /// Tag matching the struct name
-        #[derive(Clone, Debug, serde::Serialize)]
+        #[derive(Clone, Debug)]
         pub struct #tag_target(String);
 
         impl ::std::ops::Deref for #tag_target {
@@ -48,6 +48,15 @@ pub fn impl_tag_type(input: proc_macro::TokenStream) -> proc_macro::TokenStream 
                 } else {
                     Ok(#tag_target(val))
                 }
+            }
+        }
+
+        impl Serialize for #tag_target {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: serde::Serializer,
+            {
+                serializer.serialize_str(&self.0)
             }
         }
     };

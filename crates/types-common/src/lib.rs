@@ -1,9 +1,9 @@
-pub use macro_derive::{EnumDeserialize, TagType};
 pub use email_address::*;
+pub use macro_derive::{EnumDeserialize, TagType};
 
 use serde::Serialize;
 use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
-use std::{fmt, ops::Deref};
+use std::fmt;
 
 #[derive(Clone, Debug)]
 pub enum OneOrMany<T> {
@@ -34,67 +34,11 @@ impl<'de, T: DeserializeOwned + fmt::Debug> de::Deserialize<'de> for OneOrMany<T
 impl<T: Serialize> Serialize for OneOrMany<T> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
-        S: serde::Serializer {
+        S: serde::Serializer,
+    {
         match self {
             OneOrMany::One(obj) => obj.serialize(serializer),
             OneOrMany::Many(vec) => vec.serialize(serializer),
-        }
-    }
-
-}
-
-/// Email
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-/// {
-///   "type": "string",
-///   "oneOf": [
-///     {
-///       "type": "string",
-///       "format": "email"
-///     },
-///     {
-///       "type": "string",
-///       "format": "uri",
-///       "pattern": "^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)"
-///     }
-///   ]
-/// }
-/// ```
-/// </details>
-#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize)]
-#[serde(try_from = "String")]
-pub struct Email(pub String);
-
-impl Deref for Email {
-    type Target = String;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-impl<'de> de::Deserialize<'de> for Email {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let email = String::deserialize(deserializer)?;
-
-        let email_regex = regex::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
-        let email_uri_regex = regex::Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
-
-        let valid = email_regex.is_match(&email) || email_uri_regex.is_match(&email);
-
-        if valid {
-            Ok(Email(email))
-        } else {
-            Err(de::Error::invalid_value(
-                Unexpected::Str(&email),
-                &"A valid email format",
-            ))
         }
     }
 }
