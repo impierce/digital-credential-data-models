@@ -1,3 +1,5 @@
+use syn::parse_macro_input;
+
 mod enum_derive;
 mod tag_type_derive;
 mod gen_json_paths;
@@ -14,5 +16,6 @@ pub fn tag_type(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
 #[proc_macro_derive(GenPaths)] 
 pub fn gen_paths(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    gen_json_paths::gen_paths(input)
+    let input = parse_macro_input!(input as syn::DeriveInput);
+    gen_json_paths::gen_paths(input).unwrap()
 }

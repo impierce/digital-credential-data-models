@@ -1,11 +1,9 @@
 use std::{collections::HashMap, fmt, path::PathBuf};
 
-use chrono::{DateTime, TimeZone, Utc};
-use macro_derive::GenPaths;
-
 pub enum Multiplicity {
     One,
     Many,
+    OneOrMany,
 }
 
 impl fmt::Display for Multiplicity {
@@ -13,6 +11,7 @@ impl fmt::Display for Multiplicity {
         match self {
             Self::One => f.write_str("1"),
             Self::Many => f.write_str("*"),
+            Self::OneOrMany => f.write_str("1/*")
         }
     }
 }
@@ -22,17 +21,19 @@ pub struct SchemaData {
     pub json_path: String,
     pub tgt_schema: String,
     pub multiplicity: Multiplicity,
+    pub optional: bool,
     // TODO add optionality var
 }
 
 impl fmt::Display for SchemaData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_fmt(format_args!(
-            "{}, {}, {}, {}",
+            "{}, {}, {}, {}, {}",
             self.src_schema,
             self.json_path,
             self.tgt_schema,
             self.multiplicity,
+            self.optional
         ))
     }
 }
@@ -112,16 +113,5 @@ macro_rules! impl_T {
 
 impl_T!(for usize, u8, u16, u32, u64, u128);
 impl_T!(for isize, i8, i16, i32, i64, i128);
+impl_T!(for f32, f64);
 impl_T!(for String, bool, PathBuf);
-
-//impl<T: TimeZone> AddSchemaTypes for DateTime<T> {
-//fn add_schema_types(_map: &mut HashMap<String, Vec<SchemaData>>) {}
-//}
-
-//impl AddSchemaTypes for String {
-//fn add_schema_types(_map: &mut HashMap<String, Vec<SchemaData>>) {}
-//}
-
-//impl AddSchemaTypes for usize {
-//fn add_schema_types(_map: &mut HashMap<String, Vec<SchemaData>>) {}
-//}
