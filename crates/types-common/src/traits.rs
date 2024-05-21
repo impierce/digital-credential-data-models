@@ -3,7 +3,6 @@ use std::{collections::HashMap, fmt, path::PathBuf};
 pub enum Multiplicity {
     One,
     Many,
-    OneOrMany,
 }
 
 impl fmt::Display for Multiplicity {
@@ -11,7 +10,6 @@ impl fmt::Display for Multiplicity {
         match self {
             Self::One => f.write_str("1"),
             Self::Many => f.write_str("*"),
-            Self::OneOrMany => f.write_str("1/*")
         }
     }
 }
@@ -29,17 +27,13 @@ impl fmt::Display for SchemaData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_fmt(format_args!(
             "{}, {}, {}, {}, {}",
-            self.src_schema,
-            self.json_path,
-            self.tgt_schema,
-            self.multiplicity,
-            self.optional
+            self.src_schema, self.json_path, self.tgt_schema, self.multiplicity, self.optional
         ))
     }
 }
 
 pub trait AddSchemaTypes {
-    fn add_schema_types(map: &mut HashMap<String, Vec<SchemaData>>);
+    fn add_schema_types(map: &mut Vec<SchemaData>, src_schema: &str, json_path: &str, optional: bool);
 }
 
 //impl AddSchemaTypes for Option<bool> {
@@ -106,7 +100,8 @@ pub trait AddSchemaTypes {
 macro_rules! impl_T {
     (for $($t:ty),+) => {
         $(impl AddSchemaTypes for $t {
-            fn add_schema_types(_map: &mut HashMap<String, Vec<SchemaData>>) {}
+            fn add_schema_types(_map: &mut Vec<SchemaData>, src_schema: &str,
+                json_path: &str, optional: bool) {}
         })*
     }
 }

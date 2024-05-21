@@ -3,6 +3,7 @@ use syn::parse_macro_input;
 mod enum_derive;
 mod tag_type_derive;
 mod gen_json_paths;
+mod enum_json_paths;
 
 #[proc_macro_derive(EnumDeserialize)]
 pub fn enum_deserialize(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
