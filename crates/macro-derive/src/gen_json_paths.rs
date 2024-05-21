@@ -49,6 +49,8 @@ fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
                 } else if &type_name == "Option" {
                     meta.optional = true;
                     fetch_schema_target_ident(&segment.arguments, meta);
+                } else if !segment.arguments.is_empty() {
+                    fetch_schema_target_ident(&segment.arguments, meta);
                 } else {
                     meta.target_type = Some(segment.ident.clone());
                 }
@@ -87,7 +89,7 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                 assert!(fields.unnamed.len() == 1);
 
                 if let Some(first_field) = fields.unnamed.first() {
-                    add_schema_data(&mut tokens, &src_schema_str, "$".to_string(), &first_field.ty);
+                    add_schema_data(&mut tokens, &src_schema_str, "$".to_string(), &first_field.ty, true);
                 }
             }
             _ => {
@@ -123,7 +125,7 @@ fn handle_object(object: &syn::DataStruct, input: &syn::DeriveInput) -> syn::Res
     match &object.fields {
         syn::Fields::Named(named) => {
             let src_schema_str = input.ident.to_string();
-            let tokens = handle_named_fields(src_schema_str, named, camel_case)?;
+            let tokens = handle_struct_fields(src_schema_str, named, camel_case)?;
             return implement_add_schema_types(input, tokens);
         }
         _ => panic!("Can only handle structs with named fields"),
@@ -145,7 +147,13 @@ fn implement_add_schema_types(input: &syn::DeriveInput, tokens: TokenStream) -> 
     Ok(expand.into())
 }
 
-fn add_schema_data(tokens: &mut Vec<TokenStream>, src_schema: &str, json_path: String, field_type: &syn::Type) {
+fn add_schema_data(
+    tokens: &mut Vec<TokenStream>,
+    src_schema: &str,
+    json_path: String,
+    field_type: &syn::Type,
+    is_enum: bool,
+) {
     let mut meta = TargetMetadata::default();
     traverse_type(field_type, &mut meta);
 
@@ -158,22 +166,37 @@ fn add_schema_data(tokens: &mut Vec<TokenStream>, src_schema: &str, json_path: S
 
         let optional = meta.optional;
 
-        tokens.push(quote! {
-            data.push(SchemaData {
-                src_schema: src_schema.to_string(),
-                json_path: json_path.to_string(),
-                multiplicity: #multiplicity,
-                tgt_schema: stringify!(#target_schema).to_string(),
-                optional: #optional
-            });
+        if is_enum {
+            tokens.push(quote! {
+                data.push(SchemaData {
+                    src_schema: src_schema.to_string(),
+                    json_path: json_path.to_string(),
+                    multiplicity: #multiplicity,
+                    tgt_schema: stringify!(#target_schema).to_string(),
+                    optional: #optional
+                });
 
-            // Recurse into tree. TODO enum variant
-            #target_schema::add_schema_types(data, stringify!(#target_schema), "$", #optional);
-        });
+                // Recurse into tree. TODO enum variant
+                #target_schema::add_schema_types(data, stringify!(#target_schema), stringify!(#json_path), #optional);
+            });
+        } else {
+            tokens.push(quote! {
+                data.push(SchemaData {
+                    src_schema: #src_schema.to_string(),
+                    json_path: json_path.to_string(),
+                    multiplicity: #multiplicity,
+                    tgt_schema: stringify!(#target_schema).to_string(),
+                    optional: #optional
+                });
+
+                // Recurse into tree. TODO enum variant
+                #target_schema::add_schema_types(data, stringify!(#target_schema), "$", #optional);
+            });
+        }
     }
 }
 
-fn handle_named_fields(src_schema: String, fields: &syn::FieldsNamed, rename_cc: bool) -> syn::Result<TokenStream> {
+fn handle_struct_fields(src_schema: String, fields: &syn::FieldsNamed, rename_cc: bool) -> syn::Result<TokenStream> {
     let mut tokens = vec![];
 
     for field in fields.named.iter() {
@@ -201,7 +224,7 @@ fn handle_named_fields(src_schema: String, fields: &syn::FieldsNamed, rename_cc:
             println!("{}", field_name);
             let json_path = format!("$.{}", field_name);
 
-            add_schema_data(&mut tokens, &src_schema, json_path, &field.ty);
+            add_schema_data(&mut tokens, &src_schema, json_path, &field.ty, false);
         }
     }
 

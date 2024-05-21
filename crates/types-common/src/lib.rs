@@ -1,5 +1,6 @@
 pub use macro_derive::*;
 pub use email_address::*;
+use crate::traits::*;
 
 use serde::Serialize;
 use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
@@ -7,7 +8,7 @@ use std::{fmt, ops::Deref};
 
 pub mod traits;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, GenPaths)]
 pub enum OneOrMany<T> {
     One(Box<T>),
     Many(Vec<T>),

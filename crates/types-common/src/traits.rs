@@ -33,7 +33,7 @@ impl fmt::Display for SchemaData {
 }
 
 pub trait AddSchemaTypes {
-    fn add_schema_types(map: &mut Vec<SchemaData>, src_schema: &str, json_path: &str, optional: bool);
+    fn add_schema_types(map: &mut Vec<SchemaData>, src_schema: &str, json_path: &str, optional: bool) {}
 }
 
 //impl AddSchemaTypes for Option<bool> {
@@ -100,8 +100,8 @@ pub trait AddSchemaTypes {
 macro_rules! impl_T {
     (for $($t:ty),+) => {
         $(impl AddSchemaTypes for $t {
-            fn add_schema_types(_map: &mut Vec<SchemaData>, src_schema: &str,
-                json_path: &str, optional: bool) {}
+            fn add_schema_types(_map: &mut Vec<SchemaData>, _src_schema: &str,
+                _json_path: &str, _optional: bool) {}
         })*
     }
 }
