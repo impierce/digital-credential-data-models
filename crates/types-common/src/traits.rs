@@ -1,8 +1,9 @@
-use std::{collections::HashMap, fmt, path::PathBuf};
+use std::{fmt, path::PathBuf};
 
 pub enum Multiplicity {
     One,
     Many,
+    OneOrMany,
 }
 
 impl fmt::Display for Multiplicity {
@@ -10,6 +11,7 @@ impl fmt::Display for Multiplicity {
         match self {
             Self::One => f.write_str("1"),
             Self::Many => f.write_str("*"),
+            Self::OneOrMany => f.write_str("1|*"),
         }
     }
 }
@@ -33,7 +35,11 @@ impl fmt::Display for SchemaData {
 }
 
 pub trait AddSchemaTypes {
-    fn add_schema_types(map: &mut Vec<SchemaData>, src_schema: &str, json_path: &str, optional: bool) {}
+    fn add_schema_types(data: &mut Vec<SchemaData>, parent_src_schema: &str, parent_json_path: &str, optional: bool) {}
+
+    fn add_schema() -> bool {
+        true
+    }
 }
 
 //impl AddSchemaTypes for Option<bool> {
