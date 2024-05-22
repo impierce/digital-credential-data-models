@@ -1,6 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
+use types_common::{AddSchemaTypes, GenPaths, SchemaList};
 use types_common::{DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
 
 /// Error types.
@@ -30,7 +31,7 @@ pub mod error {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 #[serde(rename_all = "camelCase")]
 pub struct EuropassEdcCredential {
     #[serde(rename = "@context")]
@@ -40,30 +41,30 @@ pub struct EuropassEdcCredential {
     ///One or more schemas that validate the Verifiable Credential.
     pub credential_schema: OneOrMany<CredentialSchema>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub credential_status: Option<EuropassEdcCredentialCredentialStatus>,
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub credential_status: Option<EuropassEdcCredentialCredentialStatus>,
 
-    pub credential_subject: OneOrMany<AgentOrPersonOrOrganisation>,
+    //pub credential_subject: OneOrMany<AgentOrPersonOrOrganisation>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub display_parameter: Option<DisplayParameter>,
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub display_parameter: Option<DisplayParameter>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub evidence: Option<OneOrMany<Evidence>>,
-    ///Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
-    pub id: String,
-    ///DID of the credential issuer
-    pub issuer: Organisation,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub terms_of_use: Option<OneOrMany<TermsOfUseValue>>,
-    ///Full type chain, used to identify the credential base types
-    #[serde(rename = "type")]
-    pub type_: Vec<String>,
-    ///Defines the earliest point when the credential becomes valid.
-    pub valid_from: DateTime<Utc>,
-    ///Defines the latest point when the credential ceases to be valid.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub valid_until: Option<DateTime<Utc>>,
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub evidence: Option<OneOrMany<Evidence>>,
+    /////Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
+    //pub id: String,
+    /////DID of the credential issuer
+    //pub issuer: Organisation,
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub terms_of_use: Option<OneOrMany<TermsOfUseValue>>,
+    /////Full type chain, used to identify the credential base types
+    //#[serde(rename = "type")]
+    //pub type_: Vec<String>,
+    /////Defines the earliest point when the credential becomes valid.
+    //pub valid_from: DateTime<Utc>,
+    /////Defines the latest point when the credential ceases to be valid.
+    //#[serde(default, skip_serializing_if = "Option::is_none")]
+    //pub valid_until: Option<DateTime<Utc>>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
@@ -140,6 +141,8 @@ pub enum AgentOrPersonOrOrganisation {
     Person(Box<Person>),
     Organisation(Box<Organisation>),
 }
+
+impl AddSchemaTypes for AgentOrPersonOrOrganisation {}
 
 //impl AddSchemaTypes for AgentOrPersonOrOrganisation {
 //fn add_enum_types(src_schema: &str, json_path: &str, optional: bool) -> Vec<SchemaData> {
@@ -291,6 +294,8 @@ pub struct Concept {
     pub type_: ConceptTag,
 }
 
+impl AddSchemaTypes for Concept {}
+
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct ContactPoint {
@@ -382,12 +387,16 @@ pub struct DisplayParameter {
     pub type_: DisplayParameterTag,
 }
 
+impl AddSchemaTypes for DisplayParameter {}
+
 #[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum EuropassEdcCredentialContext {
     One(String),
     Many(Vec<String>),
 }
+
+impl AddSchemaTypes for EuropassEdcCredentialContext {}
 
 impl<'de> de::Deserialize<'de> for EuropassEdcCredentialContext {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -439,6 +448,8 @@ pub struct EuropassEdcCredentialCredentialStatus {
     #[serde(rename = "type")]
     pub revocation_type: String,
 }
+
+impl AddSchemaTypes for EuropassEdcCredentialCredentialStatus {}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
@@ -534,6 +545,8 @@ pub struct Evidence {
     #[serde(rename = "type")]
     pub type_: EvidenceTag,
 }
+
+impl AddSchemaTypes for Evidence {}
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
@@ -1430,6 +1443,8 @@ pub struct Organisation {
     pub type_: OrganisationTag,
 }
 
+impl AddSchemaTypes for Organisation {}
+
 #[derive(Clone, Debug, Serialize)]
 pub struct Percentage(u32);
 
@@ -1695,6 +1710,8 @@ pub struct CredentialSchema {
     pub type_: CredentialSchemaType,
 }
 
+impl AddSchemaTypes for CredentialSchema {}
+
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ShortenedGrading {
@@ -1716,6 +1733,8 @@ pub struct TermsOfUseValue {
     #[serde(rename = "type")]
     pub type_extension: String,
 }
+
+impl AddSchemaTypes for TermsOfUseValue {}
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct UriType(pub fluent_uri::Uri<String>);

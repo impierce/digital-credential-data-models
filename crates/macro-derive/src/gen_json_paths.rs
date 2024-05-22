@@ -158,7 +158,8 @@ fn handle_struct_fields(
 
             for attr in field.attrs.iter() {
                 if attr.path().is_ident("serde") {
-                    attr.parse_nested_meta(|meta| {
+                    // Test if this is good
+                    let _ = attr.parse_nested_meta(|meta| {
                         if meta.path.is_ident("rename") {
                             let value = meta.value()?;
                             let s: syn::LitStr = value.parse()?;
@@ -166,7 +167,7 @@ fn handle_struct_fields(
                         }
 
                         Ok(())
-                    })?;
+                    });
                 }
             }
 
@@ -192,9 +193,9 @@ fn implement_add_schema_types(
     let recurse_schema_tokens = TokenStream::from_iter(ctx.recurse_schema_tokens);
 
     let expand = quote! {
-        impl #generics AddSchemaTypes for #src_schema #generics {
+        impl #generics types_common::AddSchemaTypes for #src_schema #generics {
             fn add_schema_types(
-                data: &mut Vec<SchemaData>,
+                data: &mut Vec<types_common::SchemaData>,
                 parent_src_schema: &str,
                 parent_src_field: &str,
                 optional: bool
@@ -223,11 +224,11 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
 
     if let Some(target_schema) = &meta.target_type {
         let multiplicity = if meta.is_one_or_many {
-            quote! { Multiplicity::OneOrMany }
+            quote! { types_common::Multiplicity::OneOrMany }
         } else if meta.is_many {
-            quote! { Multiplicity::Many }
+            quote! { types_common::Multiplicity::Many }
         } else {
-            quote! { Multiplicity::One }
+            quote! { types_common::Multiplicity::One }
         };
 
         let optional = meta.optional;
@@ -236,7 +237,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
             // If add schema we add ourselves
             // If target has add schema then connect
             if #target_schema::add_schema() {
-                data.push(SchemaData {
+                data.push(types_common::SchemaData {
                     src_schema: stringify!(#src_schema).to_string(),
                     src_field: #src_field.to_string(),
                     multiplicity: #multiplicity,
@@ -252,7 +253,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
             //  DigitalCredential, $.issuer, Agent
             //  DigitalCredential, $.issuer, Person
             //  DigitalCredential, $.issuer, Organization
-            data.push(SchemaData {
+            data.push(types_common::SchemaData {
                 src_schema: parent_src_schema.to_string(),
                 src_field: parent_src_field.to_string(),
                 multiplicity: #multiplicity,
