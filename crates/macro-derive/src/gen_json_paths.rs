@@ -19,6 +19,12 @@ pub fn gen_paths(input: syn::DeriveInput) -> syn::Result<proc_macro::TokenStream
     Ok(proc_macro::TokenStream::new())
 }
 
+pub struct SchemaTokensCtx {
+    connected_schema_tokens: Vec<TokenStream>,
+    unconnected_schema_tokens: Vec<TokenStream>,
+    recurse_schema_tokens: Vec<TokenStream>,
+}
+
 pub struct TargetMetadata {
     target_type: Option<syn::Ident>,
     optional: bool,
@@ -85,7 +91,9 @@ fn fetch_schema_target_ident(path_args: &syn::PathArguments, meta: &mut TargetMe
 }
 
 fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Result<proc_macro::TokenStream> {
-    let mut tokens = vec![];
+    let mut connected_schema_tokens = vec![];
+    let mut unconnected_schema_tokens = vec![];
+    let mut recurse_schema_tokens = vec![];
     let src_schema = &input.ident;
 
     for variant in data_enum.variants.iter() {
@@ -94,7 +102,14 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                 assert!(fields.unnamed.len() == 1);
 
                 if let Some(first_field) = fields.unnamed.first() {
-                    add_schema_data(&mut tokens, src_schema, "$".to_string(), &first_field.ty);
+                    add_schema_data(
+                        &mut connected_schema_tokens,
+                        &mut unconnected_schema_tokens,
+                        &mut recurse_schema_tokens,
+                        src_schema,
+                        "$".to_string(),
+                        &first_field.ty,
+                    );
                 }
             }
             _ => {
@@ -103,9 +118,13 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
         }
     }
 
-    let tokens = TokenStream::from_iter(tokens);
+    let ctx = SchemaTokensCtx {
+        recurse_schema_tokens,
+        connected_schema_tokens,
+        unconnected_schema_tokens,
+    };
 
-    implement_add_schema_types(input, tokens, false)
+    implement_add_schema_types(input, ctx, false)
 }
 
 fn handle_object(object: &syn::DataStruct, input: &syn::DeriveInput) -> syn::Result<proc_macro::TokenStream> {
@@ -129,21 +148,35 @@ fn handle_object(object: &syn::DataStruct, input: &syn::DeriveInput) -> syn::Res
 
     match &object.fields {
         syn::Fields::Named(named) => {
-            let tokens = handle_struct_fields(&input.ident, named, camel_case)?;
-            return implement_add_schema_types(input, tokens, true);
+            let ctx = handle_struct_fields(&input.ident, named, camel_case)?;
+            return implement_add_schema_types(input, ctx, true);
         }
         _ => panic!("Can only handle structs with named fields"),
     }
 }
 
-fn implement_add_schema_types(input: &syn::DeriveInput, tokens: TokenStream, add_schema: bool) -> syn::Result<proc_macro::TokenStream> {
+fn implement_add_schema_types(
+    input: &syn::DeriveInput,
+    ctx: SchemaTokensCtx,
+    add_schema: bool,
+) -> syn::Result<proc_macro::TokenStream> {
     let src_schema = &input.ident;
     let generics = &input.generics;
+
+    let connected_schema_tokens = TokenStream::from_iter(ctx.connected_schema_tokens);
+    let unconnected_schema_tokens = TokenStream::from_iter(ctx.unconnected_schema_tokens);
+    let recurse_schema_tokens = TokenStream::from_iter(ctx.recurse_schema_tokens);
 
     let expand = quote! {
         impl #generics AddSchemaTypes for #src_schema #generics {
             fn add_schema_types(data: &mut Vec<SchemaData>, parent_src_schema: &str, parent_json_path: &str, optional: bool) {
-                #tokens
+                if #src_schema::add_schema() {
+                    #connected_schema_tokens
+                } else {
+                    #unconnected_schema_tokens
+                }
+
+                #recurse_schema_tokens
             }
 
             fn add_schema() -> bool {
@@ -155,7 +188,14 @@ fn implement_add_schema_types(input: &syn::DeriveInput, tokens: TokenStream, add
     Ok(expand.into())
 }
 
-fn add_schema_data(tokens: &mut Vec<TokenStream>, src_schema: &syn::Ident, json_path: String, field_type: &syn::Type) {
+fn add_schema_data(
+    connected_schema_tokens: &mut Vec<TokenStream>,
+    unconnected_schema_tokens: &mut Vec<TokenStream>,
+    recurse_schema_tokens: &mut Vec<TokenStream>,
+    src_schema: &syn::Ident,
+    json_path: String,
+    field_type: &syn::Type,
+) {
     let mut meta = TargetMetadata::default();
     traverse_type(field_type, &mut meta);
 
@@ -170,39 +210,46 @@ fn add_schema_data(tokens: &mut Vec<TokenStream>, src_schema: &syn::Ident, json_
 
         let optional = meta.optional;
 
-        tokens.push(quote! {
+        connected_schema_tokens.push(quote! {
             // If add schema we add ourselves
-            if #src_schema::add_schema() {
-                data.push(SchemaData {
-                    src_schema: stringify!(#src_schema).to_string(),
-                    json_path: #json_path.to_string(),
-                    multiplicity: #multiplicity,
-                    tgt_schema: stringify!(#target_schema).to_string(),
-                    optional: #optional
-                });
+            data.push(SchemaData {
+                src_schema: stringify!(#src_schema).to_string(),
+                json_path: #json_path.to_string(),
+                multiplicity: #multiplicity,
+                tgt_schema: stringify!(#target_schema).to_string(),
+                optional: #optional
+            });
+        });
 
-            } else {
-                // In case of add_schema is false, we don't add the types so in the enum (AgentOrPersonOrOrganization)
-                // The type AgentOrPersonOrOrganization is not added but its sub types. Will go like this ->
-                //  DigitalCredential, $.issuer, Agent
-                //  DigitalCredential, $.issuer, Person
-                //  DigitalCredential, $.issuer, Organization
-                data.push(SchemaData {
-                    src_schema: parent_src_schema.to_string(),
-                    json_path: parent_json_path.to_string(),
-                    multiplicity: #multiplicity,
-                    tgt_schema: stringify!(#target_schema).to_string(),
-                    optional: #optional
-                });
-            }
+        unconnected_schema_tokens.push(quote! {
+            // In case of add_schema is false, we don't add the types so in the enum (AgentOrPersonOrOrganization)
+            // The type AgentOrPersonOrOrganization is not added but its sub types. Will go like this ->
+            //  DigitalCredential, $.issuer, Agent
+            //  DigitalCredential, $.issuer, Person
+            //  DigitalCredential, $.issuer, Organization
+            data.push(SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                json_path: parent_json_path.to_string(),
+                multiplicity: #multiplicity,
+                tgt_schema: stringify!(#target_schema).to_string(),
+                optional: #optional
+            });
+        });
 
-            #target_schema::add_schema_types(data, stringify!(#target_schema), stringify!(#json_path), #optional);
+        recurse_schema_tokens.push(quote! {
+            #target_schema::add_schema_types(data, stringify!(#target_schema), #json_path, #optional);
         });
     }
 }
 
-fn handle_struct_fields(src_schema: &syn::Ident, fields: &syn::FieldsNamed, rename_cc: bool) -> syn::Result<TokenStream> {
-    let mut tokens = vec![];
+fn handle_struct_fields(
+    src_schema: &syn::Ident,
+    fields: &syn::FieldsNamed,
+    rename_cc: bool,
+) -> syn::Result<SchemaTokensCtx> {
+    let mut connected_schema_tokens = vec![];
+    let mut unconnected_schema_tokens = vec![];
+    let mut recurse_schema_tokens = vec![];
 
     for field in fields.named.iter() {
         if let Some(field_ident) = &field.ident {
@@ -229,9 +276,20 @@ fn handle_struct_fields(src_schema: &syn::Ident, fields: &syn::FieldsNamed, rena
             println!("{}", field_name);
             let json_path = format!("$.{}", field_name);
 
-            add_schema_data(&mut tokens, &src_schema, json_path, &field.ty);
+            add_schema_data(
+                &mut connected_schema_tokens,
+                &mut unconnected_schema_tokens,
+                &mut recurse_schema_tokens,
+                &src_schema,
+                json_path,
+                &field.ty,
+            );
         }
     }
 
-    Ok(TokenStream::from_iter(tokens))
+    Ok(SchemaTokensCtx {
+        connected_schema_tokens,
+        unconnected_schema_tokens,
+        recurse_schema_tokens,
+    })
 }
