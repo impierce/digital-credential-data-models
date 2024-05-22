@@ -10,10 +10,8 @@ pub fn gen_paths(input: syn::DeriveInput) -> syn::Result<proc_macro::TokenStream
     */
     match &input.data {
         syn::Data::Enum(union) => return handle_enum(union, &input),
+        syn::Data::Struct(obj) => return handle_struct(obj, &input),
         syn::Data::Union(_) => {}
-        syn::Data::Struct(obj) => {
-            return handle_object(obj, &input);
-        }
     }
 
     Ok(proc_macro::TokenStream::new())
@@ -47,22 +45,24 @@ impl Default for TargetMetadata {
 fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
     match field_type {
         syn::Type::Path(path_type) => {
+            if 1 < path_type.path.segments.len() {
+                panic!("TODO");
+            }
+
             for segment in path_type.path.segments.iter() {
                 let type_name = segment.ident.to_string();
 
-                //println!("{}", segment.arguments);
-
                 if &type_name == "OneOrMany" {
                     meta.is_one_or_many = true;
-                    fetch_schema_target_ident(&segment.arguments, meta);
+                    find_schema_target_ident(&segment.arguments, meta);
                 } else if &type_name == "Vec" {
                     meta.is_many = true;
-                    fetch_schema_target_ident(&segment.arguments, meta);
+                    find_schema_target_ident(&segment.arguments, meta);
                 } else if &type_name == "Option" {
                     meta.optional = true;
-                    fetch_schema_target_ident(&segment.arguments, meta);
+                    find_schema_target_ident(&segment.arguments, meta);
                 } else if !segment.arguments.is_empty() {
-                    fetch_schema_target_ident(&segment.arguments, meta);
+                    find_schema_target_ident(&segment.arguments, meta);
                 } else {
                     meta.target_type = Some(segment.ident.clone());
                 }
@@ -72,7 +72,7 @@ fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
     }
 }
 
-fn fetch_schema_target_ident(path_args: &syn::PathArguments, meta: &mut TargetMetadata) {
+fn find_schema_target_ident(path_args: &syn::PathArguments, meta: &mut TargetMetadata) {
     fn search_segments(ab_args: &syn::AngleBracketedGenericArguments, meta: &mut TargetMetadata) {
         for arg in ab_args.args.iter() {
             match arg {
@@ -101,7 +101,7 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                 assert!(fields.unnamed.len() == 1);
 
                 if let Some(first_field) = fields.unnamed.first() {
-                    add_schema_data(&mut ctx, src_schema, "$".to_string(), &first_field.ty);
+                    add_schema_data(&mut ctx, src_schema, "UNUSED".to_string(), &first_field.ty);
                 }
             }
             _ => {
@@ -113,7 +113,7 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
     implement_add_schema_types(input, ctx, false)
 }
 
-fn handle_object(object: &syn::DataStruct, input: &syn::DeriveInput) -> syn::Result<proc_macro::TokenStream> {
+fn handle_struct(data_struct: &syn::DataStruct, input: &syn::DeriveInput) -> syn::Result<proc_macro::TokenStream> {
     let mut camel_case = false;
 
     for attr in input.attrs.iter() {
@@ -132,97 +132,12 @@ fn handle_object(object: &syn::DataStruct, input: &syn::DeriveInput) -> syn::Res
         }
     }
 
-    match &object.fields {
+    match &data_struct.fields {
         syn::Fields::Named(named) => {
             let ctx = handle_struct_fields(&input.ident, named, camel_case)?;
             return implement_add_schema_types(input, ctx, true);
         }
         _ => panic!("Can only handle structs with named fields"),
-    }
-}
-
-fn implement_add_schema_types(
-    input: &syn::DeriveInput,
-    ctx: SchemaTokensCtx,
-    add_schema: bool,
-) -> syn::Result<proc_macro::TokenStream> {
-    let src_schema = &input.ident;
-    let generics = &input.generics;
-
-    let connected_schema_tokens = TokenStream::from_iter(ctx.connected_schema_tokens);
-    let unconnected_schema_tokens = TokenStream::from_iter(ctx.unconnected_schema_tokens);
-    let recurse_schema_tokens = TokenStream::from_iter(ctx.recurse_schema_tokens);
-
-    let expand = quote! {
-        impl #generics AddSchemaTypes for #src_schema #generics {
-            fn add_schema_types(data: &mut Vec<SchemaData>, parent_src_schema: &str, parent_json_path: &str, optional: bool) {
-                if #src_schema::add_schema() {
-                    #connected_schema_tokens
-                } else {
-                    #unconnected_schema_tokens
-                }
-
-                #recurse_schema_tokens
-            }
-
-            fn add_schema() -> bool {
-                #add_schema
-            }
-        }
-    };
-
-    Ok(expand.into())
-}
-
-fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, json_path: String, field_type: &syn::Type) {
-    let mut meta = TargetMetadata::default();
-    traverse_type(field_type, &mut meta);
-
-    if let Some(target_schema) = &meta.target_type {
-        let multiplicity = if meta.is_one_or_many {
-            quote! { Multiplicity::OneOrMany }
-        } else if meta.is_many {
-            quote! { Multiplicity::Many }
-        } else {
-            quote! { Multiplicity::One }
-        };
-
-        let optional = meta.optional;
-
-        ctx.connected_schema_tokens.push(quote! {
-            // If add schema we add ourselves
-            // If target has add schema then connect
-            if #target_schema::add_schema() {
-                data.push(SchemaData {
-                    src_schema: stringify!(#src_schema).to_string(),
-                    json_path: #json_path.to_string(),
-                    multiplicity: #multiplicity,
-                    tgt_schema: stringify!(#target_schema).to_string(),
-                    optional: #optional
-                });
-            }
-        });
-
-        ctx.unconnected_schema_tokens.push(quote! {
-            // In case of add_schema is false, we don't add the types so in the enum (AgentOrPersonOrOrganization)
-            // The type AgentOrPersonOrOrganization is not added but its sub types. Will go like this ->
-            //  DigitalCredential, $.issuer, Agent
-            //  DigitalCredential, $.issuer, Person
-            //  DigitalCredential, $.issuer, Organization
-            data.push(SchemaData {
-                src_schema: parent_src_schema.to_string(),
-                json_path: parent_json_path.to_string(),
-                multiplicity: #multiplicity,
-                tgt_schema: stringify!(#target_schema).to_string(),
-                optional: #optional
-            });
-        });
-
-        ctx.recurse_schema_tokens.push(quote! {
-            if !data.contains_schema(stringify!(#target_schema)) {
-                #target_schema::add_schema_types(data, stringify!(#src_schema), #json_path, #optional);
-            }
-        });
     }
 }
 
@@ -255,12 +170,101 @@ fn handle_struct_fields(
                 }
             }
 
-            println!("{}", field_name);
-            let json_path = format!("$.{}", field_name);
+            println!("Field: {}", field_name);
 
-            add_schema_data(&mut ctx, &src_schema, json_path, &field.ty);
+            add_schema_data(&mut ctx, &src_schema, field_name, &field.ty);
         }
     }
 
     Ok(ctx)
+}
+
+fn implement_add_schema_types(
+    input: &syn::DeriveInput,
+    ctx: SchemaTokensCtx,
+    add_schema: bool,
+) -> syn::Result<proc_macro::TokenStream> {
+    let src_schema = &input.ident;
+    let generics = &input.generics;
+
+    let connected_schema_tokens = TokenStream::from_iter(ctx.connected_schema_tokens);
+    let unconnected_schema_tokens = TokenStream::from_iter(ctx.unconnected_schema_tokens);
+    let recurse_schema_tokens = TokenStream::from_iter(ctx.recurse_schema_tokens);
+
+    let expand = quote! {
+        impl #generics AddSchemaTypes for #src_schema #generics {
+            fn add_schema_types(
+                data: &mut Vec<SchemaData>,
+                parent_src_schema: &str,
+                parent_src_field: &str,
+                optional: bool
+            ) {
+                if #src_schema::add_schema() {
+                    #connected_schema_tokens
+                } else {
+                    #unconnected_schema_tokens
+                }
+
+                #recurse_schema_tokens
+            }
+
+            fn add_schema() -> bool {
+                #add_schema
+            }
+        }
+    };
+
+    Ok(expand.into())
+}
+
+fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field: String, field_type: &syn::Type) {
+    let mut meta = TargetMetadata::default();
+    traverse_type(field_type, &mut meta);
+
+    if let Some(target_schema) = &meta.target_type {
+        let multiplicity = if meta.is_one_or_many {
+            quote! { Multiplicity::OneOrMany }
+        } else if meta.is_many {
+            quote! { Multiplicity::Many }
+        } else {
+            quote! { Multiplicity::One }
+        };
+
+        let optional = meta.optional;
+
+        ctx.connected_schema_tokens.push(quote! {
+            // If add schema we add ourselves
+            // If target has add schema then connect
+            if #target_schema::add_schema() {
+                data.push(SchemaData {
+                    src_schema: stringify!(#src_schema).to_string(),
+                    src_field: #src_field.to_string(),
+                    multiplicity: #multiplicity,
+                    tgt_schema: stringify!(#target_schema).to_string(),
+                    optional: #optional
+                });
+            }
+        });
+
+        ctx.unconnected_schema_tokens.push(quote! {
+            // In case of add_schema is false, we don't add the types so in the enum (AgentOrPersonOrOrganization)
+            // The type AgentOrPersonOrOrganization is not added but its sub types. Will go like this ->
+            //  DigitalCredential, $.issuer, Agent
+            //  DigitalCredential, $.issuer, Person
+            //  DigitalCredential, $.issuer, Organization
+            data.push(SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: #multiplicity,
+                tgt_schema: stringify!(#target_schema).to_string(),
+                optional: #optional
+            });
+        });
+
+        ctx.recurse_schema_tokens.push(quote! {
+            if !data.contains_schema(stringify!(#target_schema)) {
+                #target_schema::add_schema_types(data, stringify!(#src_schema), #src_field, #optional);
+            }
+        });
+    }
 }
