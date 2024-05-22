@@ -41,30 +41,30 @@ pub struct EuropassEdcCredential {
     ///One or more schemas that validate the Verifiable Credential.
     pub credential_schema: OneOrMany<CredentialSchema>,
 
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub credential_status: Option<EuropassEdcCredentialCredentialStatus>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub credential_status: Option<EuropassEdcCredentialCredentialStatus>,
 
-    //pub credential_subject: OneOrMany<AgentOrPersonOrOrganisation>,
+    pub credential_subject: OneOrMany<AgentOrPersonOrOrganisation>,
 
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub display_parameter: Option<DisplayParameter>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub display_parameter: Option<DisplayParameter>,
 
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub evidence: Option<OneOrMany<Evidence>>,
-    /////Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
-    //pub id: String,
-    /////DID of the credential issuer
-    //pub issuer: Organisation,
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub terms_of_use: Option<OneOrMany<TermsOfUseValue>>,
-    /////Full type chain, used to identify the credential base types
-    //#[serde(rename = "type")]
-    //pub type_: Vec<String>,
-    /////Defines the earliest point when the credential becomes valid.
-    //pub valid_from: DateTime<Utc>,
-    /////Defines the latest point when the credential ceases to be valid.
-    //#[serde(default, skip_serializing_if = "Option::is_none")]
-    //pub valid_until: Option<DateTime<Utc>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub evidence: Option<OneOrMany<Evidence>>,
+    ///Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
+    pub id: String,
+    ///DID of the credential issuer
+    pub issuer: Organisation,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub terms_of_use: Option<OneOrMany<TermsOfUseValue>>,
+    ///Full type chain, used to identify the credential base types
+    #[serde(rename = "type")]
+    pub type_: Vec<String>,
+    ///Defines the earliest point when the credential becomes valid.
+    pub valid_from: DateTime<Utc>,
+    ///Defines the latest point when the credential ceases to be valid.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub valid_until: Option<DateTime<Utc>>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
