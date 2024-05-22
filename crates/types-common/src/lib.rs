@@ -5,7 +5,9 @@ use serde::Serialize;
 use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
 use std::{fmt, ops::Deref};
 
-pub mod traits;
+mod traits;
+
+pub use traits::*;
 
 #[derive(Clone, Debug)]
 pub enum OneOrMany<T> {

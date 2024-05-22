@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
-use types_common::{traits::{AddSchemaTypes, SchemaData}, DurationType, EmailAddress, EnumDeserialize, GenPaths, OneOrMany, PositiveInteger, TagType};
+use types_common::{DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
 
 /// Error types.
 pub mod error {
@@ -142,17 +142,17 @@ pub enum AgentOrPersonOrOrganisation {
 }
 
 //impl AddSchemaTypes for AgentOrPersonOrOrganisation {
-    //fn add_enum_types(src_schema: &str, json_path: &str, optional: bool) -> Vec<SchemaData> {
-        //let mut schemas = Vec::new();
+//fn add_enum_types(src_schema: &str, json_path: &str, optional: bool) -> Vec<SchemaData> {
+//let mut schemas = Vec::new();
 
-        //schemas.push(SchemaData {
-            //src_schema: src_schema.to_string(),
-            //json_path: json_path.to_string(),
-            //tgt_schema: "Agent".to_string(),
-            //multiplicity: types_common::traits::Multiplicity::One,
-            //optional,
-        //});
-    //}
+//schemas.push(SchemaData {
+//src_schema: src_schema.to_string(),
+//json_path: json_path.to_string(),
+//tgt_schema: "Agent".to_string(),
+//multiplicity: types_common::traits::Multiplicity::One,
+//optional,
+//});
+//}
 //}
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]

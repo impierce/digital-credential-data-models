@@ -1,5 +1,6 @@
 use std::{fmt, path::PathBuf};
 
+#[derive(PartialEq, Eq)]
 pub enum Multiplicity {
     One,
     Many,
@@ -16,6 +17,7 @@ impl fmt::Display for Multiplicity {
     }
 }
 
+#[derive(PartialEq, Eq)]
 pub struct SchemaData {
     pub src_schema: String,
     pub json_path: String,
@@ -41,6 +43,17 @@ pub trait AddSchemaTypes {
         true
     }
 }
+
+pub trait SchemaList {
+    fn contains_schema(&self, src_schema: &str) -> bool;
+}
+
+impl SchemaList for Vec<SchemaData> {
+    fn contains_schema(&self, src_schema: &str) -> bool {
+        self.iter().any(|data| &data.src_schema == src_schema)
+    }
+}
+
 
 //impl AddSchemaTypes for Option<bool> {
 //fn add_schema_types(map: &mut HashMap<String, Vec<SchemaData>>) {

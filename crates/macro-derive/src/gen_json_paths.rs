@@ -19,6 +19,7 @@ pub fn gen_paths(input: syn::DeriveInput) -> syn::Result<proc_macro::TokenStream
     Ok(proc_macro::TokenStream::new())
 }
 
+#[derive(Default)]
 pub struct SchemaTokensCtx {
     connected_schema_tokens: Vec<TokenStream>,
     unconnected_schema_tokens: Vec<TokenStream>,
@@ -91,9 +92,7 @@ fn fetch_schema_target_ident(path_args: &syn::PathArguments, meta: &mut TargetMe
 }
 
 fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Result<proc_macro::TokenStream> {
-    let mut connected_schema_tokens = vec![];
-    let mut unconnected_schema_tokens = vec![];
-    let mut recurse_schema_tokens = vec![];
+    let mut ctx = SchemaTokensCtx::default();
     let src_schema = &input.ident;
 
     for variant in data_enum.variants.iter() {
@@ -102,14 +101,7 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                 assert!(fields.unnamed.len() == 1);
 
                 if let Some(first_field) = fields.unnamed.first() {
-                    add_schema_data(
-                        &mut connected_schema_tokens,
-                        &mut unconnected_schema_tokens,
-                        &mut recurse_schema_tokens,
-                        src_schema,
-                        "$".to_string(),
-                        &first_field.ty,
-                    );
+                    add_schema_data(&mut ctx, src_schema, "$".to_string(), &first_field.ty);
                 }
             }
             _ => {
@@ -117,12 +109,6 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
             }
         }
     }
-
-    let ctx = SchemaTokensCtx {
-        recurse_schema_tokens,
-        connected_schema_tokens,
-        unconnected_schema_tokens,
-    };
 
     implement_add_schema_types(input, ctx, false)
 }
@@ -188,14 +174,7 @@ fn implement_add_schema_types(
     Ok(expand.into())
 }
 
-fn add_schema_data(
-    connected_schema_tokens: &mut Vec<TokenStream>,
-    unconnected_schema_tokens: &mut Vec<TokenStream>,
-    recurse_schema_tokens: &mut Vec<TokenStream>,
-    src_schema: &syn::Ident,
-    json_path: String,
-    field_type: &syn::Type,
-) {
+fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, json_path: String, field_type: &syn::Type) {
     let mut meta = TargetMetadata::default();
     traverse_type(field_type, &mut meta);
 
@@ -210,18 +189,21 @@ fn add_schema_data(
 
         let optional = meta.optional;
 
-        connected_schema_tokens.push(quote! {
+        ctx.connected_schema_tokens.push(quote! {
             // If add schema we add ourselves
-            data.push(SchemaData {
-                src_schema: stringify!(#src_schema).to_string(),
-                json_path: #json_path.to_string(),
-                multiplicity: #multiplicity,
-                tgt_schema: stringify!(#target_schema).to_string(),
-                optional: #optional
-            });
+            // If target has add schema then connect
+            if #target_schema::add_schema() {
+                data.push(SchemaData {
+                    src_schema: stringify!(#src_schema).to_string(),
+                    json_path: #json_path.to_string(),
+                    multiplicity: #multiplicity,
+                    tgt_schema: stringify!(#target_schema).to_string(),
+                    optional: #optional
+                });
+            }
         });
 
-        unconnected_schema_tokens.push(quote! {
+        ctx.unconnected_schema_tokens.push(quote! {
             // In case of add_schema is false, we don't add the types so in the enum (AgentOrPersonOrOrganization)
             // The type AgentOrPersonOrOrganization is not added but its sub types. Will go like this ->
             //  DigitalCredential, $.issuer, Agent
@@ -236,8 +218,10 @@ fn add_schema_data(
             });
         });
 
-        recurse_schema_tokens.push(quote! {
-            #target_schema::add_schema_types(data, stringify!(#target_schema), #json_path, #optional);
+        ctx.recurse_schema_tokens.push(quote! {
+            if !data.contains_schema(stringify!(#target_schema)) {
+                #target_schema::add_schema_types(data, stringify!(#src_schema), #json_path, #optional);
+            }
         });
     }
 }
@@ -247,9 +231,7 @@ fn handle_struct_fields(
     fields: &syn::FieldsNamed,
     rename_cc: bool,
 ) -> syn::Result<SchemaTokensCtx> {
-    let mut connected_schema_tokens = vec![];
-    let mut unconnected_schema_tokens = vec![];
-    let mut recurse_schema_tokens = vec![];
+    let mut ctx = SchemaTokensCtx::default();
 
     for field in fields.named.iter() {
         if let Some(field_ident) = &field.ident {
@@ -276,20 +258,9 @@ fn handle_struct_fields(
             println!("{}", field_name);
             let json_path = format!("$.{}", field_name);
 
-            add_schema_data(
-                &mut connected_schema_tokens,
-                &mut unconnected_schema_tokens,
-                &mut recurse_schema_tokens,
-                &src_schema,
-                json_path,
-                &field.ty,
-            );
+            add_schema_data(&mut ctx, &src_schema, json_path, &field.ty);
         }
     }
 
-    Ok(SchemaTokensCtx {
-        connected_schema_tokens,
-        unconnected_schema_tokens,
-        recurse_schema_tokens,
-    })
+    Ok(ctx)
 }
