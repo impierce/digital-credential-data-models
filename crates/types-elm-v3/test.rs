@@ -1,3 +1,16 @@
+Field: @context
+Field: credentialProfiles
+Field: credentialSchema
+Field: credentialStatus
+Field: credentialSubject
+Field: displayParameter
+Field: evidence
+Field: id
+Field: issuer
+Field: termsOfUse
+Field: type
+Field: validFrom
+Field: validUntil
 #![feature(prelude_import)]
 #[prelude_import]
 use std::prelude::rust_2021::*;
@@ -6,6 +19,7 @@ extern crate std;
 use chrono::{DateTime, Utc};
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
+use types_common::{AddSchemaTypes, GenPaths, SchemaList};
 use types_common::{
     DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType,
 };
@@ -897,6 +911,308 @@ const _: () = {
         }
     }
 };
+impl types_common::AddSchemaTypes for EuropassEdcCredential {
+    fn add_schema_types(
+        data: &mut Vec<types_common::SchemaData>,
+        parent_src_schema: &str,
+        parent_src_field: &str,
+        optional: bool,
+    ) {
+        if EuropassEdcCredential::add_schema() {
+            if EuropassEdcCredentialContext::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "@context".to_string(),
+                    multiplicity: types_common::Multiplicity::One,
+                    tgt_schema: "EuropassEdcCredentialContext".to_string(),
+                    optional: false,
+                });
+            }
+            if Concept::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "credentialProfiles".to_string(),
+                    multiplicity: types_common::Multiplicity::OneOrMany,
+                    tgt_schema: "Concept".to_string(),
+                    optional: true,
+                });
+            }
+            if CredentialSchema::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "credentialSchema".to_string(),
+                    multiplicity: types_common::Multiplicity::OneOrMany,
+                    tgt_schema: "CredentialSchema".to_string(),
+                    optional: false,
+                });
+            }
+            if EuropassEdcCredentialCredentialStatus::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "credentialStatus".to_string(),
+                    multiplicity: types_common::Multiplicity::One,
+                    tgt_schema: "EuropassEdcCredentialCredentialStatus".to_string(),
+                    optional: true,
+                });
+            }
+            if AgentOrPersonOrOrganisation::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "credentialSubject".to_string(),
+                    multiplicity: types_common::Multiplicity::OneOrMany,
+                    tgt_schema: "AgentOrPersonOrOrganisation".to_string(),
+                    optional: false,
+                });
+            }
+            if DisplayParameter::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "displayParameter".to_string(),
+                    multiplicity: types_common::Multiplicity::One,
+                    tgt_schema: "DisplayParameter".to_string(),
+                    optional: true,
+                });
+            }
+            if Evidence::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "evidence".to_string(),
+                    multiplicity: types_common::Multiplicity::OneOrMany,
+                    tgt_schema: "Evidence".to_string(),
+                    optional: true,
+                });
+            }
+            if String::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "id".to_string(),
+                    multiplicity: types_common::Multiplicity::One,
+                    tgt_schema: "String".to_string(),
+                    optional: false,
+                });
+            }
+            if Organisation::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "issuer".to_string(),
+                    multiplicity: types_common::Multiplicity::One,
+                    tgt_schema: "Organisation".to_string(),
+                    optional: false,
+                });
+            }
+            if TermsOfUseValue::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "termsOfUse".to_string(),
+                    multiplicity: types_common::Multiplicity::OneOrMany,
+                    tgt_schema: "TermsOfUseValue".to_string(),
+                    optional: true,
+                });
+            }
+            if String::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "type".to_string(),
+                    multiplicity: types_common::Multiplicity::Many,
+                    tgt_schema: "String".to_string(),
+                    optional: false,
+                });
+            }
+            if Utc::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "validFrom".to_string(),
+                    multiplicity: types_common::Multiplicity::One,
+                    tgt_schema: "Utc".to_string(),
+                    optional: false,
+                });
+            }
+            if Utc::add_schema() {
+                data.push(types_common::SchemaData {
+                    src_schema: "EuropassEdcCredential".to_string(),
+                    src_field: "validUntil".to_string(),
+                    multiplicity: types_common::Multiplicity::One,
+                    tgt_schema: "Utc".to_string(),
+                    optional: true,
+                });
+            }
+        } else {
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::One,
+                tgt_schema: "EuropassEdcCredentialContext".to_string(),
+                optional: false,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::OneOrMany,
+                tgt_schema: "Concept".to_string(),
+                optional: true,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::OneOrMany,
+                tgt_schema: "CredentialSchema".to_string(),
+                optional: false,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::One,
+                tgt_schema: "EuropassEdcCredentialCredentialStatus".to_string(),
+                optional: true,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::OneOrMany,
+                tgt_schema: "AgentOrPersonOrOrganisation".to_string(),
+                optional: false,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::One,
+                tgt_schema: "DisplayParameter".to_string(),
+                optional: true,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::OneOrMany,
+                tgt_schema: "Evidence".to_string(),
+                optional: true,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::One,
+                tgt_schema: "String".to_string(),
+                optional: false,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::One,
+                tgt_schema: "Organisation".to_string(),
+                optional: false,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::OneOrMany,
+                tgt_schema: "TermsOfUseValue".to_string(),
+                optional: true,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::Many,
+                tgt_schema: "String".to_string(),
+                optional: false,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::One,
+                tgt_schema: "Utc".to_string(),
+                optional: false,
+            });
+            data.push(types_common::SchemaData {
+                src_schema: parent_src_schema.to_string(),
+                src_field: parent_src_field.to_string(),
+                multiplicity: types_common::Multiplicity::One,
+                tgt_schema: "Utc".to_string(),
+                optional: true,
+            });
+        }
+        if !data.contains_schema("EuropassEdcCredentialContext") {
+            EuropassEdcCredentialContext::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "@context",
+                false,
+            );
+        }
+        if !data.contains_schema("Concept") {
+            Concept::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "credentialProfiles",
+                true,
+            );
+        }
+        if !data.contains_schema("CredentialSchema") {
+            CredentialSchema::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "credentialSchema",
+                false,
+            );
+        }
+        if !data.contains_schema("EuropassEdcCredentialCredentialStatus") {
+            EuropassEdcCredentialCredentialStatus::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "credentialStatus",
+                true,
+            );
+        }
+        if !data.contains_schema("AgentOrPersonOrOrganisation") {
+            AgentOrPersonOrOrganisation::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "credentialSubject",
+                false,
+            );
+        }
+        if !data.contains_schema("DisplayParameter") {
+            DisplayParameter::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "displayParameter",
+                true,
+            );
+        }
+        if !data.contains_schema("Evidence") {
+            Evidence::add_schema_types(data, "EuropassEdcCredential", "evidence", true);
+        }
+        if !data.contains_schema("String") {
+            String::add_schema_types(data, "EuropassEdcCredential", "id", false);
+        }
+        if !data.contains_schema("Organisation") {
+            Organisation::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "issuer",
+                false,
+            );
+        }
+        if !data.contains_schema("TermsOfUseValue") {
+            TermsOfUseValue::add_schema_types(
+                data,
+                "EuropassEdcCredential",
+                "termsOfUse",
+                true,
+            );
+        }
+        if !data.contains_schema("String") {
+            String::add_schema_types(data, "EuropassEdcCredential", "type", false);
+        }
+        if !data.contains_schema("Utc") {
+            Utc::add_schema_types(data, "EuropassEdcCredential", "validFrom", false);
+        }
+        if !data.contains_schema("Utc") {
+            Utc::add_schema_types(data, "EuropassEdcCredential", "validUntil", true);
+        }
+    }
+    fn add_schema() -> bool {
+        true
+    }
+}
 #[serde(deny_unknown_fields)]
 pub struct Accreditation {
     #[serde(rename = "accreditingAgent")]
@@ -3049,6 +3365,7 @@ impl<'de> ::serde::Deserialize<'de> for AgentOrPersonOrOrganisation {
         }
     }
 }
+impl AddSchemaTypes for AgentOrPersonOrOrganisation {}
 #[serde(deny_unknown_fields)]
 pub struct Agent {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
@@ -7514,6 +7831,7 @@ impl<'de> Deserialize<'de> for ConceptTag {
         }
     }
 }
+impl AddSchemaTypes for Concept {}
 #[serde(deny_unknown_fields)]
 pub struct ContactPoint {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
@@ -10636,6 +10954,7 @@ impl<'de> Deserialize<'de> for DisplayParameterTag {
         }
     }
 }
+impl AddSchemaTypes for DisplayParameter {}
 #[serde(untagged)]
 pub enum EuropassEdcCredentialContext {
     One(String),
@@ -10694,6 +11013,7 @@ const _: () = {
         }
     }
 };
+impl AddSchemaTypes for EuropassEdcCredentialContext {}
 impl<'de> de::Deserialize<'de> for EuropassEdcCredentialContext {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -11037,6 +11357,7 @@ const _: () = {
         }
     }
 };
+impl AddSchemaTypes for EuropassEdcCredentialCredentialStatus {}
 #[serde(untagged)]
 pub enum EuropassEdcCredentialIssuer {
     String(String),
@@ -13844,6 +14165,7 @@ impl<'de> Deserialize<'de> for EvidenceTag {
         }
     }
 }
+impl AddSchemaTypes for Evidence {}
 #[serde(deny_unknown_fields)]
 pub struct Geometry {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -36744,6 +37066,7 @@ impl<'de> Deserialize<'de> for OrganisationTag {
         }
     }
 }
+impl AddSchemaTypes for Organisation {}
 pub struct Percentage(u32);
 #[automatically_derived]
 impl ::core::clone::Clone for Percentage {
@@ -43842,6 +44165,7 @@ impl<'de> Deserialize<'de> for CredentialSchemaTag {
         }
     }
 }
+impl AddSchemaTypes for CredentialSchema {}
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ShortenedGrading {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -44631,6 +44955,7 @@ const _: () = {
         }
     }
 };
+impl AddSchemaTypes for TermsOfUseValue {}
 pub struct UriType(pub fluent_uri::Uri<String>);
 #[automatically_derived]
 impl ::core::clone::Clone for UriType {

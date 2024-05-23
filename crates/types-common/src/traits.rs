@@ -131,4 +131,4 @@ impl_T!(for usize, u8, u16, u32, u64, u128);
 impl_T!(for isize, i8, i16, i32, i64, i128);
 impl_T!(for f32, f64);
 impl_T!(for String, bool, PathBuf);
-impl_T!(for DateTime<Utc>);
+impl_T!(for Utc);

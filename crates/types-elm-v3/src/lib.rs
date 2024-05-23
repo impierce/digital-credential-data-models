@@ -268,7 +268,7 @@ pub struct ClaimTypeNode {
     pub type_: ClaimTypeNodeTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct ConceptScheme {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -277,7 +277,7 @@ pub struct ConceptScheme {
     pub type_: ConceptSchemeTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Concept {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -293,8 +293,6 @@ pub struct Concept {
     #[serde(rename = "type")]
     pub type_: ConceptTag,
 }
-
-impl AddSchemaTypes for Concept {}
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
@@ -332,6 +330,13 @@ impl ToString for CredentialSchemaType {
     }
 }
 
+    fn add_schema_types(
+        data: &mut Vec<types_common::SchemaData>,
+        parent_src_schema: &str,
+        parent_json_path: &str,
+        optional: bool,
+    ) {
+    }
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct CredentialStatus {
@@ -389,14 +394,12 @@ pub struct DisplayParameter {
 
 impl AddSchemaTypes for DisplayParameter {}
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, GenPaths)]
 #[serde(untagged)]
 pub enum EuropassEdcCredentialContext {
     One(String),
     Many(Vec<String>),
 }
-
-impl AddSchemaTypes for EuropassEdcCredentialContext {}
 
 impl<'de> de::Deserialize<'de> for EuropassEdcCredentialContext {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -1208,6 +1211,16 @@ pub struct LegalIdentifier {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Literal(pub String);
 
+impl AddSchemaTypes for Literal {
+    fn add_schema_types(
+        data: &mut Vec<types_common::SchemaData>,
+        parent_src_schema: &str,
+        parent_json_path: &str,
+        optional: bool,
+    ) {
+    }
+}
+
 impl std::ops::Deref for Literal {
     type Target = String;
     fn deref(&self) -> &String {
@@ -1293,6 +1306,16 @@ pub struct Mailbox {
 
 #[derive(Clone, Debug, Serialize)]
 pub struct LangKVPairs(HashMap<LangKey, serde_json::Value>);
+
+impl AddSchemaTypes for LangKVPairs {
+    fn add_schema_types(
+        data: &mut Vec<types_common::SchemaData>,
+        parent_src_schema: &str,
+        parent_json_path: &str,
+        optional: bool,
+    ) {
+    }
+}
 
 impl LangKVPairs {
     pub fn new(kv_pairs: HashMap<LangKey, serde_json::Value>) -> Option<Self> {
@@ -1738,6 +1761,16 @@ impl AddSchemaTypes for TermsOfUseValue {}
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct UriType(pub fluent_uri::Uri<String>);
+
+impl AddSchemaTypes for UriType {
+    fn add_schema_types(
+        data: &mut Vec<types_common::SchemaData>,
+        parent_src_schema: &str,
+        parent_json_path: &str,
+        optional: bool,
+    ) {
+    }
+}
 
 impl ops::Deref for UriType {
     type Target = fluent_uri::Uri<String>;

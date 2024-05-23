@@ -263,6 +263,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
         });
 
         ctx.recurse_schema_tokens.push(quote! {
+            //let a = stringify!(#target_schema);
             if !data.contains_schema(stringify!(#target_schema)) {
                 #target_schema::add_schema_types(data, stringify!(#src_schema), #src_field, #optional);
             }

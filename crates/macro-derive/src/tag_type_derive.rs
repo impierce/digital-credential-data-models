@@ -26,6 +26,8 @@ pub fn impl_tag_type(input: proc_macro::TokenStream) -> proc_macro::TokenStream 
             }
         }
 
+        impl types_common::AddSchemaTypes for #tag_target {}
+
         impl Default for #tag_target {
             fn default() -> Self {
                 Self(stringify!(#tag_source).to_string())
