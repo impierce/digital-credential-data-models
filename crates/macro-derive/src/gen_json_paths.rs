@@ -30,7 +30,7 @@ pub struct TargetData {
 
 pub struct TargetMetadata {
     target: Option<TargetData>,
-    optional: bool,
+    required: bool,
     is_many: bool,
     is_one_or_many: bool,
 }
@@ -39,7 +39,7 @@ impl Default for TargetMetadata {
     fn default() -> Self {
         Self {
             target: None,
-            optional: false,
+            required: true,
             is_many: false,
             is_one_or_many: false,
         }
@@ -59,7 +59,7 @@ fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
                     meta.is_many = true;
                     find_schema_target_ident(&segment.arguments, meta);
                 } else if &type_name == "Option" {
-                    meta.optional = true;
+                    meta.required = false;
                     find_schema_target_ident(&segment.arguments, meta);
                 } else if !segment.arguments.is_empty() {
                     find_schema_target_ident(&segment.arguments, meta);
@@ -116,7 +116,7 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                         src_field: "".to_string(),
                         multiplicity: types_common::Multiplicity::One,
                         tgt_schema: #tgt_schema.to_string(),
-                        optional: false,
+                        required: true,
                     });
                 });
             }
@@ -238,7 +238,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
             quote! { types_common::Multiplicity::One }
         };
 
-        let optional = meta.optional;
+        let required = meta.required;
         let target_schema = &target.path;
         let target_name = &target.name;
 
@@ -248,7 +248,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
                 src_field: #src_field.to_string(),
                 multiplicity: #multiplicity,
                 tgt_schema: #target_name.to_string(),
-                optional: #optional
+                required: #required
             });
         });
 

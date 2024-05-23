@@ -25,7 +25,7 @@ pub struct SchemaData {
     pub src_field: String,
     pub tgt_schema: String,
     pub multiplicity: Multiplicity,
-    pub optional: bool,
+    pub required: bool,
 }
 
 impl PartialOrd for SchemaData {
@@ -44,7 +44,7 @@ impl fmt::Display for SchemaData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_fmt(format_args!(
             "{}, {}, {}, {}, {}",
-            self.src_schema, self.src_field, self.tgt_schema, self.multiplicity, self.optional
+            self.src_schema, self.src_field, self.tgt_schema, self.multiplicity, self.required
         ))
     }
 }
