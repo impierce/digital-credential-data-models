@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
-use types_common::{AddSchemaTypes, GenPaths, SchemaList};
+use types_common::{GenPaths, SchemaList};
 use types_common::{DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
 
 /// Error types.
@@ -67,7 +67,7 @@ pub struct EuropassEdcCredential {
     pub valid_until: Option<DateTime<Utc>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Accreditation {
     #[serde(rename = "accreditingAgent")]
@@ -119,7 +119,7 @@ pub struct Accreditation {
     pub type_: OneOrMany<AccreditationTag>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Address {
     #[serde(rename = "countryCode")]
@@ -134,15 +134,13 @@ pub struct Address {
     pub type_: AddressTag,
 }
 
-#[derive(Clone, Debug, Serialize, EnumDeserialize)]
+#[derive(Clone, Debug, Serialize, EnumDeserialize, GenPaths)]
 #[serde(untagged)]
 pub enum AgentOrPersonOrOrganisation {
     Agent(Box<Agent>),
     Person(Box<Person>),
     Organisation(Box<Organisation>),
 }
-
-impl AddSchemaTypes for AgentOrPersonOrOrganisation {}
 
 //impl AddSchemaTypes for AgentOrPersonOrOrganisation {
 //fn add_enum_types(src_schema: &str, json_path: &str, optional: bool) -> Vec<SchemaData> {
@@ -158,7 +156,7 @@ impl AddSchemaTypes for AgentOrPersonOrOrganisation {}
 //}
 //}
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Agent {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
@@ -183,7 +181,7 @@ pub struct Agent {
     pub type_: AgentTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Amount {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -194,7 +192,7 @@ pub struct Amount {
     pub type_: AmountTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct AwardingOpportunity {
     #[serde(rename = "awardingBody")]
@@ -213,7 +211,7 @@ pub struct AwardingOpportunity {
     pub type_: AwardingOpportunityTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct AwardingProcess {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -239,7 +237,7 @@ pub struct AwardingProcess {
     pub type_: AwardingProcessTag,
 }
 
-#[derive(Clone, Debug, Serialize, EnumDeserialize)]
+#[derive(Clone, Debug, Serialize, EnumDeserialize, GenPaths)]
 #[serde(untagged)]
 pub enum ClaimNode {
     LearningAchievement(Box<LearningAchievement>),
@@ -249,7 +247,7 @@ pub enum ClaimNode {
     ClaimNodeType(Box<ClaimTypeNode>),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ClaimTypeNode {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -294,7 +292,7 @@ pub struct Concept {
     pub type_: ConceptTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct ContactPoint {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
@@ -330,7 +328,7 @@ impl ToString for CredentialSchemaType {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct CredentialStatus {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -339,14 +337,14 @@ pub struct CredentialStatus {
     pub type_: CredentialStatusTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 pub struct CredentialSubject {
     ///Defines the DID of the subject that is described by the issued credential
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct CreditPoint {
     pub framework: Concept,
@@ -357,7 +355,7 @@ pub struct CreditPoint {
     pub type_: CreditPointTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct DisplayDetail {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -368,7 +366,7 @@ pub struct DisplayDetail {
     pub type_: DisplayDetailTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct DisplayParameter {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -384,8 +382,6 @@ pub struct DisplayParameter {
     #[serde(rename = "type")]
     pub type_: DisplayParameterTag,
 }
-
-impl AddSchemaTypes for DisplayParameter {}
 
 #[derive(Clone, Debug, Serialize, GenPaths)]
 #[serde(untagged)]
@@ -455,14 +451,14 @@ pub enum EuropassEdcCredentialIssuer {
     },
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, GenPaths)]
 #[serde(untagged)]
 pub enum DataOrUri {
     Data(AgentOrPersonOrOrganisation),
     GenericId(UriType),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct EuropeanDigitalCredential {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -503,7 +499,7 @@ pub struct EuropeanDigitalCredential {
     pub type_: EuropeanDigitalCredentialTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct EuropeanDigitalPresentation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -520,7 +516,7 @@ pub struct EuropeanDigitalPresentation {
     pub type_: EuropeanDigitalPresentationTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Evidence {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -540,9 +536,7 @@ pub struct Evidence {
     pub type_: EvidenceTag,
 }
 
-impl AddSchemaTypes for Evidence {}
-
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Geometry {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -555,7 +549,7 @@ pub struct Geometry {
     pub type_: GeometryTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct GradingScheme {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -571,7 +565,7 @@ pub struct GradingScheme {
     pub type_: GradingSchemeTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Grant {
     #[serde(rename = "contentURL", default, skip_serializing_if = "Option::is_none")]
@@ -589,7 +583,7 @@ pub struct Grant {
     pub type_: GrantTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Group {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -609,7 +603,7 @@ pub struct Group {
     pub type_: GroupTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct HtmlType(pub String);
 impl std::ops::Deref for HtmlType {
     type Target = String;
@@ -618,14 +612,14 @@ impl std::ops::Deref for HtmlType {
     }
 }
 
-#[derive(Clone, Debug, Serialize, EnumDeserialize)]
+#[derive(Clone, Debug, Serialize, EnumDeserialize, GenPaths)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum IdentifierOrLegalIdentifier {
     Identifier(Box<Identifier>),
     LegalIdentifier(Box<LegalIdentifier>),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Identifier {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -649,7 +643,7 @@ pub struct Identifier {
     pub type_: IdentifierTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct IndividualDisplay {
     pub display_detail: OneOrMany<DisplayDetail>,
@@ -660,7 +654,7 @@ pub struct IndividualDisplay {
     pub type_: IndividualDisplayTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct IriType(pub String);
 impl std::ops::Deref for IriType {
     type Target = String;
@@ -669,7 +663,7 @@ impl std::ops::Deref for IriType {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct IssuerNode {
     pub eidas_legal_identifier: LegalIdentifier,
@@ -679,7 +673,7 @@ pub struct IssuerNode {
     pub type_: IssuerNodeTag,
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, GenPaths)]
 pub struct LangKV(pub serde_json::Map<String, serde_json::Value>);
 
 impl LangKV {
@@ -714,14 +708,14 @@ impl<'de> Deserialize<'de> for LangKV {
     }
 }
 
-#[derive(Clone, Debug, Serialize, EnumDeserialize)]
+#[derive(Clone, Debug, Serialize, EnumDeserialize, GenPaths)]
 #[serde(untagged)]
 pub enum LearningAchievementSpecificationOrQualification {
     LearningAchievementSpecification(Box<LearningAchievementSpecification>),
     Qualification(Box<Qualification>),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningAchievementSpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -793,7 +787,7 @@ pub struct LearningAchievementSpecification {
     pub type_: LearningAchievementSpecificationTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningAchievement {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -830,7 +824,7 @@ pub struct LearningAchievement {
     pub type_: LearningAchievementTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningActivitySpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -878,7 +872,7 @@ pub struct LearningActivitySpecification {
     pub type_: LearningActivitySpecificationTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningActivity {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -919,7 +913,7 @@ pub struct LearningActivity {
     pub r#type: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct LearningAssessmentSpecification {
     #[serde(rename = "additionalNote", default, skip_serializing_if = "Option::is_none")]
@@ -965,7 +959,7 @@ pub struct LearningAssessmentSpecification {
     pub type_: LearningAssessmentSpecificationTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningAssessment {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1009,7 +1003,7 @@ pub struct LearningAssessment {
     pub type_: LearningAssessmentTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningEntitlementSpecification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1057,7 +1051,7 @@ pub struct LearningEntitlementSpecification {
     pub type_: LearningEntitlementSpecificationTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningEntitlement {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1090,7 +1084,7 @@ pub struct LearningEntitlement {
     pub type_: LearningEntitlementTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningOpportunity {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1152,7 +1146,7 @@ pub struct LearningOpportunity {
     pub type_: LearningOpportunityTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LearningOutcome {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1174,7 +1168,7 @@ pub struct LearningOutcome {
     pub type_: LearningOutcomeTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct LegalIdentifier {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1199,18 +1193,8 @@ pub struct LegalIdentifier {
     pub type_: LegalIdentifierTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 pub struct Literal(pub String);
-
-impl AddSchemaTypes for Literal {
-    fn add_schema_types(
-        data: &mut Vec<types_common::SchemaData>,
-        parent_src_schema: &str,
-        parent_json_path: &str,
-        optional: bool,
-    ) {
-    }
-}
 
 impl std::ops::Deref for Literal {
     type Target = String;
@@ -1219,7 +1203,7 @@ impl std::ops::Deref for Literal {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Location {
     pub address: Option<OneOrMany<Address>>,
@@ -1239,7 +1223,7 @@ pub struct Location {
     pub type_: LocationTag,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, GenPaths)]
 pub struct MailTo(String);
 
 impl ops::Deref for MailTo {
@@ -1279,14 +1263,14 @@ impl<'de> Deserialize<'de> for MailTo {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 #[serde(untagged)]
 pub enum Email {
     EmailAddress(EmailAddress),
     MailTo(MailTo),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Mailbox {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1295,18 +1279,8 @@ pub struct Mailbox {
     pub type_: MailboxTag,
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, GenPaths)]
 pub struct LangKVPairs(HashMap<LangKey, serde_json::Value>);
-
-impl AddSchemaTypes for LangKVPairs {
-    fn add_schema_types(
-        data: &mut Vec<types_common::SchemaData>,
-        parent_src_schema: &str,
-        parent_json_path: &str,
-        optional: bool,
-    ) {
-    }
-}
 
 impl LangKVPairs {
     pub fn new(kv_pairs: HashMap<LangKey, serde_json::Value>) -> Option<Self> {
@@ -1342,7 +1316,7 @@ impl<'de> Deserialize<'de> for LangKVPairs {
     }
 }
 
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct LangKey(String);
 impl std::ops::Deref for LangKey {
     type Target = String;
@@ -1376,7 +1350,7 @@ impl<'de> serde::Deserialize<'de> for LangKey {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct MediaObject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1398,7 +1372,7 @@ pub struct MediaObject {
     pub type_: MediaObjectTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Note {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1412,7 +1386,7 @@ pub struct Note {
     pub type_: NoteTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Organisation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1457,9 +1431,7 @@ pub struct Organisation {
     pub type_: OrganisationTag,
 }
 
-impl AddSchemaTypes for Organisation {}
-
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, GenPaths)]
 pub struct Percentage(u32);
 
 impl Percentage {
@@ -1498,7 +1470,7 @@ impl<'de> Deserialize<'de> for Percentage {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct PeriodOfTime {
     #[serde(rename = "endDate", default, skip_serializing_if = "Option::is_none")]
@@ -1513,7 +1485,7 @@ pub struct PeriodOfTime {
     pub type_: PeriodOfTimeTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Person {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1558,7 +1530,7 @@ pub struct Person {
     pub type_: PersonTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Phone {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1575,7 +1547,7 @@ pub struct Phone {
     pub type_: PhoneTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct PriceDetail {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1594,7 +1566,7 @@ pub struct PriceDetail {
     pub type_: PriceDetailTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Proof {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1603,7 +1575,7 @@ pub struct Proof {
     pub type_: ProofTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Qualification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1685,7 +1657,7 @@ pub struct Qualification {
     pub type_: QualificationTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ResultCategory {
     pub count: PositiveInteger,
@@ -1702,7 +1674,7 @@ pub struct ResultCategory {
     pub type_: ResultCategoryTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ResultDistribution {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1724,7 +1696,7 @@ pub struct CredentialSchema {
     pub type_: CredentialSchemaType,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct ShortenedGrading {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1736,7 +1708,7 @@ pub struct ShortenedGrading {
     pub type_: ShortenedGradingTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 pub struct TermsOfUseValue {
     ///Contains a URL that points to where more information about this instance of terms of use can be found.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1745,8 +1717,6 @@ pub struct TermsOfUseValue {
     #[serde(rename = "type")]
     pub type_extension: String,
 }
-
-impl AddSchemaTypes for TermsOfUseValue {}
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, GenPaths)]
 pub struct UriType(pub fluent_uri::Uri<String>);
@@ -1783,7 +1753,7 @@ impl<'de> Deserialize<'de> for UriType {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct VerificationCheck {
     pub dc_type: Concept,
@@ -1799,7 +1769,7 @@ pub struct VerificationCheck {
     pub type_: VerificationCheckTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct WebResource {
     #[serde(rename = "contentURL")]

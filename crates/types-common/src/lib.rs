@@ -8,6 +8,7 @@ use std::{fmt, ops::Deref};
 mod traits;
 
 pub use traits::*;
+use traits as types_common;
 
 #[derive(Clone, Debug)]
 pub enum OneOrMany<T> {
@@ -103,7 +104,7 @@ impl<'de> de::Deserialize<'de> for Email {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, GenPaths)]
 pub struct PositiveInteger(pub u32);
 impl std::ops::Deref for PositiveInteger {
     type Target = u32;
@@ -130,7 +131,7 @@ impl<'de> de::Deserialize<'de> for PositiveInteger {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, GenPaths)]
 pub struct DurationType(iso8601_duration::Duration);
 
 impl DurationType {

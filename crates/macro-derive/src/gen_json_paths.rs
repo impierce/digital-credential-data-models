@@ -24,8 +24,13 @@ pub struct SchemaTokensCtx {
     recurse_schema_tokens: Vec<TokenStream>,
 }
 
+pub struct TargetData {
+    path: syn::Path,
+    name: String,
+}
+
 pub struct TargetMetadata {
-    target_type: Option<syn::Ident>,
+    target: Option<TargetData>,
     optional: bool,
     is_many: bool,
     is_one_or_many: bool,
@@ -34,7 +39,7 @@ pub struct TargetMetadata {
 impl Default for TargetMetadata {
     fn default() -> Self {
         Self {
-            target_type: None,
+            target: None,
             optional: false,
             is_many: false,
             is_one_or_many: false,
@@ -45,11 +50,7 @@ impl Default for TargetMetadata {
 fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
     match field_type {
         syn::Type::Path(path_type) => {
-            if 1 < path_type.path.segments.len() {
-                panic!("TODO");
-            }
-
-            for segment in path_type.path.segments.iter() {
+            if let Some(segment) = path_type.path.segments.last() {
                 let type_name = segment.ident.to_string();
 
                 if &type_name == "OneOrMany" {
@@ -64,7 +65,10 @@ fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
                 } else if !segment.arguments.is_empty() {
                     find_schema_target_ident(&segment.arguments, meta);
                 } else {
-                    meta.target_type = Some(segment.ident.clone());
+                    meta.target = Some(TargetData {
+                        path: path_type.path.clone(),
+                        name: type_name,
+                    });
                 }
             }
         }
@@ -239,7 +243,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
     let mut meta = TargetMetadata::default();
     traverse_type(field_type, &mut meta);
 
-    if let Some(target_schema) = &meta.target_type {
+    if let Some(target) = &meta.target {
         let multiplicity = if meta.is_one_or_many {
             quote! { types_common::Multiplicity::OneOrMany }
         } else if meta.is_many {
@@ -250,6 +254,9 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
 
         let optional = meta.optional;
 
+        let target_schema = &target.path;
+        let target_name = &target.name;
+
         ctx.connected_schema_tokens.push(quote! {
             // If add schema we add ourselves
             // If target has add schema then connect
@@ -258,7 +265,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
                     src_schema: stringify!(#src_schema).to_string(),
                     src_field: #src_field.to_string(),
                     multiplicity: #multiplicity,
-                    tgt_schema: stringify!(#target_schema).to_string(),
+                    tgt_schema: #target_name.to_string(),
                     optional: #optional
                 });
             }
@@ -274,14 +281,13 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
                 src_schema: parent_src_schema.to_string(),
                 src_field: parent_src_field.to_string(),
                 multiplicity: #multiplicity,
-                tgt_schema: stringify!(#target_schema).to_string(),
+                tgt_schema: #target_name.to_string(),
                 optional
             });
         });
 
         ctx.recurse_schema_tokens.push(quote! {
-            //let a = stringify!(#target_schema);
-            if !data.contains_schema(stringify!(#target_schema)) {
+            if !data.contains_schema(#target_name) {
                 #target_schema::add_schema_types(data, stringify!(#src_schema), #src_field, #optional);
             }
         });
