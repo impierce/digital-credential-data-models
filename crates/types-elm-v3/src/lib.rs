@@ -315,7 +315,7 @@ pub struct ContactPoint {
     pub type_: ContactPointTag,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum CredentialSchemaType {
     JsonSchema,
     ShaclValidator2017,
@@ -330,13 +330,6 @@ impl ToString for CredentialSchemaType {
     }
 }
 
-    fn add_schema_types(
-        data: &mut Vec<types_common::SchemaData>,
-        parent_src_schema: &str,
-        parent_json_path: &str,
-        optional: bool,
-    ) {
-    }
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields)]
 pub struct CredentialStatus {
@@ -443,7 +436,7 @@ impl<'de> de::Deserialize<'de> for EuropassEdcCredentialContext {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, GenPaths)]
 pub struct EuropassEdcCredentialCredentialStatus {
     ///Exact identity for the credential status
     pub id: UriType,
@@ -451,8 +444,6 @@ pub struct EuropassEdcCredentialCredentialStatus {
     #[serde(rename = "type")]
     pub revocation_type: String,
 }
-
-impl AddSchemaTypes for EuropassEdcCredentialCredentialStatus {}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(untagged)]
@@ -1724,7 +1715,7 @@ pub struct ResultDistribution {
     pub type_: ResultDistributionTag,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, TagType)]
+#[derive(Clone, Debug, Deserialize, Serialize, TagType, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct CredentialSchema {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1732,8 +1723,6 @@ pub struct CredentialSchema {
     #[serde(rename = "type")]
     pub type_: CredentialSchemaType,
 }
-
-impl AddSchemaTypes for CredentialSchema {}
 
 #[derive(Clone, Debug, Deserialize, Serialize, TagType)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
@@ -1759,18 +1748,8 @@ pub struct TermsOfUseValue {
 
 impl AddSchemaTypes for TermsOfUseValue {}
 
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, GenPaths)]
 pub struct UriType(pub fluent_uri::Uri<String>);
-
-impl AddSchemaTypes for UriType {
-    fn add_schema_types(
-        data: &mut Vec<types_common::SchemaData>,
-        parent_src_schema: &str,
-        parent_json_path: &str,
-        optional: bool,
-    ) {
-    }
-}
 
 impl ops::Deref for UriType {
     type Target = fluent_uri::Uri<String>;

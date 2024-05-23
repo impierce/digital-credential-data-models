@@ -6,6 +6,6 @@ pub mod elmv3 {
     pub use types_elm_v3::*;
 }
 
-pub mod common {
+pub mod types_common {
     pub use types_common::*;
 }

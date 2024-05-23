@@ -104,8 +104,21 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                     add_schema_data(&mut ctx, src_schema, "UNUSED".to_string(), &first_field.ty);
                 }
             }
+            syn::Fields::Unit => {
+                let tgt_schema = &variant.ident.to_string();
+
+                ctx.unconnected_schema_tokens.push(quote! {
+                    data.push(types_common::SchemaData {
+                        src_schema: parent_src_schema.to_string(),
+                        src_field: parent_src_field.to_string(),
+                        multiplicity: types_common::Multiplicity::One,
+                        tgt_schema: #tgt_schema.to_string(),
+                        optional
+                    });
+                });
+            }
             _ => {
-                panic!("Can only handle unnamed variants");
+                panic!("Can only handle unnamed variants or units");
             }
         }
     }
@@ -135,6 +148,10 @@ fn handle_struct(data_struct: &syn::DataStruct, input: &syn::DeriveInput) -> syn
     match &data_struct.fields {
         syn::Fields::Named(named) => {
             let ctx = handle_struct_fields(&input.ident, named, camel_case)?;
+            return implement_add_schema_types(input, ctx, true);
+        }
+        syn::Fields::Unnamed(_unnamed) => {
+            let ctx = SchemaTokensCtx::default();
             return implement_add_schema_types(input, ctx, true);
         }
         _ => panic!("Can only handle structs with named fields"),
@@ -258,7 +275,7 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
                 src_field: parent_src_field.to_string(),
                 multiplicity: #multiplicity,
                 tgt_schema: stringify!(#target_schema).to_string(),
-                optional: #optional
+                optional
             });
         });
 
