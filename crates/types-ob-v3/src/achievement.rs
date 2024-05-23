@@ -1,8 +1,9 @@
 use super::{alignment, endorsement, general, identity, profile, related, result::ResultDescription};
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "A collection of information about the accomplishment recognized by the Assertion. Many assertions may be created corresponding to one Achievement."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Achievement {
     #[doc = "Unique URI for the Achievement."]
     pub id: String,
@@ -60,7 +61,7 @@ impl From<&Achievement> for Achievement {
 }
 
 #[doc = "The type of achievement. This is an extensible vocabulary."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AchievementType {
     Enum(AchievementTypeEnum),
@@ -91,7 +92,7 @@ impl std::str::FromStr for AchievementType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum AchievementTypeEnum {
     Achievement,
     ApprenticeshipCertificate,
@@ -231,7 +232,7 @@ impl std::convert::TryFrom<String> for AchievementTypeEnum {
     }
 }
 
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AchievementTypeString(String);
 impl std::ops::Deref for AchievementTypeString {
     type Target = String;
@@ -296,7 +297,7 @@ impl<'de> serde::Deserialize<'de> for AchievementTypeString {
 }
 
 #[doc = "Descriptive metadata about the achievements necessary to be recognized with an assertion of a particular achievement. This data is added to the Achievement class so that it may be rendered when the achievement assertion is displayed, instead of simply a link to human-readable criteria external to the achievement. Embedding criteria allows either enhancement of an external criteria page or increased portability and ease of use by allowing issuers to skip hosting the formerly-required external criteria page altogether. Criteria is used to allow would-be recipients to learn what is required of them to be recognized with an assertion of a particular achievement. It is also used after the assertion is awarded to a recipient to let those inspecting earned achievements know the general requirements that the recipients met in order to earn it."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Criteria {
     #[doc = "The URI of a webpage that describes in a human-readable format the criteria for the achievement."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -312,7 +313,7 @@ impl From<&Criteria> for Criteria {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum Type {
     String(String),
@@ -347,7 +348,7 @@ impl From<Vec<&str>> for Type {
 }
 
 #[doc = "Allows endorsers to make specific claims about the Achievement. These endorsements are signed with the VC-JWT proof format."]
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AchievementEndorsementJwtItem(String);
 impl std::ops::Deref for AchievementEndorsementJwtItem {
     type Target = String;
@@ -415,7 +416,7 @@ impl<'de> serde::Deserialize<'de> for AchievementEndorsementJwtItem {
 }
 
 #[doc = "The language of the achievement."]
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AchievementLanguage(String);
 impl std::ops::Deref for AchievementLanguage {
     type Target = String;

@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "Identifies a related achievement."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Related {
     #[doc = "The related achievement."]
     pub id: String,
@@ -22,7 +23,7 @@ impl From<&Related> for Related {
 }
 
 #[doc = "The language of the related achievement."]
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct RelatedLanguage(String);
 impl std::ops::Deref for RelatedLanguage {
     type Target = String;
@@ -89,7 +90,7 @@ impl<'de> serde::Deserialize<'de> for RelatedLanguage {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum RelatedType {
     String(String),

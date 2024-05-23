@@ -1,8 +1,9 @@
 use super::{achievement_credential, general, profile, proof_evidence};
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "A verifiable credential that asserts a claim about an entity. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct EndorsementCredential {
     #[serde(rename = "@context")]
     pub context: Vec<general::Context>,
@@ -38,13 +39,14 @@ pub struct EndorsementCredential {
     #[serde(rename = "termsOfUse", default, skip_serializing_if = "Option::is_none")]
     pub terms_of_use: Option<EndorsementCredentialTermsOfUse>,
 }
+
 impl From<&EndorsementCredential> for EndorsementCredential {
     fn from(value: &EndorsementCredential) -> Self {
         value.clone()
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum EndorsementCredentialSchema {
     Schema(achievement_credential::CredentialSchema),
@@ -65,7 +67,7 @@ impl From<Vec<achievement_credential::CredentialSchema>> for EndorsementCredenti
         Self::VecSchema(value)
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum EndorsementCredentialProof {
     Proof(proof_evidence::Proof),
@@ -86,7 +88,7 @@ impl From<Vec<proof_evidence::Proof>> for EndorsementCredentialProof {
         Self::VecProof(value)
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum EndorsementCredentialTermsOfUse {
     TermsOfUse(general::TermsOfUse),
@@ -107,7 +109,7 @@ impl From<Vec<general::TermsOfUse>> for EndorsementCredentialTermsOfUse {
         Self::VecTermsOfUse(value)
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum EndorsementCredentialType {
     String(String),
@@ -140,7 +142,7 @@ impl From<Vec<&str>> for EndorsementCredentialType {
     }
 }
 #[doc = "A collection of information about the subject of the endorsement."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct EndorsementSubject {
     #[doc = "The identifier of the individual, entity, organization, assertion, or achievement that is endorsed."]
     pub id: String,
@@ -156,7 +158,7 @@ impl From<&EndorsementSubject> for EndorsementSubject {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum EndorsementSubjectType {
     String(String),

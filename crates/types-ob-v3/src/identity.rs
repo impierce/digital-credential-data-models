@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "No description supplied."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct IdentifierEntry {
     #[doc = "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'IdentifierEntry'."]
@@ -20,12 +21,13 @@ impl From<&IdentifierEntry> for IdentifierEntry {
 }
 
 #[doc = "The identifier type."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum IdentifierType {
     Enum(IdentifierTypeEnum),
     String(IdentifierTypeString),
 }
+
 impl From<&IdentifierType> for IdentifierType {
     fn from(value: &IdentifierType) -> Self {
         value.clone()
@@ -52,7 +54,7 @@ impl std::str::FromStr for IdentifierType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum IdentifierTypeEnum {
     #[serde(rename = "name")]
     Name,
@@ -168,7 +170,7 @@ impl std::convert::TryFrom<String> for IdentifierTypeEnum {
         value.parse()
     }
 }
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct IdentifierTypeString(String);
 impl std::ops::Deref for IdentifierTypeString {
     type Target = String;
@@ -225,7 +227,7 @@ impl<'de> serde::Deserialize<'de> for IdentifierTypeString {
     }
 }
 #[doc = "A collection of information about the recipient of an achievement."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct IdentityObject {
     #[doc = "MUST be the IRI 'IdentityObject'."]
@@ -250,7 +252,7 @@ impl From<&IdentityObject> for IdentityObject {
 }
 
 #[doc = "The identity type."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum IdentityObjectType {
     Enum(IdentityObjectTypeEnum),
@@ -282,7 +284,7 @@ impl std::str::FromStr for IdentityObjectType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum IdentityObjectTypeEnum {
     #[serde(rename = "name")]
     Name,
@@ -398,7 +400,7 @@ impl std::convert::TryFrom<String> for IdentityObjectTypeEnum {
         value.parse()
     }
 }
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct IdentityObjectTypeString(String);
 impl std::ops::Deref for IdentityObjectTypeString {
     type Target = String;

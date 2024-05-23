@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "JSON-LD Context. Either a URI with the context definition or a Map with a local context definition MUST be supplied."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum Context {
     Map(serde_json::Map<String, serde_json::Value>),
@@ -31,7 +32,7 @@ impl From<&str> for Context {
 }
 
 #[doc = "Metadata about images that represent assertions, achieve or profiles. These properties can typically be represented as just the id string of the image, but using a fleshed-out document allows for including captions and other applicable metadata."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(deny_unknown_fields)]
 pub struct Image {
     #[doc = "The URI or Data URI of the image."]
@@ -50,7 +51,7 @@ impl From<&Image> for Image {
 }
 
 #[doc = "The information in RefreshService is used to refresh the verifiable credential."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct RefreshService {
     #[doc = "The value MUST be the URL of the issuer's refresh service."]
     pub id: String,
@@ -65,7 +66,7 @@ impl From<&RefreshService> for RefreshService {
 }
 
 #[doc = "Terms of use can be utilized by an issuer or a holder to communicate the terms under which a verifiable credential or verifiable presentation was issued"]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct TermsOfUse {
     #[doc = "The value MUST be a URI identifying the term of use."]
     #[serde(default, skip_serializing_if = "Option::is_none")]

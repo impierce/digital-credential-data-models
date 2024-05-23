@@ -1,8 +1,9 @@
 use super::{achievement, general, identity, profile, result};
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "A collection of information about the recipient of an achievement. Maps to Credential Subject in [[VC-DATA-MODEL]]."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct AchievementSubject {
     #[doc = "An identifier for the Credential Subject. Either `id` or at least one `identifier` MUST be supplied."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -29,7 +30,7 @@ pub struct AchievementSubject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub narrative: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub result: Vec<result::Result_>,
+    pub result: Vec<result::ResultAchievement>,
     #[doc = "Role, position, or title of the learner when demonstrating or performing the achievement or evidence of learning being asserted. Examples include 'Student President', 'Intern', 'Captain', etc."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -45,7 +46,7 @@ impl From<&AchievementSubject> for AchievementSubject {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AchievementSubjectType {
     String(String),
@@ -89,7 +90,7 @@ pub struct AchievementSubjectBuilder {
     image: Result<Option<general::Image>, String>,
     license_number: Result<Option<String>, String>,
     narrative: Result<Option<String>, String>,
-    result: Result<Vec<result::Result_>, String>,
+    result: Result<Vec<result::ResultAchievement>, String>,
     role: Result<Option<String>, String>,
     source: Result<Option<profile::Profile>, String>,
     term: Result<Option<String>, String>,
@@ -212,7 +213,7 @@ impl AchievementSubjectBuilder {
     }
     pub fn result<T>(mut self, value: Vec<T>) -> Self
     where
-        T: std::convert::TryInto<result::Result_>,
+        T: std::convert::TryInto<result::ResultAchievement>,
         T::Error: std::fmt::Display,
     {
         self.result = value
@@ -221,7 +222,7 @@ impl AchievementSubjectBuilder {
                 v.try_into()
                     .map_err(|e| format!("error converting supplied value for result: {}", e))
             })
-            .collect::<Result<Vec<result::Result_>, String>>();
+            .collect::<Result<Vec<result::ResultAchievement>, String>>();
         self
     }
     pub fn role<T>(mut self, value: T) -> Self

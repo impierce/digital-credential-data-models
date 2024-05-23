@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "Describes an alignment between an achievement and a node in an educational framework."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Alignment {
     #[serde(rename = "type")]
     pub type_: AlignmentType,
@@ -24,6 +25,7 @@ pub struct Alignment {
     #[serde(rename = "targetUrl")]
     pub target_url: String,
 }
+
 impl From<&Alignment> for Alignment {
     fn from(value: &Alignment) -> Self {
         value.clone()
@@ -31,7 +33,7 @@ impl From<&Alignment> for Alignment {
 }
 
 #[doc = "The type of the alignment target node."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AlignmentTargetType {
     Enum(AlignmentTargetTypeEnum),
@@ -63,7 +65,7 @@ impl std::str::FromStr for AlignmentTargetType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum AlignmentTargetTypeEnum {
     #[serde(rename = "ceasn:Competency")]
     CeasnCompetency,
@@ -131,7 +133,7 @@ impl std::convert::TryFrom<String> for AlignmentTargetTypeEnum {
         value.parse()
     }
 }
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AlignmentTargetTypeString(String);
 impl std::ops::Deref for AlignmentTargetTypeString {
     type Target = String;
@@ -187,7 +189,7 @@ impl<'de> serde::Deserialize<'de> for AlignmentTargetTypeString {
             .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AlignmentType {
     String(String),

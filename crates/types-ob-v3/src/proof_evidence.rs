@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 use crate::endorsement::EndorsementCredentialProof;
 
 #[doc = "Descriptive metadata about evidence related to the achievement assertion. Each instance of the evidence class present in an assertion corresponds to one entity, though a single entry can describe a set of items collectively. There may be multiple evidence entries referenced from an assertion. The narrative property is also in scope of the assertion class to provide an overall description of the achievement related to the assertion in rich text. It is used here to provide a narrative of achievement of the specific entity described. If both the description and narrative properties are present, displayers can assume the narrative value goes into more detail and is not simply a recapitulation of description."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Evidence {
     #[doc = "The URL of a webpage presenting evidence of achievement or the evidence encoded as a Data URI. The schema of the webpage is undefined."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -32,7 +33,7 @@ impl From<&Evidence> for Evidence {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum EvidenceType {
     String(String),
@@ -66,7 +67,7 @@ impl From<Vec<&str>> for EvidenceType {
 }
 
 #[doc = "A JSON-LD Linked Data proof."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Proof {
     #[doc = "Signature suite used to produce proof."]
     #[serde(rename = "type")]

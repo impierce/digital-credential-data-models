@@ -38,7 +38,7 @@ pub struct EuropassEdcCredential {
     pub context: EuropassEdcCredentialContext,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub credential_profiles: Option<OneOrMany<Concept>>,
-    ///One or more schemas that validate the Verifiable Credential.
+    /// One or more schemas that validate the Verifiable Credential.
     pub credential_schema: OneOrMany<CredentialSchema>,
 
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -51,18 +51,18 @@ pub struct EuropassEdcCredential {
 
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub evidence: Option<OneOrMany<Evidence>>,
-    ///Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
+    /// Globally unique identifier for the issued credential. It can be a UUID or another globally unique identifier.
     pub id: String,
-    ///DID of the credential issuer
+    /// DID of the credential issuer
     pub issuer: Organisation,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub terms_of_use: Option<OneOrMany<TermsOfUseValue>>,
-    ///Full type chain, used to identify the credential base types
+    /// Full type chain, used to identify the credential base types
     #[serde(rename = "type")]
     pub type_: Vec<String>,
-    ///Defines the earliest point when the credential becomes valid.
+    /// Defines the earliest point when the credential becomes valid.
     pub valid_from: DateTime<Utc>,
-    ///Defines the latest point when the credential ceases to be valid.
+    /// Defines the latest point when the credential ceases to be valid.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub valid_until: Option<DateTime<Utc>>,
 }

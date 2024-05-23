@@ -1,10 +1,11 @@
 use super::alignment;
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
+// Originally named: Result
 #[doc = "Describes a result that was achieved."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(rename = "Result")]
-pub struct Result_ {
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
+pub struct ResultAchievement {
     #[serde(rename = "type")]
     pub type_: ResultType,
     #[doc = "If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the `id` of the RubricCriterionLevel in linked ResultDescription."]
@@ -22,14 +23,15 @@ pub struct Result_ {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
-impl From<&Result_> for Result_ {
-    fn from(value: &Result_) -> Self {
+
+impl From<&ResultAchievement> for ResultAchievement {
+    fn from(value: &ResultAchievement) -> Self {
         value.clone()
     }
 }
 
 #[doc = "The status of the achievement. Required if `resultType` of the linked ResultDescription is Status."]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum ResultStatus {
     Completed,
     Enrolled,
@@ -87,7 +89,7 @@ impl std::convert::TryFrom<String> for ResultStatus {
         value.parse()
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum ResultType {
     String(String),
@@ -121,7 +123,7 @@ impl From<Vec<&str>> for ResultType {
 }
 
 #[doc = "Describes a possible achievement result."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct ResultDescription {
     #[doc = "The unique URI for this result description. Required so a result can link to this result description."]
     pub id: String,
@@ -151,13 +153,14 @@ pub struct ResultDescription {
     #[serde(rename = "valueMin", default, skip_serializing_if = "Option::is_none")]
     pub value_min: Option<String>,
 }
+
 impl From<&ResultDescription> for ResultDescription {
     fn from(value: &ResultDescription) -> Self {
         value.clone()
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum DescriptionType {
     String(String),
@@ -192,7 +195,7 @@ impl From<Vec<&str>> for DescriptionType {
 }
 
 #[doc = "The type of result this description represents. This is an extensible enumerated vocabulary."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum ResultDescriptionType {
     Enum(ResultDescriptionTypeEnum),
@@ -219,7 +222,7 @@ impl std::str::FromStr for ResultDescriptionType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum ResultDescriptionTypeEnum {
     GradePointAverage,
     LetterGrade,
@@ -295,7 +298,7 @@ impl std::convert::TryFrom<String> for ResultDescriptionTypeEnum {
         value.parse()
     }
 }
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct ResultDescriptionTypeString(String);
 impl std::ops::Deref for ResultDescriptionTypeString {
     type Target = String;
@@ -352,7 +355,7 @@ impl<'de> serde::Deserialize<'de> for ResultDescriptionTypeString {
     }
 }
 #[doc = "Describes a rubric criterion level."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct RubricCriterionLevel {
     #[doc = "The unique URI for this rubric criterion level. Required so a result can link to this rubric criterion level."]
     pub id: String,
@@ -378,7 +381,7 @@ impl From<&RubricCriterionLevel> for RubricCriterionLevel {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum RubricCriterionLevelType {
     String(String),
@@ -693,7 +696,7 @@ impl ResultBuilder {
         self
     }
 }
-impl std::convert::TryFrom<ResultBuilder> for Result_ {
+impl std::convert::TryFrom<ResultBuilder> for ResultAchievement {
     type Error = String;
     fn try_from(value: ResultBuilder) -> Result<Self, String> {
         Ok(Self {
@@ -706,8 +709,8 @@ impl std::convert::TryFrom<ResultBuilder> for Result_ {
         })
     }
 }
-impl From<Result_> for ResultBuilder {
-    fn from(value: Result_) -> Self {
+impl From<ResultAchievement> for ResultBuilder {
+    fn from(value: ResultAchievement) -> Self {
         Self {
             achieved_level: Ok(value.achieved_level),
             alignment: Ok(value.alignment),

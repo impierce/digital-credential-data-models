@@ -19,8 +19,7 @@ pub fn gen_paths(input: syn::DeriveInput) -> syn::Result<proc_macro::TokenStream
 
 #[derive(Default)]
 pub struct SchemaTokensCtx {
-    connected_schema_tokens: Vec<TokenStream>,
-    unconnected_schema_tokens: Vec<TokenStream>,
+    schema_tokens: Vec<TokenStream>,
     recurse_schema_tokens: Vec<TokenStream>,
 }
 
@@ -105,19 +104,19 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                 assert!(fields.unnamed.len() == 1);
 
                 if let Some(first_field) = fields.unnamed.first() {
-                    add_schema_data(&mut ctx, src_schema, "UNUSED".to_string(), &first_field.ty);
+                    add_schema_data(&mut ctx, src_schema, "".to_string(), &first_field.ty);
                 }
             }
             syn::Fields::Unit => {
                 let tgt_schema = &variant.ident.to_string();
 
-                ctx.unconnected_schema_tokens.push(quote! {
+                ctx.schema_tokens.push(quote! {
                     data.push(types_common::SchemaData {
-                        src_schema: parent_src_schema.to_string(),
-                        src_field: parent_src_field.to_string(),
+                        src_schema: stringify!(#src_schema).to_string(),
+                        src_field: "".to_string(),
                         multiplicity: types_common::Multiplicity::One,
                         tgt_schema: #tgt_schema.to_string(),
-                        optional
+                        optional: false,
                     });
                 });
             }
@@ -192,8 +191,6 @@ fn handle_struct_fields(
                 }
             }
 
-            println!("Field: {}", field_name);
-
             add_schema_data(&mut ctx, &src_schema, field_name, &field.ty);
         }
     }
@@ -209,24 +206,13 @@ fn implement_add_schema_types(
     let src_schema = &input.ident;
     let generics = &input.generics;
 
-    let connected_schema_tokens = TokenStream::from_iter(ctx.connected_schema_tokens);
-    let unconnected_schema_tokens = TokenStream::from_iter(ctx.unconnected_schema_tokens);
+    let connected_schema_tokens = TokenStream::from_iter(ctx.schema_tokens);
     let recurse_schema_tokens = TokenStream::from_iter(ctx.recurse_schema_tokens);
 
     let expand = quote! {
         impl #generics types_common::AddSchemaTypes for #src_schema #generics {
-            fn add_schema_types(
-                data: &mut Vec<types_common::SchemaData>,
-                parent_src_schema: &str,
-                parent_src_field: &str,
-                optional: bool
-            ) {
-                if #src_schema::add_schema() {
-                    #connected_schema_tokens
-                } else {
-                    #unconnected_schema_tokens
-                }
-
+            fn add_schema_types(data: &mut Vec<types_common::SchemaData>) {
+                #connected_schema_tokens
                 #recurse_schema_tokens
             }
 
@@ -253,42 +239,22 @@ fn add_schema_data(ctx: &mut SchemaTokensCtx, src_schema: &syn::Ident, src_field
         };
 
         let optional = meta.optional;
-
         let target_schema = &target.path;
         let target_name = &target.name;
 
-        ctx.connected_schema_tokens.push(quote! {
-            // If add schema we add ourselves
-            // If target has add schema then connect
-            if #target_schema::add_schema() {
-                data.push(types_common::SchemaData {
-                    src_schema: stringify!(#src_schema).to_string(),
-                    src_field: #src_field.to_string(),
-                    multiplicity: #multiplicity,
-                    tgt_schema: #target_name.to_string(),
-                    optional: #optional
-                });
-            }
-        });
-
-        ctx.unconnected_schema_tokens.push(quote! {
-            // In case of add_schema is false, we don't add the types so in the enum (AgentOrPersonOrOrganization)
-            // The type AgentOrPersonOrOrganization is not added but its sub types. Will go like this ->
-            //  DigitalCredential, $.issuer, Agent
-            //  DigitalCredential, $.issuer, Person
-            //  DigitalCredential, $.issuer, Organization
+        ctx.schema_tokens.push(quote! {
             data.push(types_common::SchemaData {
-                src_schema: parent_src_schema.to_string(),
-                src_field: parent_src_field.to_string(),
+                src_schema: stringify!(#src_schema).to_string(),
+                src_field: #src_field.to_string(),
                 multiplicity: #multiplicity,
                 tgt_schema: #target_name.to_string(),
-                optional
+                optional: #optional
             });
         });
 
         ctx.recurse_schema_tokens.push(quote! {
             if !data.contains_schema(#target_name) {
-                #target_schema::add_schema_types(data, stringify!(#src_schema), #src_field, #optional);
+                #target_schema::add_schema_types(data);
             }
         });
     }

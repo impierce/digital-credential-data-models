@@ -1,5 +1,5 @@
 use std::{fmt, path::PathBuf};
-use chrono::Utc;
+use chrono::{NaiveDate, Utc};
 use email_address::EmailAddress;
 
 #[derive(PartialEq, Eq)]
@@ -50,7 +50,7 @@ impl fmt::Display for SchemaData {
 }
 
 pub trait AddSchemaTypes {
-    fn add_schema_types(data: &mut Vec<SchemaData>, parent_src_schema: &str, parent_json_path: &str, optional: bool) {}
+    fn add_schema_types(data: &mut Vec<SchemaData>) {}
 
     fn add_schema() -> bool {
         true
@@ -71,8 +71,7 @@ impl SchemaList for Vec<SchemaData> {
 macro_rules! impl_T {
     (for $($t:ty),+) => {
         $(impl AddSchemaTypes for $t {
-            fn add_schema_types(_data: &mut Vec<SchemaData>, _src_schema: &str,
-                _src_field: &str, _optional: bool) {}
+            fn add_schema_types(_data: &mut Vec<SchemaData>) {}
         })*
     }
 }
@@ -81,5 +80,5 @@ impl_T!(for usize, u8, u16, u32, u64, u128);
 impl_T!(for isize, i8, i16, i32, i64, i128);
 impl_T!(for f32, f64);
 impl_T!(for String, bool, PathBuf);
-impl_T!(for Utc, EmailAddress);
+impl_T!(for Utc, NaiveDate, EmailAddress);
 impl_T!(for serde_json::Value);
