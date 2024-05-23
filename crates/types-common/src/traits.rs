@@ -1,6 +1,6 @@
-use std::{fmt, path::PathBuf};
 use chrono::{NaiveDate, Utc};
 use email_address::EmailAddress;
+use std::{fmt, path::PathBuf};
 
 #[derive(PartialEq, Eq)]
 pub enum Multiplicity {
@@ -59,11 +59,29 @@ pub trait AddSchemaTypes {
 
 pub trait SchemaList {
     fn contains_schema(&self, src_schema: &str) -> bool;
+
+    /// This will merge two multiplicity variants to one:
+    /// Contact, phone, String, 1, true
+    /// Contact, phone, String, \*, true
+    /// Into:
+    /// Contact, phone, String, 1|\*, true
+    fn merge_multiplicity(&mut self);
 }
 
 impl SchemaList for Vec<SchemaData> {
     fn contains_schema(&self, src_schema: &str) -> bool {
         self.iter().any(|data| &data.src_schema == src_schema)
+    }
+
+    fn merge_multiplicity(&mut self) {
+        self.dedup_by(|a, b| {
+            if a.src_schema == b.src_schema && a.src_field == b.src_field && a.tgt_schema == b.tgt_schema {
+                b.multiplicity = Multiplicity::OneOrMany;
+                true
+            } else {
+                false
+            }
+        });
     }
 }
 
