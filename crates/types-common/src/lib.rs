@@ -1,14 +1,13 @@
 pub use macro_derive::*;
 pub use email_address::*;
-
 use serde::Serialize;
 use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
 use std::{fmt, ops::Deref};
-
-mod traits;
-
 pub use traits::*;
 use traits as types_common;
+pub use macro_derive::{EnumDeserialize, TagType};
+
+mod traits;
 
 #[derive(Clone, Debug)]
 pub enum OneOrMany<T> {
@@ -39,7 +38,8 @@ impl<'de, T: DeserializeOwned + fmt::Debug> de::Deserialize<'de> for OneOrMany<T
 impl<T: Serialize> Serialize for OneOrMany<T> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
-        S: serde::Serializer {
+        S: serde::Serializer,
+    {
         match self {
             OneOrMany::One(obj) => obj.serialize(serializer),
             OneOrMany::Many(vec) => vec.serialize(serializer),

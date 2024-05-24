@@ -1,8 +1,8 @@
 use chrono::{DateTime, Utc};
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
-use types_common::{GenPaths, SchemaList};
 use types_common::{DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
+use types_common::{GenPaths, SchemaList};
 
 /// Error types.
 pub mod error {
@@ -408,7 +408,7 @@ impl<'de> de::Deserialize<'de> for EuropassEdcCredentialContext {
                     return Err(de::Error::invalid_value(de::Unexpected::Seq, &"Array cannot be empty"));
                 }
 
-                if &must_contain != &many[0] {
+                if must_contain != many[0] {
                     Err(de::Error::invalid_value(
                         de::Unexpected::Str(&many[0]),
                         &format!("First value must be: {}", must_contain).as_str(),
@@ -418,7 +418,7 @@ impl<'de> de::Deserialize<'de> for EuropassEdcCredentialContext {
                 }
             }
             serde_json::Value::String(one) => {
-                if &must_contain == &one {
+                if must_contain == one {
                     Ok(Self::One(one))
                 } else {
                     Err(de::Error::invalid_value(de::Unexpected::Str(&one), &must_contain))
