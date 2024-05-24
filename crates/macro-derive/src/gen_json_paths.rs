@@ -3,10 +3,10 @@ use proc_macro2::TokenStream;
 use quote::quote;
 
 pub fn gen_paths(input: syn::DeriveInput) -> syn::Result<proc_macro::TokenStream> {
-    /* Generate flat data (source, jpath, target, multiplicity, optionality)
-        (Person, $.birthName, DateTime, 1, true),
-        (Person, $.citizenship_country, Concept, 1, false),
-        (Person, $.citizenship_country, Concept, *, true),
+    /* Generate flat data (source_schema, field_name, target_schema, multiplicity, required)
+        (Person, birthName, DateTime, 1, true),
+        (Person, citizenship_country, Concept, 1, false),
+        (Person, citizenship_country, Concept, *, true),
     */
     match &input.data {
         syn::Data::Enum(union) => return handle_enum(union, &input),
@@ -53,15 +53,15 @@ fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
 
             if &type_name == "OneOrMany" {
                 meta.is_one_or_many = true;
-                find_schema_target_ident(&segment.arguments, meta);
+                find_schema_target(&segment.arguments, meta);
             } else if &type_name == "Vec" {
                 meta.is_many = true;
-                find_schema_target_ident(&segment.arguments, meta);
+                find_schema_target(&segment.arguments, meta);
             } else if &type_name == "Option" {
                 meta.required = false;
-                find_schema_target_ident(&segment.arguments, meta);
+                find_schema_target(&segment.arguments, meta);
             } else if !segment.arguments.is_empty() {
-                find_schema_target_ident(&segment.arguments, meta);
+                find_schema_target(&segment.arguments, meta);
             } else {
                 meta.target = Some(TargetData {
                     path: path_type.path.clone(),
@@ -72,7 +72,7 @@ fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
     }
 }
 
-fn find_schema_target_ident(path_args: &syn::PathArguments, meta: &mut TargetMetadata) {
+fn find_schema_target(path_args: &syn::PathArguments, meta: &mut TargetMetadata) {
     if let syn::PathArguments::AngleBracketed(ab_args) = path_args {
         for arg in ab_args.args.iter() {
             if let syn::GenericArgument::Type(type_args) = arg {
