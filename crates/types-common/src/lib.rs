@@ -48,62 +48,6 @@ impl<T: Serialize> Serialize for OneOrMany<T> {
 
 }
 
-/// Email
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-/// {
-///   "type": "string",
-///   "oneOf": [
-///     {
-///       "type": "string",
-///       "format": "email"
-///     },
-///     {
-///       "type": "string",
-///       "format": "uri",
-///       "pattern": "^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)"
-///     }
-///   ]
-/// }
-/// ```
-/// </details>
-#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize)]
-#[serde(try_from = "String")]
-pub struct Email(pub String);
-
-impl Deref for Email {
-    type Target = String;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-impl<'de> de::Deserialize<'de> for Email {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let email = String::deserialize(deserializer)?;
-
-        let email_regex = regex::Regex::new("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").unwrap();
-        let email_uri_regex = regex::Regex::new("^mailto:[^@]*[^\\.]@[^\\.]($|[^@]*[^\\.]$)").unwrap();
-
-        let valid = email_regex.is_match(&email) || email_uri_regex.is_match(&email);
-
-        if valid {
-            Ok(Email(email))
-        } else {
-            Err(de::Error::invalid_value(
-                Unexpected::Str(&email),
-                &"A valid email format",
-            ))
-        }
-    }
-}
-
 #[derive(Clone, Debug, Serialize, GenPaths)]
 pub struct PositiveInteger(pub u32);
 impl std::ops::Deref for PositiveInteger {
