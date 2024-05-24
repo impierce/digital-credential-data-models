@@ -52,12 +52,11 @@ Will add Person to the SchemaData and ignore Arc, Mutex and Box.
 
 Output of the CSV from the AddSchemaTypes can look like this:
 
-```csv
-Amount, id, UriType, 1, false
-Amount, unit, Concept, 1, true
-Amount, value, f32, 1, true
-Amount, type, AmountTag, 1, true
-```
+| source schema | field name | target schema | multiplicity | required |
+|---------------|------------|---------------|--------------|----------|
+| Amount        | id         | UriType       | 1            | false    |
+| Amount        | value      | f32           | 1            | true     |
+| Amount        | type       | AmountTag     | 1            | true     |
 
 - Column 1: source schema
 - Column 2: field name
