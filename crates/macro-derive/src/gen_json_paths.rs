@@ -110,12 +110,16 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
             syn::Fields::Unit => {
                 let tgt_schema = &variant.ident.to_string();
 
+                // This will create for example the following rows:
+                // AgentOrPersonOrOrganization, "", "Agent", 1, true  
+                // AgentOrPersonOrOrganization, "", "Person", 1, true  
+                // AgentOrPersonOrOrganization, "", "Organization", 1, true  
                 ctx.schema_tokens.push(quote! {
                     data.push(types_common::SchemaData {
                         src_schema: stringify!(#src_schema).to_string(),
                         src_field: "".to_string(),
-                        multiplicity: types_common::Multiplicity::One,
                         tgt_schema: #tgt_schema.to_string(),
+                        multiplicity: types_common::Multiplicity::One,
                         required: true,
                     });
                 });
@@ -132,6 +136,7 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
 fn handle_struct(data_struct: &syn::DataStruct, input: &syn::DeriveInput) -> syn::Result<proc_macro::TokenStream> {
     let mut camel_case = false;
 
+    // Check for #serde(rename_all = "camelCase")  attribute on a struct.
     for attr in input.attrs.iter() {
         if attr.path().is_ident("serde") {
             attr.parse_nested_meta(|meta| {

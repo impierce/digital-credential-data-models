@@ -85,7 +85,7 @@ impl SchemaList for Vec<SchemaData> {
     }
 }
 
-// Implement empty traits impl for all types
+// Add empty traits impl for all external types
 macro_rules! impl_T {
     (for $($t:ty),+) => {
         $(impl AddSchemaTypes for $t {
