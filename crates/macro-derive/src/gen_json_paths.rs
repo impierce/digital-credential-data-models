@@ -101,9 +101,8 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                 let tgt_schema = &variant.ident.to_string();
 
                 // This will create for example the following rows:
-                // AgentOrPersonOrOrganization, "", "Agent", 1, true
-                // AgentOrPersonOrOrganization, "", "Person", 1, true
-                // AgentOrPersonOrOrganization, "", "Organization", 1, true
+                // "CredentialSchemaType", "", "JsonSchema", 1, true
+                // "CredentialSchemaType", "", "ShaclValidator2017", 1, true
                 ctx.schema_tokens.push(quote! {
                     data.push(types_common::SchemaData {
                         src_schema: stringify!(#src_schema).to_string(),
