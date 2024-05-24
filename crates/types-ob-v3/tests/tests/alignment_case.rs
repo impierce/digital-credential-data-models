@@ -1,12 +1,6 @@
 use crate::tests::assert_eq_json_value;
-use openbadges::{
-    achievement::{AchievementBuilder, CriteriaBuilder},
-    achievement_credential::{AchievementCredential, AchievementCredentialBuilder, AchievementCredentialType},
-    achievement_subject::AchievementSubjectBuilder,
-    alignment::{AlignmentBuilder, AlignmentTargetType},
-    profile::ProfileBuilder,
-};
 use std::{fs::File, str::FromStr};
+use types_ob_v3::prelude::*;
 
 #[test]
 fn alignment_case() {

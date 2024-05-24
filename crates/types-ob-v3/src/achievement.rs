@@ -255,14 +255,11 @@ impl From<&AchievementTypeString> for AchievementTypeString {
 impl std::str::FromStr for AchievementTypeString {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
-        if regress::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+")
-            .unwrap()
-            .find(value)
-            .is_none()
-        {
-            return Err("doesn't match pattern \"(ext:)[a-z|A-Z|0-9|.|-|_]+\"");
+        if regex::Regex::new("(ext:)[a-z|A-Z|0-9|.|-|_]+").unwrap().is_match(value) {
+            Ok(Self(value.to_string()))
+        } else {
+            Err("doesn't match pattern \"(ext:)[a-z|A-Z|0-9|.|-|_]+\"")
         }
-        Ok(Self(value.to_string()))
     }
 }
 
@@ -374,14 +371,14 @@ impl From<&AchievementEndorsementJwtItem> for AchievementEndorsementJwtItem {
 impl std::str::FromStr for AchievementEndorsementJwtItem {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
-        if regress::Regex::new("^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$")
+        if regex::Regex::new("^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$")
             .unwrap()
-            .find(value)
-            .is_none()
+            .is_match(value)
         {
-            return Err("doesn't match pattern \"^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$\"");
+            Ok(Self(value.to_string()))
+        } else {
+            Err("doesn't match pattern \"^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+$\"")
         }
-        Ok(Self(value.to_string()))
     }
 }
 
@@ -442,14 +439,14 @@ impl From<&AchievementLanguage> for AchievementLanguage {
 impl std::str::FromStr for AchievementLanguage {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
-        if regress::Regex::new("^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$")
+        if regex::Regex::new("^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$")
             .unwrap()
-            .find(value)
-            .is_none()
+            .is_match(value)
         {
-            return Err("doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"");
+            Ok(Self(value.to_string()))
+        } else {
+            Err("doesn't match pattern \"^[a-z]{2,4}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$\"")
         }
-        Ok(Self(value.to_string()))
     }
 }
 
