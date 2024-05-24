@@ -1,11 +1,11 @@
-pub use macro_derive::*;
 pub use email_address::*;
+pub use macro_derive::*;
+pub use macro_derive::{EnumDeserialize, TagType};
 use serde::Serialize;
 use serde::{de, de::DeserializeOwned, de::Unexpected, Deserializer};
-use std::{fmt, ops::Deref};
-pub use traits::*;
+use std::fmt;
 use traits as types_common;
-pub use macro_derive::{EnumDeserialize, TagType};
+pub use traits::*;
 
 mod traits;
 
@@ -45,7 +45,6 @@ impl<T: Serialize> Serialize for OneOrMany<T> {
             OneOrMany::Many(vec) => vec.serialize(serializer),
         }
     }
-
 }
 
 #[derive(Clone, Debug, Serialize, GenPaths)]

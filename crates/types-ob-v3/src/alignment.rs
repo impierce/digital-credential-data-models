@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde::{Deserialize, Serialize};
 use types_common::{GenPaths, SchemaList};
 
@@ -87,16 +89,16 @@ impl From<&AlignmentTargetTypeEnum> for AlignmentTargetTypeEnum {
         *value
     }
 }
-impl ToString for AlignmentTargetTypeEnum {
-    fn to_string(&self) -> String {
+impl fmt::Display for AlignmentTargetTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::CeasnCompetency => "ceasn:Competency".to_string(),
-            Self::CetermsCredential => "ceterms:Credential".to_string(),
-            Self::CfItem => "CFItem".to_string(),
-            Self::CfRubric => "CFRubric".to_string(),
-            Self::CfRubricCriterion => "CFRubricCriterion".to_string(),
-            Self::CfRubricCriterionLevel => "CFRubricCriterionLevel".to_string(),
-            Self::Ctdl => "CTDL".to_string(),
+            Self::CeasnCompetency => f.write_str("ceasn:Competency"),
+            Self::CetermsCredential => f.write_str("ceterms:Credential"),
+            Self::CfItem => f.write_str("CFItem"),
+            Self::CfRubric => f.write_str("CFRubric"),
+            Self::CfRubricCriterion => f.write_str("CFRubricCriterion"),
+            Self::CfRubricCriterionLevel => f.write_str("CFRubricCriterionLevel"),
+            Self::Ctdl => f.write_str("CTDL"),
         }
     }
 }

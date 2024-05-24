@@ -47,50 +47,40 @@ impl Default for TargetMetadata {
 }
 
 fn traverse_type(field_type: &syn::Type, meta: &mut TargetMetadata) {
-    match field_type {
-        syn::Type::Path(path_type) => {
-            if let Some(segment) = path_type.path.segments.last() {
-                let type_name = segment.ident.to_string();
+    if let syn::Type::Path(path_type) = field_type {
+        if let Some(segment) = path_type.path.segments.last() {
+            let type_name = segment.ident.to_string();
 
-                if &type_name == "OneOrMany" {
-                    meta.is_one_or_many = true;
-                    find_schema_target_ident(&segment.arguments, meta);
-                } else if &type_name == "Vec" {
-                    meta.is_many = true;
-                    find_schema_target_ident(&segment.arguments, meta);
-                } else if &type_name == "Option" {
-                    meta.required = false;
-                    find_schema_target_ident(&segment.arguments, meta);
-                } else if !segment.arguments.is_empty() {
-                    find_schema_target_ident(&segment.arguments, meta);
-                } else {
-                    meta.target = Some(TargetData {
-                        path: path_type.path.clone(),
-                        name: type_name,
-                    });
-                }
+            if &type_name == "OneOrMany" {
+                meta.is_one_or_many = true;
+                find_schema_target_ident(&segment.arguments, meta);
+            } else if &type_name == "Vec" {
+                meta.is_many = true;
+                find_schema_target_ident(&segment.arguments, meta);
+            } else if &type_name == "Option" {
+                meta.required = false;
+                find_schema_target_ident(&segment.arguments, meta);
+            } else if !segment.arguments.is_empty() {
+                find_schema_target_ident(&segment.arguments, meta);
+            } else {
+                meta.target = Some(TargetData {
+                    path: path_type.path.clone(),
+                    name: type_name,
+                });
             }
         }
-        _ => {}
     }
 }
 
 fn find_schema_target_ident(path_args: &syn::PathArguments, meta: &mut TargetMetadata) {
-    fn search_segments(ab_args: &syn::AngleBracketedGenericArguments, meta: &mut TargetMetadata) {
+    if let syn::PathArguments::AngleBracketed(ab_args) = path_args {
         for arg in ab_args.args.iter() {
-            match arg {
-                syn::GenericArgument::Type(type_args) => traverse_type(type_args, meta),
-                _ => {}
+            if let syn::GenericArgument::Type(type_args) = arg {
+                traverse_type(type_args, meta)
             }
         }
-    }
-
-    match path_args {
-        syn::PathArguments::AngleBracketed(ab_args) => search_segments(ab_args, meta),
-        _ => {
-            // TODO?
-            panic!("Not implemented");
-        }
+    } else {
+        panic!("Not implemented");
     }
 }
 
@@ -111,9 +101,9 @@ fn handle_enum(data_enum: &syn::DataEnum, input: &syn::DeriveInput) -> syn::Resu
                 let tgt_schema = &variant.ident.to_string();
 
                 // This will create for example the following rows:
-                // AgentOrPersonOrOrganization, "", "Agent", 1, true  
-                // AgentOrPersonOrOrganization, "", "Person", 1, true  
-                // AgentOrPersonOrOrganization, "", "Organization", 1, true  
+                // AgentOrPersonOrOrganization, "", "Agent", 1, true
+                // AgentOrPersonOrOrganization, "", "Person", 1, true
+                // AgentOrPersonOrOrganization, "", "Organization", 1, true
                 ctx.schema_tokens.push(quote! {
                     data.push(types_common::SchemaData {
                         src_schema: stringify!(#src_schema).to_string(),
@@ -156,11 +146,11 @@ fn handle_struct(data_struct: &syn::DataStruct, input: &syn::DeriveInput) -> syn
     match &data_struct.fields {
         syn::Fields::Named(named) => {
             let ctx = handle_struct_fields(&input.ident, named, camel_case)?;
-            return implement_add_schema_types(input, ctx, true);
+            implement_add_schema_types(input, ctx, true)
         }
         syn::Fields::Unnamed(_unnamed) => {
             let ctx = SchemaTokensCtx::default();
-            return implement_add_schema_types(input, ctx, true);
+            implement_add_schema_types(input, ctx, true)
         }
         _ => panic!("Can only handle structs with named fields"),
     }
@@ -183,7 +173,7 @@ fn handle_struct_fields(
 
             for attr in field.attrs.iter() {
                 if attr.path().is_ident("serde") {
-                    // Test if this is good
+                    // Don't replace this with ? on the end, it will fail.
                     let _ = attr.parse_nested_meta(|meta| {
                         if meta.path.is_ident("rename") {
                             let value = meta.value()?;
@@ -196,7 +186,7 @@ fn handle_struct_fields(
                 }
             }
 
-            add_schema_data(&mut ctx, &src_schema, field_name, &field.ty);
+            add_schema_data(&mut ctx, src_schema, field_name, &field.ty);
         }
     }
 

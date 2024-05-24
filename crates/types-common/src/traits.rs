@@ -30,7 +30,7 @@ pub struct SchemaData {
 
 impl PartialOrd for SchemaData {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(&other))
+        Some(self.cmp(other))
     }
 }
 
@@ -49,6 +49,7 @@ impl fmt::Display for SchemaData {
     }
 }
 
+#[allow(unused_variables)]
 pub trait AddSchemaTypes {
     fn add_schema_types(data: &mut Vec<SchemaData>) {}
 
@@ -70,7 +71,7 @@ pub trait SchemaList {
 
 impl SchemaList for Vec<SchemaData> {
     fn contains_schema(&self, src_schema: &str) -> bool {
-        self.iter().any(|data| &data.src_schema == src_schema)
+        self.iter().any(|data| data.src_schema == src_schema)
     }
 
     fn merge_multiplicity(&mut self) {

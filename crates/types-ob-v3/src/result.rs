@@ -1,9 +1,11 @@
+use std::fmt;
+
 use super::alignment;
 use serde::{Deserialize, Serialize};
 use types_common::{GenPaths, SchemaList};
 
-// Originally named: Result
-#[doc = "Describes a result that was achieved."]
+/// Originally named: Result
+/// Describes a result that was achieved.
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct ResultAchievement {
     #[serde(rename = "type")]
@@ -45,18 +47,20 @@ impl From<&ResultStatus> for ResultStatus {
         *value
     }
 }
-impl ToString for ResultStatus {
-    fn to_string(&self) -> String {
+
+impl fmt::Display for ResultStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::Completed => "Completed".to_string(),
-            Self::Enrolled => "Enrolled".to_string(),
-            Self::Failed => "Failed".to_string(),
-            Self::InProgress => "InProgress".to_string(),
-            Self::OnHold => "OnHold".to_string(),
-            Self::Withdrew => "Withdrew".to_string(),
+            Self::Completed => f.write_str("Completed"),
+            Self::Enrolled => f.write_str("Enrolled"),
+            Self::Failed => f.write_str("Failed"),
+            Self::InProgress => f.write_str("InProgress"),
+            Self::OnHold => f.write_str("OnHold"),
+            Self::Withdrew => f.write_str("Withdrew"),
         }
     }
 }
+
 impl std::str::FromStr for ResultStatus {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {
@@ -242,24 +246,26 @@ impl From<&ResultDescriptionTypeEnum> for ResultDescriptionTypeEnum {
         *value
     }
 }
-impl ToString for ResultDescriptionTypeEnum {
-    fn to_string(&self) -> String {
-        match *self {
-            Self::GradePointAverage => "GradePointAverage".to_string(),
-            Self::LetterGrade => "LetterGrade".to_string(),
-            Self::Percent => "Percent".to_string(),
-            Self::PerformanceLevel => "PerformanceLevel".to_string(),
-            Self::PredictedScore => "PredictedScore".to_string(),
-            Self::RawScore => "RawScore".to_string(),
-            Self::Result => "Result".to_string(),
-            Self::RubricCriterion => "RubricCriterion".to_string(),
-            Self::RubricCriterionLevel => "RubricCriterionLevel".to_string(),
-            Self::RubricScore => "RubricScore".to_string(),
-            Self::ScaledScore => "ScaledScore".to_string(),
-            Self::Status => "Status".to_string(),
+
+impl fmt::Display for ResultDescriptionTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::GradePointAverage => f.write_str("GradePointAverage"),
+            Self::LetterGrade => f.write_str("LetterGrade"),
+            Self::Percent => f.write_str("Percent"),
+            Self::PerformanceLevel => f.write_str("PerformanceLevel"),
+            Self::PredictedScore => f.write_str("PredictedScore"),
+            Self::RawScore => f.write_str("RawScore"),
+            Self::Result => f.write_str("Result"),
+            Self::RubricCriterion => f.write_str("RubricCriterion"),
+            Self::RubricCriterionLevel => f.write_str("RubricCriterionLevel"),
+            Self::RubricScore => f.write_str("RubricScore"),
+            Self::ScaledScore => f.write_str("ScaledScore"),
+            Self::Status => f.write_str("Status"),
         }
     }
 }
+
 impl std::str::FromStr for ResultDescriptionTypeEnum {
     type Err = &'static str;
     fn from_str(value: &str) -> Result<Self, &'static str> {

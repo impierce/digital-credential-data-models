@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde::{Deserialize, Serialize};
 use types_common::{GenPaths, SchemaList};
 
@@ -100,28 +102,28 @@ impl From<&IdentifierTypeEnum> for IdentifierTypeEnum {
         *value
     }
 }
-impl ToString for IdentifierTypeEnum {
-    fn to_string(&self) -> String {
+impl fmt::Display for IdentifierTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::Name => "name".to_string(),
-            Self::SourcedId => "sourcedId".to_string(),
-            Self::SystemId => "systemId".to_string(),
-            Self::ProductId => "productId".to_string(),
-            Self::UserName => "userName".to_string(),
-            Self::AccountId => "accountId".to_string(),
-            Self::EmailAddress => "emailAddress".to_string(),
-            Self::NationalIdentityNumber => "nationalIdentityNumber".to_string(),
-            Self::Isbn => "isbn".to_string(),
-            Self::Issn => "issn".to_string(),
-            Self::LisSourcedId => "lisSourcedId".to_string(),
-            Self::OneRosterSourcedId => "oneRosterSourcedId".to_string(),
-            Self::SisSourcedId => "sisSourcedId".to_string(),
-            Self::LtiContextId => "ltiContextId".to_string(),
-            Self::LtiDeploymentId => "ltiDeploymentId".to_string(),
-            Self::LtiToolId => "ltiToolId".to_string(),
-            Self::LtiPlatformId => "ltiPlatformId".to_string(),
-            Self::LtiUserId => "ltiUserId".to_string(),
-            Self::Identifier => "identifier".to_string(),
+            Self::Name => f.write_str("name"),
+            Self::SourcedId => f.write_str("sourcedId"),
+            Self::SystemId => f.write_str("systemId"),
+            Self::ProductId => f.write_str("productId"),
+            Self::UserName => f.write_str("userName"),
+            Self::AccountId => f.write_str("accountId"),
+            Self::EmailAddress => f.write_str("emailAddress"),
+            Self::NationalIdentityNumber => f.write_str("nationalIdentityNumber"),
+            Self::Isbn => f.write_str("isbn"),
+            Self::Issn => f.write_str("issn"),
+            Self::LisSourcedId => f.write_str("lisSourcedId"),
+            Self::OneRosterSourcedId => f.write_str("oneRosterSourcedId"),
+            Self::SisSourcedId => f.write_str("sisSourcedId"),
+            Self::LtiContextId => f.write_str("ltiContextId"),
+            Self::LtiDeploymentId => f.write_str("ltiDeploymentId"),
+            Self::LtiToolId => f.write_str("ltiToolId"),
+            Self::LtiPlatformId => f.write_str("ltiPlatformId"),
+            Self::LtiUserId => f.write_str("ltiUserId"),
+            Self::Identifier => f.write_str("identifier"),
         }
     }
 }
@@ -330,28 +332,28 @@ impl From<&IdentityObjectTypeEnum> for IdentityObjectTypeEnum {
         *value
     }
 }
-impl ToString for IdentityObjectTypeEnum {
-    fn to_string(&self) -> String {
+impl fmt::Display for IdentityObjectTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::Name => "name".to_string(),
-            Self::SourcedId => "sourcedId".to_string(),
-            Self::SystemId => "systemId".to_string(),
-            Self::ProductId => "productId".to_string(),
-            Self::UserName => "userName".to_string(),
-            Self::AccountId => "accountId".to_string(),
-            Self::EmailAddress => "emailAddress".to_string(),
-            Self::NationalIdentityNumber => "nationalIdentityNumber".to_string(),
-            Self::Isbn => "isbn".to_string(),
-            Self::Issn => "issn".to_string(),
-            Self::LisSourcedId => "lisSourcedId".to_string(),
-            Self::OneRosterSourcedId => "oneRosterSourcedId".to_string(),
-            Self::SisSourcedId => "sisSourcedId".to_string(),
-            Self::LtiContextId => "ltiContextId".to_string(),
-            Self::LtiDeploymentId => "ltiDeploymentId".to_string(),
-            Self::LtiToolId => "ltiToolId".to_string(),
-            Self::LtiPlatformId => "ltiPlatformId".to_string(),
-            Self::LtiUserId => "ltiUserId".to_string(),
-            Self::Identifier => "identifier".to_string(),
+            Self::Name => f.write_str("name"),
+            Self::SourcedId => f.write_str("sourcedId"),
+            Self::SystemId => f.write_str("systemId"),
+            Self::ProductId => f.write_str("productId"),
+            Self::UserName => f.write_str("userName"),
+            Self::AccountId => f.write_str("accountId"),
+            Self::EmailAddress => f.write_str("emailAddress"),
+            Self::NationalIdentityNumber => f.write_str("nationalIdentityNumber"),
+            Self::Isbn => f.write_str("isbn"),
+            Self::Issn => f.write_str("issn"),
+            Self::LisSourcedId => f.write_str("lisSourcedId"),
+            Self::OneRosterSourcedId => f.write_str("oneRosterSourcedId"),
+            Self::SisSourcedId => f.write_str("sisSourcedId"),
+            Self::LtiContextId => f.write_str("ltiContextId"),
+            Self::LtiDeploymentId => f.write_str("ltiDeploymentId"),
+            Self::LtiToolId => f.write_str("ltiToolId"),
+            Self::LtiPlatformId => f.write_str("ltiPlatformId"),
+            Self::LtiUserId => f.write_str("ltiUserId"),
+            Self::Identifier => f.write_str("identifier"),
         }
     }
 }

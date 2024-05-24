@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use std::fmt;
 use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, ops};
 use types_common::{DurationType, EmailAddress, EnumDeserialize, OneOrMany, PositiveInteger, TagType};
@@ -319,11 +320,11 @@ pub enum CredentialSchemaType {
     ShaclValidator2017,
 }
 
-impl ToString for CredentialSchemaType {
-    fn to_string(&self) -> String {
+impl fmt::Display for CredentialSchemaType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::JsonSchema => "JsonSchema".to_string(),
-            Self::ShaclValidator2017 => "ShaclValidator2017".to_string(),
+            Self::JsonSchema => f.write_str("JsonSchema"),
+            Self::ShaclValidator2017 => f.write_str("ShaclValidator2017"),
         }
     }
 }
