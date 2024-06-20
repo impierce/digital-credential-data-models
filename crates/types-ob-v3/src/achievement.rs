@@ -1,8 +1,11 @@
+use std::fmt;
+
 use super::{alignment, endorsement, general, identity, profile, related, result::ResultDescription};
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "A collection of information about the accomplishment recognized by the Assertion. Many assertions may be created corresponding to one Achievement."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Achievement {
     #[doc = "Unique URI for the Achievement."]
     pub id: String,
@@ -60,7 +63,7 @@ impl From<&Achievement> for Achievement {
 }
 
 #[doc = "The type of achievement. This is an extensible vocabulary."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AchievementType {
     Enum(AchievementTypeEnum),
@@ -91,7 +94,7 @@ impl std::str::FromStr for AchievementType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum AchievementTypeEnum {
     Achievement,
     ApprenticeshipCertificate,
@@ -132,40 +135,40 @@ impl From<&AchievementTypeEnum> for AchievementTypeEnum {
     }
 }
 
-impl ToString for AchievementTypeEnum {
-    fn to_string(&self) -> String {
-        match *self {
-            Self::Achievement => "Achievement".to_string(),
-            Self::ApprenticeshipCertificate => "ApprenticeshipCertificate".to_string(),
-            Self::Assessment => "Assessment".to_string(),
-            Self::Assignment => "Assignment".to_string(),
-            Self::AssociateDegree => "AssociateDegree".to_string(),
-            Self::Award => "Award".to_string(),
-            Self::Badge => "Badge".to_string(),
-            Self::BachelorDegree => "BachelorDegree".to_string(),
-            Self::Certificate => "Certificate".to_string(),
-            Self::CertificateOfCompletion => "CertificateOfCompletion".to_string(),
-            Self::Certification => "Certification".to_string(),
-            Self::CommunityService => "CommunityService".to_string(),
-            Self::Competency => "Competency".to_string(),
-            Self::Course => "Course".to_string(),
-            Self::CoCurricular => "CoCurricular".to_string(),
-            Self::Degree => "Degree".to_string(),
-            Self::Diploma => "Diploma".to_string(),
-            Self::DoctoralDegree => "DoctoralDegree".to_string(),
-            Self::Fieldwork => "Fieldwork".to_string(),
-            Self::GeneralEducationDevelopment => "GeneralEducationDevelopment".to_string(),
-            Self::JourneymanCertificate => "JourneymanCertificate".to_string(),
-            Self::LearningProgram => "LearningProgram".to_string(),
-            Self::License => "License".to_string(),
-            Self::Membership => "Membership".to_string(),
-            Self::ProfessionalDoctorate => "ProfessionalDoctorate".to_string(),
-            Self::QualityAssuranceCredential => "QualityAssuranceCredential".to_string(),
-            Self::MasterCertificate => "MasterCertificate".to_string(),
-            Self::MasterDegree => "MasterDegree".to_string(),
-            Self::MicroCredential => "MicroCredential".to_string(),
-            Self::ResearchDoctorate => "ResearchDoctorate".to_string(),
-            Self::SecondarySchoolDiploma => "SecondarySchoolDiploma".to_string(),
+impl fmt::Display for AchievementTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Achievement => f.write_str("Achievement"),
+            Self::ApprenticeshipCertificate => f.write_str("ApprenticeshipCertificate"),
+            Self::Assessment => f.write_str("Assessment"),
+            Self::Assignment => f.write_str("Assignment"),
+            Self::AssociateDegree => f.write_str("AssociateDegree"),
+            Self::Award => f.write_str("Award"),
+            Self::Badge => f.write_str("Badge"),
+            Self::BachelorDegree => f.write_str("BachelorDegree"),
+            Self::Certificate => f.write_str("Certificate"),
+            Self::CertificateOfCompletion => f.write_str("CertificateOfCompletion"),
+            Self::Certification => f.write_str("Certification"),
+            Self::CommunityService => f.write_str("CommunityService"),
+            Self::Competency => f.write_str("Competency"),
+            Self::Course => f.write_str("Course"),
+            Self::CoCurricular => f.write_str("CoCurricular"),
+            Self::Degree => f.write_str("Degree"),
+            Self::Diploma => f.write_str("Diploma"),
+            Self::DoctoralDegree => f.write_str("DoctoralDegree"),
+            Self::Fieldwork => f.write_str("Fieldwork"),
+            Self::GeneralEducationDevelopment => f.write_str("GeneralEducationDevelopment"),
+            Self::JourneymanCertificate => f.write_str("JourneymanCertificate"),
+            Self::LearningProgram => f.write_str("LearningProgram"),
+            Self::License => f.write_str("License"),
+            Self::Membership => f.write_str("Membership"),
+            Self::ProfessionalDoctorate => f.write_str("ProfessionalDoctorate"),
+            Self::QualityAssuranceCredential => f.write_str("QualityAssuranceCredential"),
+            Self::MasterCertificate => f.write_str("MasterCertificate"),
+            Self::MasterDegree => f.write_str("MasterDegree"),
+            Self::MicroCredential => f.write_str("MicroCredential"),
+            Self::ResearchDoctorate => f.write_str("ResearchDoctorate"),
+            Self::SecondarySchoolDiploma => f.write_str("SecondarySchoolDiploma"),
         }
     }
 }
@@ -231,7 +234,7 @@ impl std::convert::TryFrom<String> for AchievementTypeEnum {
     }
 }
 
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AchievementTypeString(String);
 impl std::ops::Deref for AchievementTypeString {
     type Target = String;
@@ -296,7 +299,7 @@ impl<'de> serde::Deserialize<'de> for AchievementTypeString {
 }
 
 #[doc = "Descriptive metadata about the achievements necessary to be recognized with an assertion of a particular achievement. This data is added to the Achievement class so that it may be rendered when the achievement assertion is displayed, instead of simply a link to human-readable criteria external to the achievement. Embedding criteria allows either enhancement of an external criteria page or increased portability and ease of use by allowing issuers to skip hosting the formerly-required external criteria page altogether. Criteria is used to allow would-be recipients to learn what is required of them to be recognized with an assertion of a particular achievement. It is also used after the assertion is awarded to a recipient to let those inspecting earned achievements know the general requirements that the recipients met in order to earn it."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Criteria {
     #[doc = "The URI of a webpage that describes in a human-readable format the criteria for the achievement."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -312,7 +315,7 @@ impl From<&Criteria> for Criteria {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum Type {
     String(String),
@@ -347,7 +350,7 @@ impl From<Vec<&str>> for Type {
 }
 
 #[doc = "Allows endorsers to make specific claims about the Achievement. These endorsements are signed with the VC-JWT proof format."]
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AchievementEndorsementJwtItem(String);
 impl std::ops::Deref for AchievementEndorsementJwtItem {
     type Target = String;
@@ -415,7 +418,7 @@ impl<'de> serde::Deserialize<'de> for AchievementEndorsementJwtItem {
 }
 
 #[doc = "The language of the achievement."]
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AchievementLanguage(String);
 impl std::ops::Deref for AchievementLanguage {
     type Target = String;

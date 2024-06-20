@@ -3,7 +3,7 @@ members = ["crates/*"]
 resolver = "2"
 
 [package]
-name = "openbadges"
+name = "digital-credential-data-models"
 version = "0.1.0"
 edition = "2021"
 

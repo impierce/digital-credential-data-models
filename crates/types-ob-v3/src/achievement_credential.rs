@@ -1,8 +1,9 @@
 use super::{achievement_subject, endorsement, general, profile, proof_evidence};
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "AchievementCredentials are representations of an awarded achievement, used to share information about a achievement belonging to one earner. Maps to a Verifiable Credential as defined in the [[VC-DATA-MODEL]]. As described in [[[#data-integrity]]], at least one proof mechanism, and the details necessary to evaluate that proof, MUST be expressed for a credential to be a verifiable credential. In the case of an embedded proof, the credential MUST append the proof in the `proof` property."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct AchievementCredential {
     #[serde(rename = "@context")]
     pub context: Vec<general::Context>,
@@ -53,7 +54,7 @@ impl From<&AchievementCredential> for AchievementCredential {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AchievementCredentialSchema {
     Schema(CredentialSchema),
@@ -87,7 +88,7 @@ impl From<Vec<CredentialSchema>> for AchievementCredentialSchema {
 }
 
 #[doc = "Allows endorsers to make specific claims about the credential, and the achievement and profiles in the credential. These endorsements are signed with the VC-JWT proof format."]
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AchievementCredentialEndorsementJwtItem(String);
 impl std::ops::Deref for AchievementCredentialEndorsementJwtItem {
     type Target = String;
@@ -154,7 +155,7 @@ impl<'de> serde::Deserialize<'de> for AchievementCredentialEndorsementJwtItem {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AchievementCredentialProof {
     Proof(proof_evidence::Proof),
@@ -179,7 +180,7 @@ impl From<Vec<proof_evidence::Proof>> for AchievementCredentialProof {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AchievementCredentialTermsOfUse {
     TermsOfUse(general::TermsOfUse),
@@ -204,7 +205,7 @@ impl From<Vec<general::TermsOfUse>> for AchievementCredentialTermsOfUse {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AchievementCredentialType {
     String(String),
@@ -238,7 +239,7 @@ impl From<Vec<&str>> for AchievementCredentialType {
 }
 
 #[doc = "Identify the type and location of a data schema."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct CredentialSchema {
     #[doc = "The value MUST be a URI identifying the schema file. One instance of `CredentialSchema` MUST have an `id` that is the URL of the JSON Schema for this credential defined by this specification."]
     pub id: String,
@@ -253,7 +254,7 @@ impl From<&CredentialSchema> for CredentialSchema {
 }
 
 #[doc = "The information in CredentialStatus is used to discover information about the current status of a verifiable credential, such as whether it is suspended or revoked."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct CredentialStatus {
     #[doc = "The value MUST be the URL of the issuer's credential status method."]
     pub id: String,

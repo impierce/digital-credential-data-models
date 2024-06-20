@@ -1,8 +1,9 @@
 use super::{endorsement, general, identity};
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "A Profile is a collection of information that describes the entity or organization using Open Badges. Issuers must be represented as Profiles, and endorsers, or other entities may also be represented using this vocabulary. Each Profile that represents an Issuer may be referenced in many BadgeClasses that it has defined. Anyone can create and host an Issuer file to start issuing Open Badges. Issuers may also serve as recipients of Open Badges, often identified within an Assertion by specific properties, like their url or contact email address."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Profile {
     #[doc = "Unique URI for the Issuer/Profile file."]
     pub id: String,
@@ -70,7 +71,7 @@ impl From<&Profile> for Profile {
 }
 
 #[doc = "Allows endorsers to make specific claims about the individual or organization represented by this profile. These endorsements are signed with the VC-JWT proof format."]
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct ProfileEndorsementJwtItem(String);
 impl std::ops::Deref for ProfileEndorsementJwtItem {
     type Target = String;
@@ -130,7 +131,7 @@ impl<'de> serde::Deserialize<'de> for ProfileEndorsementJwtItem {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum ProfileType {
     String(String),
@@ -164,7 +165,7 @@ impl From<Vec<&str>> for ProfileType {
 }
 
 #[doc = "An address for the described entity."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Address {
     #[serde(rename = "type")]
     pub type_: AddressType,
@@ -198,7 +199,7 @@ impl From<&Address> for Address {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AddressType {
     String(String),
@@ -232,7 +233,7 @@ impl From<Vec<&str>> for AddressType {
 }
 
 #[doc = "The geographic coordinates of a location."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct GeoCoordinates {
     #[doc = "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'GeoCoordinates'."]
     #[serde(rename = "type")]

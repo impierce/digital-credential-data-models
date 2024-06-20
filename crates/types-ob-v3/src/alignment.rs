@@ -1,7 +1,10 @@
+use std::fmt;
+
 use serde::{Deserialize, Serialize};
+use types_common::{GenPaths, SchemaList};
 
 #[doc = "Describes an alignment between an achievement and a node in an educational framework."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 pub struct Alignment {
     #[serde(rename = "type")]
     pub type_: AlignmentType,
@@ -24,6 +27,7 @@ pub struct Alignment {
     #[serde(rename = "targetUrl")]
     pub target_url: String,
 }
+
 impl From<&Alignment> for Alignment {
     fn from(value: &Alignment) -> Self {
         value.clone()
@@ -31,7 +35,7 @@ impl From<&Alignment> for Alignment {
 }
 
 #[doc = "The type of the alignment target node."]
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AlignmentTargetType {
     Enum(AlignmentTargetTypeEnum),
@@ -63,7 +67,7 @@ impl std::str::FromStr for AlignmentTargetType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub enum AlignmentTargetTypeEnum {
     #[serde(rename = "ceasn:Competency")]
     CeasnCompetency,
@@ -85,16 +89,16 @@ impl From<&AlignmentTargetTypeEnum> for AlignmentTargetTypeEnum {
         *value
     }
 }
-impl ToString for AlignmentTargetTypeEnum {
-    fn to_string(&self) -> String {
+impl fmt::Display for AlignmentTargetTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::CeasnCompetency => "ceasn:Competency".to_string(),
-            Self::CetermsCredential => "ceterms:Credential".to_string(),
-            Self::CfItem => "CFItem".to_string(),
-            Self::CfRubric => "CFRubric".to_string(),
-            Self::CfRubricCriterion => "CFRubricCriterion".to_string(),
-            Self::CfRubricCriterionLevel => "CFRubricCriterionLevel".to_string(),
-            Self::Ctdl => "CTDL".to_string(),
+            Self::CeasnCompetency => f.write_str("ceasn:Competency"),
+            Self::CetermsCredential => f.write_str("ceterms:Credential"),
+            Self::CfItem => f.write_str("CFItem"),
+            Self::CfRubric => f.write_str("CFRubric"),
+            Self::CfRubricCriterion => f.write_str("CFRubricCriterion"),
+            Self::CfRubricCriterionLevel => f.write_str("CFRubricCriterionLevel"),
+            Self::Ctdl => f.write_str("CTDL"),
         }
     }
 }
@@ -131,7 +135,7 @@ impl std::convert::TryFrom<String> for AlignmentTargetTypeEnum {
         value.parse()
     }
 }
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, GenPaths)]
 pub struct AlignmentTargetTypeString(String);
 impl std::ops::Deref for AlignmentTargetTypeString {
     type Target = String;
@@ -187,7 +191,7 @@ impl<'de> serde::Deserialize<'de> for AlignmentTargetTypeString {
             .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
     }
 }
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, GenPaths)]
 #[serde(untagged)]
 pub enum AlignmentType {
     String(String),
